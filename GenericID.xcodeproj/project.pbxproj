@@ -10,6 +10,7 @@
 		BB660BE21EAEFC8500B8EC2D /* AssociatedObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BE11EAEFC8500B8EC2D /* AssociatedObjectTests.swift */; };
 		BB660BE41EAF076F00B8EC2D /* UserDefaultes.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BE31EAF076F00B8EC2D /* UserDefaultes.swift */; };
 		BB660BE91EAF28E000B8EC2D /* UserDefaultesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BE81EAF28E000B8EC2D /* UserDefaultesTests.swift */; };
+		BB660BEB1EAF987000B8EC2D /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BEA1EAF987000B8EC2D /* UITableView.swift */; };
 		BBE148901EAEF2EF009A2B40 /* GenericID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBE148861EAEF2EE009A2B40 /* GenericID.framework */; };
 		BBE148A31EAEF5D9009A2B40 /* GenericID.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE148A21EAEF5D9009A2B40 /* GenericID.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BBE148AB1EAEF7A8009A2B40 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */; };
@@ -30,6 +31,7 @@
 		BB660BE11EAEFC8500B8EC2D /* AssociatedObjectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssociatedObjectTests.swift; path = Tests/GenericIDTests/AssociatedObjectTests.swift; sourceTree = SOURCE_ROOT; };
 		BB660BE31EAF076F00B8EC2D /* UserDefaultes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserDefaultes.swift; path = Sources/UserDefaultes.swift; sourceTree = SOURCE_ROOT; };
 		BB660BE81EAF28E000B8EC2D /* UserDefaultesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserDefaultesTests.swift; path = Tests/GenericIDTests/UserDefaultesTests.swift; sourceTree = SOURCE_ROOT; };
+		BB660BEA1EAF987000B8EC2D /* UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableView.swift; path = Tests/GenericIDTests/UITableView.swift; sourceTree = SOURCE_ROOT; };
 		BBE148861EAEF2EE009A2B40 /* GenericID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GenericID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE1488F1EAEF2EF009A2B40 /* GenericIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GenericIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE148961EAEF2EF009A2B40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				BBE148AC1EAEFA15009A2B40 /* Utility.swift */,
 				BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */,
 				BB660BE31EAF076F00B8EC2D /* UserDefaultes.swift */,
+				BB660BEA1EAF987000B8EC2D /* UITableView.swift */,
 				BBE148A11EAEF4FE009A2B40 /* Supporting Files */,
 			);
 			path = GenericID;
@@ -223,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBE148AD1EAEFA15009A2B40 /* Utility.swift in Sources */,
+				BB660BEB1EAF987000B8EC2D /* UITableView.swift in Sources */,
 				BBE148AB1EAEF7A8009A2B40 /* AssociatedObject.swift in Sources */,
 				BB660BE41EAF076F00B8EC2D /* UserDefaultes.swift in Sources */,
 			);

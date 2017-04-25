@@ -15,13 +15,6 @@ extension RawRepresentable where Self.RawValue: Hashable {
     }
 }
 
-extension RawRepresentable where Self.RawValue: Equatable {
-    
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
-        return lhs.rawValue == rhs.rawValue
-    }
-}
-
 extension RawRepresentable where Self.RawValue == String {
     
     public init(stringLiteral value: String) {
@@ -42,3 +35,29 @@ extension ExpressibleByExtendedGraphemeClusterLiteral where Self: ExpressibleByS
         self.init(stringLiteral: value)
     }
 }
+
+#if os(iOS) || os(tvOS)
+    
+    import UIKit
+    
+    public protocol UINibGettable {
+        static var nibName: String { get }
+    }
+    
+    extension UINibGettable {
+        static var nib: UINib {
+            return UINib(nibName: nibName, bundle: Bundle(for: Self.self as! AnyClass))
+        }
+    }
+    
+    protocol UINibFromTypeGettable: UINibGettable {
+        associatedtype NibType
+    }
+    
+    extension UINibFromTypeGettable {
+        public static var nibName: String {
+            return String(describing: NibType.self)
+        }
+    }
+    
+#endif
