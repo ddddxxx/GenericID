@@ -52,11 +52,20 @@
         }
         
         public func dequeueReusableCell<T>(withIdentifier identifier: CellReuseIdentifier<T>) -> T? {
-            return dequeueReusableCell(withIdentifier: identifier.rawValue).map { $0 as! T }
+            guard let dequeue = dequeueReusableHeaderFooterView(withIdentifier: identifier.rawValue) else {
+                return nil
+            }
+            guard let cell = dequeue as? T else {
+                fatalError("Could not dequeue reusable cell with identifier \(identifier.rawValue) for type \(T.self)")
+            }
+            return cell
         }
         
         public func dequeueReusableCell<T>(withIdentifier identifier: CellReuseIdentifier<T>, for indexPath: IndexPath) -> T {
-            return dequeueReusableCell(withIdentifier: identifier.rawValue, for: indexPath) as! T
+            guard let cell = dequeueReusableCell(withIdentifier: identifier.rawValue, for: indexPath) as? T else {
+                fatalError("Could not dequeue reusable cell with identifier \(identifier.rawValue) for type \(T.self)")
+            }
+            return cell
         }
     }
     
@@ -102,7 +111,13 @@
         }
         
         public func dequeueReusableHeaderFooterView<T>(withIdentifier identifier: HeaderFooterViewReuseIdentifier<T>) -> T? {
-            return dequeueReusableHeaderFooterView(withIdentifier: identifier.rawValue) as? T
+            guard let dequeue = dequeueReusableHeaderFooterView(withIdentifier: identifier.rawValue) else {
+                return nil
+            }
+            guard let view = dequeue as? T else {
+                fatalError("Could not dequeue reusable header footer view with identifier \(identifier.rawValue) for type \(T.self)")
+            }
+            return view
         }
     }
     

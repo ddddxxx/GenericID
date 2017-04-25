@@ -40,13 +40,13 @@ extension ExpressibleByExtendedGraphemeClusterLiteral where Self: ExpressibleByS
     
     import UIKit
     
-    public protocol UINibGettable {
+    public protocol UINibGettable: class {
         static var nibName: String { get }
     }
     
     extension UINibGettable {
         static var nib: UINib {
-            return UINib(nibName: nibName, bundle: Bundle(for: Self.self as! AnyClass))
+            return UINib(nibName: nibName, bundle: Bundle(for: Self.self))
         }
     }
     
