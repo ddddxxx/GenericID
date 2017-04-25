@@ -22,11 +22,11 @@ class AssociatedObjectTests: XCTestCase {
     
     func testReferenceType() {
         let obj = NSObject()
-        var date = Date()
+        var date = NSDate()
         XCTAssertNil(obj.associatedValue(for: .ReferenceTypeKey))
         obj.set(associatedValue: date, for: .ReferenceTypeKey)
         XCTAssert(obj.associatedValue(for: .ReferenceTypeKey) == date)
-        date = Date()
+        date = NSDate()
         obj.set(associatedValue: date, for: .ReferenceTypeKey)
         XCTAssert(obj.associatedValue(for: .ReferenceTypeKey) == date)
     }
@@ -34,6 +34,6 @@ class AssociatedObjectTests: XCTestCase {
 }
 
 extension NSObject.AssociateKeys {
-    static let ValueTypeKey: Key<Int>       = "ValueTypeKey"
-    static let ReferenceTypeKey: Key<Date>  = "ReferenceTypeKey"
+    static let ValueTypeKey: Key<Int>           = "ValueTypeKey"
+    static let ReferenceTypeKey: Key<NSDate>    = "ReferenceTypeKey"
 }
