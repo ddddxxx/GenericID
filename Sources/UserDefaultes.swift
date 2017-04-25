@@ -31,12 +31,18 @@ extension UserDefaults.DefaultKey: Hashable, ExpressibleByStringLiteral {}
 
 extension UserDefaults {
     
-    func contains<T>(_ key: DefaultKey<T>) -> Bool {
+    public func contains<T>(_ key: DefaultKey<T>) -> Bool {
         return object(forKey: key.rawValue) != nil
     }
     
     public func remove<T>(_ key: DefaultKey<T>) {
         removeObject(forKey: key.rawValue)
+    }
+    
+    public func removeAll() {
+        for (key, _) in dictionaryRepresentation() {
+            removeObject(forKey: key)
+        }
     }
 }
 
@@ -114,7 +120,7 @@ extension UserDefaults {
 //        set { set(newValue, forKey: key.rawValue) }
 //    }
     
-    public func unarchive<T: NSCoding>(for key: DefaultKey<T>) -> T? {
+    public func unarchive<T: NSCoding>(_ key: DefaultKey<T>) -> T? {
         guard let data = data(forKey: key.rawValue) else {
             return nil
         }

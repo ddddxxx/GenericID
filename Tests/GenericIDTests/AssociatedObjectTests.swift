@@ -14,21 +14,25 @@ class AssociatedObjectTests: XCTestCase {
     func testValueType() {
         let obj = NSObject()
         XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
+        
         obj.set(10, for: .ValueTypeKey)
-        XCTAssert(obj.associatedValue(for: .ValueTypeKey) == 10)
+        XCTAssertEqual(obj.associatedValue(for: .ValueTypeKey), 10)
+        
         obj.set(20, for: .ValueTypeKey)
-        XCTAssert(obj.associatedValue(for: .ValueTypeKey) == 20)
+        XCTAssertEqual(obj.associatedValue(for: .ValueTypeKey), 20)
     }
     
     func testReferenceType() {
         let obj = NSObject()
-        var date = NSDate()
         XCTAssertNil(obj.associatedValue(for: .ReferenceTypeKey))
+        
+        var date = NSDate()
         obj.set(date, for: .ReferenceTypeKey)
-        XCTAssert(obj.associatedValue(for: .ReferenceTypeKey) == date)
+        XCTAssertEqual(obj.associatedValue(for: .ReferenceTypeKey), date)
+        
         date = NSDate()
         obj.set(date, for: .ReferenceTypeKey)
-        XCTAssert(obj.associatedValue(for: .ReferenceTypeKey) == date)
+        XCTAssertEqual(obj.associatedValue(for: .ReferenceTypeKey), date)
     }
     
 }
