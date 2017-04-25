@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		BBE148901EAEF2EF009A2B40 /* GenericID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBE148861EAEF2EE009A2B40 /* GenericID.framework */; };
 		BBE148951EAEF2EF009A2B40 /* GenericIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148941EAEF2EF009A2B40 /* GenericIDTests.swift */; };
-		BBE148A31EAEF5D9009A2B40 /* GenericID.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE148A21EAEF5D9009A2B40 /* GenericID.h */; };
+		BBE148A31EAEF5D9009A2B40 /* GenericID.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE148A21EAEF5D9009A2B40 /* GenericID.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBE148AB1EAEF7A8009A2B40 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */; };
+		BBE148AD1EAEFA15009A2B40 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148AC1EAEFA15009A2B40 /* Utility.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,6 +32,8 @@
 		BBE148A21EAEF5D9009A2B40 /* GenericID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericID.h; path = "Sources/Supporting Files/GenericID.h"; sourceTree = SOURCE_ROOT; };
 		BBE148A41EAEF5F6009A2B40 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Sources/Supporting Files/Info.plist"; sourceTree = SOURCE_ROOT; };
 		BBE148A51EAEF5F6009A2B40 /* SingleTarget.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = SingleTarget.xcconfig; path = "Sources/Supporting Files/SingleTarget.xcconfig"; sourceTree = SOURCE_ROOT; };
+		BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssociatedObject.swift; path = Sources/AssociatedObject.swift; sourceTree = SOURCE_ROOT; };
+		BBE148AC1EAEFA15009A2B40 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utility.swift; path = Sources/Utility.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,8 @@
 		BBE148881EAEF2EE009A2B40 /* GenericID */ = {
 			isa = PBXGroup;
 			children = (
+				BBE148AC1EAEFA15009A2B40 /* Utility.swift */,
+				BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */,
 				BBE148A11EAEF4FE009A2B40 /* Supporting Files */,
 			);
 			path = GenericID;
@@ -159,6 +165,7 @@
 					BBE148851EAEF2EE009A2B40 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = KCY8NMTG34;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					BBE1488E1EAEF2EF009A2B40 = {
@@ -208,6 +215,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBE148AD1EAEFA15009A2B40 /* Utility.swift in Sources */,
+				BBE148AB1EAEF7A8009A2B40 /* AssociatedObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,6 +342,7 @@
 		BBE1489B1EAEF2EF009A2B40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -348,6 +358,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ddddxxx.GenericID;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -355,6 +366,7 @@
 		BBE1489C1EAEF2EF009A2B40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -377,6 +389,7 @@
 		BBE1489E1EAEF2EF009A2B40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KCY8NMTG34;
 				INFOPLIST_FILE = Tests/Info.plist;
@@ -390,6 +403,7 @@
 		BBE1489F1EAEF2EF009A2B40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KCY8NMTG34;
 				INFOPLIST_FILE = Tests/Info.plist;
