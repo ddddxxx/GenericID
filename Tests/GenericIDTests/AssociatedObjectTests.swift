@@ -33,7 +33,7 @@ class AssociatedObjectTests: XCTestCase {
     
 }
 
-extension NSObject.AssociatedKeys {
+extension NSObject.AssociateKeys {
     static let ValueTypeKey: Key<Int>       = "ValueTypeKey"
     static let ReferenceTypeKey: Key<Date>  = "ReferenceTypeKey"
 }

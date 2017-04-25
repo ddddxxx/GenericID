@@ -10,14 +10,14 @@ import Foundation
 
 extension NSObject {
     
-    public typealias AssociatedKey = AssociatedKeys.Key
+    public typealias AssociateKey = AssociateKeys.Key
     
-    public class AssociatedKeys {}
+    public class AssociateKeys {}
 }
 
-extension NSObject.AssociatedKeys {
+extension NSObject.AssociateKeys {
     
-    public class Key<T>: NSObject.AssociatedKeys, RawRepresentable {
+    public class Key<T>: NSObject.AssociateKeys, RawRepresentable {
         
         public let rawValue: String
         
@@ -27,9 +27,9 @@ extension NSObject.AssociatedKeys {
     }
 }
 
-extension NSObject.AssociatedKey: Hashable, ExpressibleByStringLiteral {}
+extension NSObject.AssociateKey: Hashable, ExpressibleByStringLiteral {}
 
-extension NSObject.AssociatedKey {
+extension NSObject.AssociateKey {
     
     public var opaqueKey: UnsafeRawPointer! {
         
@@ -50,11 +50,11 @@ extension NSObject {
 //        }
 //    }
     
-    public func associatedValue<T>(for key: AssociatedKey<T>) -> T? {
+    public func associatedValue<T>(for key: AssociateKey<T>) -> T? {
         return objc_getAssociatedObject(self, key.opaqueKey) as? T
     }
     
-    public func set<T>(associatedValue: T, for key: AssociatedKey<T>) {
+    public func set<T>(associatedValue: T, for key: AssociateKey<T>) {
         objc_setAssociatedObject(self, key.opaqueKey, associatedValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
     }
 }
