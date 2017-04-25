@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB660BE21EAEFC8500B8EC2D /* AssociatedObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BE11EAEFC8500B8EC2D /* AssociatedObjectTests.swift */; };
 		BBE148901EAEF2EF009A2B40 /* GenericID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBE148861EAEF2EE009A2B40 /* GenericID.framework */; };
-		BBE148951EAEF2EF009A2B40 /* GenericIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148941EAEF2EF009A2B40 /* GenericIDTests.swift */; };
 		BBE148A31EAEF5D9009A2B40 /* GenericID.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE148A21EAEF5D9009A2B40 /* GenericID.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BBE148AB1EAEF7A8009A2B40 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */; };
 		BBE148AD1EAEFA15009A2B40 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148AC1EAEFA15009A2B40 /* Utility.swift */; };
@@ -25,9 +25,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BB660BE11EAEFC8500B8EC2D /* AssociatedObjectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssociatedObjectTests.swift; path = Tests/GenericIDTests/AssociatedObjectTests.swift; sourceTree = SOURCE_ROOT; };
 		BBE148861EAEF2EE009A2B40 /* GenericID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GenericID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE1488F1EAEF2EF009A2B40 /* GenericIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GenericIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BBE148941EAEF2EF009A2B40 /* GenericIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GenericIDTests.swift; path = Tests/GenericIDTests.swift; sourceTree = "<group>"; };
 		BBE148961EAEF2EF009A2B40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
 		BBE148A21EAEF5D9009A2B40 /* GenericID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericID.h; path = "Sources/Supporting Files/GenericID.h"; sourceTree = SOURCE_ROOT; };
 		BBE148A41EAEF5F6009A2B40 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Sources/Supporting Files/Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -86,7 +86,7 @@
 		BBE148931EAEF2EF009A2B40 /* GenericIDTests */ = {
 			isa = PBXGroup;
 			children = (
-				BBE148941EAEF2EF009A2B40 /* GenericIDTests.swift */,
+				BB660BE11EAEFC8500B8EC2D /* AssociatedObjectTests.swift */,
 				BBE148961EAEF2EF009A2B40 /* Info.plist */,
 			);
 			path = GenericIDTests;
@@ -171,6 +171,7 @@
 					BBE1488E1EAEF2EF009A2B40 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = KCY8NMTG34;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -224,7 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBE148951EAEF2EF009A2B40 /* GenericIDTests.swift in Sources */,
+				BB660BE21EAEFC8500B8EC2D /* AssociatedObjectTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,12 +391,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KCY8NMTG34;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ddddxxx.GenericIDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -404,6 +407,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KCY8NMTG34;
 				INFOPLIST_FILE = Tests/Info.plist;
