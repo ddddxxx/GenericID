@@ -56,14 +56,14 @@
                 return nil
             }
             guard let cell = dequeue as? T else {
-                fatalError("Could not dequeue reusable cell with identifier \(identifier.rawValue) for type \(T.self)")
+                fatalError("Could not dequeue reusable cell with identifier '\(identifier.rawValue)' for type '\(T.self)'")
             }
             return cell
         }
         
         public func dequeueReusableCell<T>(withIdentifier identifier: CellReuseIdentifier<T>, for indexPath: IndexPath) -> T {
             guard let cell = dequeueReusableCell(withIdentifier: identifier.rawValue, for: indexPath) as? T else {
-                fatalError("Could not dequeue reusable cell with identifier \(identifier.rawValue) for type \(T.self)")
+                fatalError("Could not dequeue reusable cell with identifier '\(identifier.rawValue)' for type '\(T.self)'")
             }
             return cell
         }
@@ -115,7 +115,7 @@
                 return nil
             }
             guard let view = dequeue as? T else {
-                fatalError("Could not dequeue reusable header footer view with identifier \(identifier.rawValue) for type \(T.self)")
+                fatalError("Could not dequeue reusable header footer view with identifier '\(identifier.rawValue)' for type '\(T.self)'")
             }
             return view
         }
