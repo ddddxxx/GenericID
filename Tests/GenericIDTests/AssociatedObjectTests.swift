@@ -35,6 +35,17 @@ class AssociatedObjectTests: XCTestCase {
         XCTAssertEqual(obj.associatedValue(for: .ReferenceTypeKey), date)
     }
     
+    func testRemoving() {
+        let obj = NSObject()
+        XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
+        
+        obj.set(233, for: .ValueTypeKey)
+        XCTAssertEqual(obj.associatedValue(for: .ValueTypeKey), 233)
+        
+        obj.removeAssociateValue(for: .ValueTypeKey)
+        XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
+    }
+    
 }
 
 extension NSObject.AssociateKeys {

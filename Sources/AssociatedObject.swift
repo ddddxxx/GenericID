@@ -57,4 +57,12 @@ extension NSObject {
     public func set<T>(_ associatedValue: T, for key: AssociateKey<T>, policy: objc_AssociationPolicy = .OBJC_ASSOCIATION_COPY_NONATOMIC) {
         objc_setAssociatedObject(self, key.opaqueKey, associatedValue, policy)
     }
+    
+    public func removeAssociateValue<T>(for key: AssociateKey<T>) {
+        objc_setAssociatedObject(self, key.opaqueKey, nil, .OBJC_ASSOCIATION_ASSIGN)
+    }
+    
+    public func removeAssociateValues() {
+        objc_removeAssociatedObjects(self)
+    }
 }
