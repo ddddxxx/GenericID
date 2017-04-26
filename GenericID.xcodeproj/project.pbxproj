@@ -12,6 +12,8 @@
 		BB660BE91EAF28E000B8EC2D /* UserDefaultesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BE81EAF28E000B8EC2D /* UserDefaultesTests.swift */; };
 		BB660BEB1EAF987000B8EC2D /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BEA1EAF987000B8EC2D /* UITableView.swift */; };
 		BB660BED1EAFA37A00B8EC2D /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BEC1EAFA37A00B8EC2D /* UICollectionView.swift */; };
+		BB660BEF1EAFAB0900B8EC2D /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BEE1EAFAB0900B8EC2D /* UIStoryboard.swift */; };
+		BB660BF11EAFADD600B8EC2D /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BF01EAFADD600B8EC2D /* NSStoryboard.swift */; };
 		BBE148901EAEF2EF009A2B40 /* GenericID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBE148861EAEF2EE009A2B40 /* GenericID.framework */; };
 		BBE148A31EAEF5D9009A2B40 /* GenericID.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE148A21EAEF5D9009A2B40 /* GenericID.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BBE148AB1EAEF7A8009A2B40 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */; };
@@ -34,6 +36,8 @@
 		BB660BE81EAF28E000B8EC2D /* UserDefaultesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserDefaultesTests.swift; path = Tests/GenericIDTests/UserDefaultesTests.swift; sourceTree = SOURCE_ROOT; };
 		BB660BEA1EAF987000B8EC2D /* UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableView.swift; path = Tests/GenericIDTests/UITableView.swift; sourceTree = SOURCE_ROOT; };
 		BB660BEC1EAFA37A00B8EC2D /* UICollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UICollectionView.swift; path = Tests/GenericIDTests/UICollectionView.swift; sourceTree = SOURCE_ROOT; };
+		BB660BEE1EAFAB0900B8EC2D /* UIStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIStoryboard.swift; path = Tests/GenericIDTests/UIStoryboard.swift; sourceTree = SOURCE_ROOT; };
+		BB660BF01EAFADD600B8EC2D /* NSStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSStoryboard.swift; path = Tests/GenericIDTests/NSStoryboard.swift; sourceTree = SOURCE_ROOT; };
 		BBE148861EAEF2EE009A2B40 /* GenericID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GenericID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE1488F1EAEF2EF009A2B40 /* GenericIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GenericIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE148961EAEF2EF009A2B40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
@@ -89,6 +93,8 @@
 				BB660BE31EAF076F00B8EC2D /* UserDefaultes.swift */,
 				BB660BEA1EAF987000B8EC2D /* UITableView.swift */,
 				BB660BEC1EAFA37A00B8EC2D /* UICollectionView.swift */,
+				BB660BEE1EAFAB0900B8EC2D /* UIStoryboard.swift */,
+				BB660BF01EAFADD600B8EC2D /* NSStoryboard.swift */,
 				BBE148A11EAEF4FE009A2B40 /* Supporting Files */,
 			);
 			path = GenericID;
@@ -228,6 +234,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB660BEF1EAFAB0900B8EC2D /* UIStoryboard.swift in Sources */,
+				BB660BF11EAFADD600B8EC2D /* NSStoryboard.swift in Sources */,
 				BB660BED1EAFA37A00B8EC2D /* UICollectionView.swift in Sources */,
 				BBE148AD1EAEFA15009A2B40 /* Utility.swift in Sources */,
 				BB660BEB1EAF987000B8EC2D /* UITableView.swift in Sources */,
