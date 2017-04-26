@@ -46,6 +46,19 @@ class AssociatedObjectTests: XCTestCase {
         XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
     }
     
+    func testDynamicKey() {
+        let key: NSObject.AssociateKey<Int> = "ValueTypeKey"
+        let obj = NSObject()
+        XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
+        XCTAssertNil(obj.associatedValue(for: key))
+        
+        obj.set(10, for: .ValueTypeKey)
+        XCTAssertEqual(obj.associatedValue(for: key), 10)
+        
+        obj.set(20, for: key)
+        XCTAssertEqual(obj.associatedValue(for: .ValueTypeKey), 20)
+    }
+    
 }
 
 extension NSObject.AssociateKeys {

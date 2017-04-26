@@ -14,7 +14,7 @@
     
     extension UICollectionView {
         
-        public typealias CellReuseIdentifier = CellReuseIdentifiers.Identifier
+        public typealias CellReuseIdentifier<T> = CellReuseIdentifiers.Identifier<T> where T: UICollectionViewCell
         
         public class CellReuseIdentifiers {}
     }
@@ -63,7 +63,7 @@
     
     extension UICollectionView {
         
-        public typealias SupplementaryViewReuseIdentifier = SupplementaryViewReuseIdentifiers.SupplementaryViewReuseIdentifier
+        public typealias SupplementaryViewReuseIdentifier<T> = SupplementaryViewReuseIdentifiers.SupplementaryViewReuseIdentifier<T> where T: UICollectionReusableView
         
         public class SupplementaryViewReuseIdentifiers {}
     }

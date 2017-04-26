@@ -10,7 +10,7 @@ import Foundation
 
 extension NSObject {
     
-    public typealias AssociateKey = AssociateKeys.Key
+    public typealias AssociateKey<T> = AssociateKeys.Key<T>
     
     public class AssociateKeys {}
 }
@@ -32,7 +32,6 @@ extension NSObject.AssociateKey: Hashable, ExpressibleByStringLiteral {}
 extension NSObject.AssociateKey {
     
     public var opaqueKey: UnsafeRawPointer! {
-        
         return UnsafeRawPointer.init(bitPattern: hashValue)
     }
 }

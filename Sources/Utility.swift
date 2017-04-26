@@ -45,7 +45,7 @@ extension ExpressibleByExtendedGraphemeClusterLiteral where Self: ExpressibleByS
     }
     
     extension UINibGettable {
-        static var nib: UINib {
+        public static var nib: UINib {
             return UINib(nibName: nibName, bundle: Bundle(for: Self.self))
         }
     }

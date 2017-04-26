@@ -14,7 +14,7 @@
     
     extension UITableView {
         
-        public typealias CellReuseIdentifier = CellReuseIdentifiers.Identifier
+        public typealias CellReuseIdentifier<T> = CellReuseIdentifiers.Identifier<T> where T: UITableViewCell
         
         public class CellReuseIdentifiers {}
     }
@@ -73,7 +73,7 @@
     
     extension UITableView {
         
-        public typealias HeaderFooterViewReuseIdentifier = HeaderFooterViewReuseIdentifiers.HeaderFooterViewReuseIdentifier
+        public typealias HeaderFooterViewReuseIdentifier<T> = HeaderFooterViewReuseIdentifiers.HeaderFooterViewReuseIdentifier<T> where T: UITableViewHeaderFooterView
         
         public class HeaderFooterViewReuseIdentifiers {}
     }

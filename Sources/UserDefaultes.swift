@@ -10,7 +10,7 @@ import Foundation
 
 extension UserDefaults {
     
-    public typealias DefaultKey = DefaultKeys.Key
+    public typealias DefaultKey<T> = DefaultKeys.Key<T>
     
     public class DefaultKeys {}
 }
