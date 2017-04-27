@@ -42,11 +42,34 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(defaults[.IntKey], 466)
     }
     
+    func testFloat() {
+        XCTAssertEqual(defaults[.FloatKey], 0)
+        
+        defaults[.FloatKey] = 3.14
+        XCTAssertEqual(defaults[.FloatKey], 3.14)
+        
+        defaults[.FloatKey] += 0.01
+        XCTAssertEqual(defaults[.FloatKey], 3.15)
+    }
+    
+    func testDouble() {
+        XCTAssertEqual(defaults[.DoubleKey], 0)
+        
+        defaults[.DoubleKey] = 3.14
+        XCTAssertEqual(defaults[.DoubleKey], 3.14)
+        
+        defaults[.DoubleKey] += 0.01
+        XCTAssertEqual(defaults[.DoubleKey], 3.15)
+    }
+    
     func testString() {
         XCTAssertNil(defaults[.StringKey])
         
         defaults[.StringKey] = "foo"
         XCTAssertEqual(defaults[.StringKey], "foo")
+        
+        defaults[.StringKey]?.append("bar")
+        XCTAssertEqual(defaults[.StringKey], "foobar")
     }
     
     func testURL() {
@@ -55,6 +78,9 @@ class UserDefaultesTests: XCTestCase {
         let url = URL(string: "https://google.com")
         defaults[.URLKey] = url
         XCTAssertEqual(defaults[.URLKey], url)
+        
+        defaults[.URLKey]?.appendPathComponent("404")
+        XCTAssertEqual(defaults[.URLKey], URL(string: "https://google.com/404")!)
     }
     
     func testArray() {
@@ -118,6 +144,8 @@ class UserDefaultesTests: XCTestCase {
 extension UserDefaults.DefaultKeys {
     static let BoolKey: Key<Bool> = "BoolKey"
     static let IntKey: Key<Int> = "IntKey"
+    static let FloatKey: Key<Float> = "FloatKey"
+    static let DoubleKey: Key<Double> = "DoubleKey"
     static let StringKey: Key<String> = "StringKey"
     static let URLKey: Key<URL> = "URLKey"
     static let ArrayKey: Key<[Any]> = "ArrayKey"
