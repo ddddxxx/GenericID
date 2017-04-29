@@ -14,14 +14,14 @@
     
     extension UITableView {
         
-        public typealias CellReuseIdentifier<T> = CellReuseIdentifiers.Identifier<T> where T: UITableViewCell
+        public typealias CellReuseIdentifier<T> = CellReuseIdentifiers.ID<T> where T: UITableViewCell
         
         public class CellReuseIdentifiers {}
     }
     
     extension UITableView.CellReuseIdentifiers {
         
-        public class Identifier<T: UITableViewCell>: UITableView.CellReuseIdentifiers, RawRepresentable {
+        public class ID<T: UITableViewCell>: UITableView.CellReuseIdentifiers, RawRepresentable {
             
             public let rawValue: String
             
@@ -73,14 +73,14 @@
     
     extension UITableView {
         
-        public typealias HeaderFooterViewReuseIdentifier<T> = HeaderFooterViewReuseIdentifiers.HeaderFooterViewReuseIdentifier<T> where T: UITableViewHeaderFooterView
+        public typealias HeaderFooterViewReuseIdentifier<T> = HeaderFooterViewReuseIdentifiers.ID<T> where T: UITableViewHeaderFooterView
         
         public class HeaderFooterViewReuseIdentifiers {}
     }
     
     extension UITableView.HeaderFooterViewReuseIdentifiers {
         
-        public class HeaderFooterViewReuseIdentifier<T: UITableViewHeaderFooterView>: UITableView.HeaderFooterViewReuseIdentifiers, RawRepresentable {
+        public class ID<T: UITableViewHeaderFooterView>: UITableView.HeaderFooterViewReuseIdentifiers, RawRepresentable {
             
             public let rawValue: String
             

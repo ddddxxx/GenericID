@@ -14,14 +14,14 @@
     
     extension UICollectionView {
         
-        public typealias CellReuseIdentifier<T> = CellReuseIdentifiers.Identifier<T> where T: UICollectionViewCell
+        public typealias CellReuseIdentifier<T> = CellReuseIdentifiers.ID<T> where T: UICollectionViewCell
         
         public class CellReuseIdentifiers {}
     }
     
     extension UICollectionView.CellReuseIdentifiers {
         
-        public class Identifier<T: UICollectionViewCell>: UICollectionView.CellReuseIdentifiers, RawRepresentable {
+        public class ID<T: UICollectionViewCell>: UICollectionView.CellReuseIdentifiers, RawRepresentable {
             
             public let rawValue: String
             
@@ -63,14 +63,14 @@
     
     extension UICollectionView {
         
-        public typealias SupplementaryViewReuseIdentifier<T> = SupplementaryViewReuseIdentifiers.SupplementaryViewReuseIdentifier<T> where T: UICollectionReusableView
+        public typealias SupplementaryViewReuseIdentifier<T> = SupplementaryViewReuseIdentifiers.ID<T> where T: UICollectionReusableView
         
         public class SupplementaryViewReuseIdentifiers {}
     }
     
     extension UICollectionView.SupplementaryViewReuseIdentifiers {
         
-        public class SupplementaryViewReuseIdentifier<T: UICollectionReusableView>: UICollectionView.SupplementaryViewReuseIdentifiers, RawRepresentable {
+        public class ID<T: UICollectionReusableView>: UICollectionView.SupplementaryViewReuseIdentifiers, RawRepresentable {
             
             public let rawValue: String
             
