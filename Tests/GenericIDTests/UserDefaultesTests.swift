@@ -199,13 +199,16 @@ extension UserDefaults.DefaultKeys {
     static let IntKey: Key<Int> = "IntKey"
     static let FloatKey: Key<Float> = "FloatKey"
     static let DoubleKey: Key<Double> = "DoubleKey"
-    static let StringKey: Key<String> = "StringKey"
-    static let URLKey: Key<URL> = "URLKey"
-    static let DateKey: Key<Date> = "DateKey"
-    static let DataKey: Key<Data> = "DataKey"
-    static let ArrayKey: Key<[Any]> = "ArrayKey"
-    static let StringArrayKey: Key<[String]> = "StringArrayKey"
-    static let DictionaryKey: Key<[String: Any]> = "DictionaryKey"
+}
+
+extension UserDefaults.DefaultKeys {
+    static let StringKey: Key<String?> = "StringKey"
+    static let URLKey: Key<URL?> = "URLKey"
+    static let DateKey: Key<Date?> = "DateKey"
+    static let DataKey: Key<Data?> = "DataKey"
+    static let ArrayKey: Key<[Any]?> = "ArrayKey"
+    static let StringArrayKey: Key<[String]?> = "StringArrayKey"
+    static let DictionaryKey: Key<[String: Any]?> = "DictionaryKey"
     static let ColorKey: Key<Color> = "ColorKey"
-    static let AnyKey: Key<Any> = "AnyKey"
+    static let AnyKey: Key<Any?> = "AnyKey"
 }
