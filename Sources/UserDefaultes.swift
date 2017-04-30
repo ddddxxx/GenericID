@@ -44,67 +44,123 @@ extension UserDefaults {
             removeObject(forKey: key)
         }
     }
+    
+    fileprivate func number(forKey defaultName: String) -> NSNumber? {
+        return object(forKey: defaultName) as? NSNumber
+    }
 }
+
+// MARK: - Optional Key
 
 extension UserDefaults {
     
-    public subscript(_ key: DefaultKey<String>) -> String? {
+    public subscript(_ key: DefaultKey<Bool?>) -> Bool? {
+        get { return number(forKey: key.rawValue)?.boolValue }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<Int?>) -> Int? {
+        get { return number(forKey: key.rawValue)?.intValue }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<Float?>) -> Float? {
+        get { return number(forKey: key.rawValue)?.floatValue }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<Double?>) -> Double? {
+        get { return number(forKey: key.rawValue)?.doubleValue }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<String?>) -> String? {
         get { return string(forKey: key.rawValue) }
         set { set(newValue, forKey: key.rawValue) }
     }
     
-    public subscript(_ key: DefaultKey<[Any]>) -> [Any]? {
-        get { return array(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<[String: Any]>) -> [String: Any]? {
-        get { return dictionary(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Data>) -> Data? {
+    public subscript(_ key: DefaultKey<Data?>) -> Data? {
         get { return data(forKey: key.rawValue) }
         set { set(newValue, forKey: key.rawValue) }
     }
     
-    public subscript(_ key: DefaultKey<[String]>) -> [String]? {
-        get { return stringArray(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Int>) -> Int {
-        get { return integer(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Float>) -> Float {
-        get { return float(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Double>) -> Double {
-        get { return double(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Bool>) -> Bool {
-        get { return bool(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<URL>) -> URL? {
+    public subscript(_ key: DefaultKey<URL?>) -> URL? {
         get { return url(forKey: key.rawValue) }
         set { set(newValue, forKey: key.rawValue) }
     }
     
-    public subscript(_ key: DefaultKey<Date>) -> Date? {
+    public subscript(_ key: DefaultKey<Date?>) -> Date? {
         get { return object(forKey: key.rawValue) as? Date }
         set { set(newValue, forKey: key.rawValue) }
     }
     
-    public subscript(_ key: DefaultKey<Any>) -> Any? {
+    public subscript(_ key: DefaultKey<[Any]?>) -> [Any]? {
+        get { return array(forKey: key.rawValue) }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<[String: Any]?>) -> [String: Any]? {
+        get { return dictionary(forKey: key.rawValue) }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<[String]?>) -> [String]? {
+        get { return stringArray(forKey: key.rawValue) }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<Any?>) -> Any? {
         get { return object(forKey: key.rawValue) }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+}
+
+// MARK: - Non-Optional Key
+
+extension UserDefaults {
+    
+    public subscript(_ key: DefaultKey<Bool>) -> Bool {
+        get { return number(forKey: key.rawValue)?.boolValue ?? false }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<Int>) -> Int {
+        get { return number(forKey: key.rawValue)?.intValue ?? 0 }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<Float>) -> Float {
+        get { return number(forKey: key.rawValue)?.floatValue ?? 0 }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<Double>) -> Double {
+        get { return number(forKey: key.rawValue)?.doubleValue ?? 0 }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<String>) -> String {
+        get { return string(forKey: key.rawValue) ?? "" }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<Data>) -> Data {
+        get { return data(forKey: key.rawValue) ?? Data() }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<[Any]>) -> [Any] {
+        get { return array(forKey: key.rawValue) ?? [] }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<[String: Any]>) -> [String: Any] {
+        get { return dictionary(forKey: key.rawValue) ?? [:] }
+        set { set(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript(_ key: DefaultKey<[String]>) -> [String] {
+        get { return stringArray(forKey: key.rawValue) ?? [] }
         set { set(newValue, forKey: key.rawValue) }
     }
     
