@@ -7,9 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB660BE21EAEFC8500B8EC2D /* AssociatedObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BE11EAEFC8500B8EC2D /* AssociatedObjectTests.swift */; };
+		BB660BE41EAF076F00B8EC2D /* UserDefaultes.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BE31EAF076F00B8EC2D /* UserDefaultes.swift */; };
+		BB660BE91EAF28E000B8EC2D /* UserDefaultesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BE81EAF28E000B8EC2D /* UserDefaultesTests.swift */; };
+		BB660BEB1EAF987000B8EC2D /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BEA1EAF987000B8EC2D /* UITableView.swift */; };
+		BB660BED1EAFA37A00B8EC2D /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BEC1EAFA37A00B8EC2D /* UICollectionView.swift */; };
+		BB660BEF1EAFAB0900B8EC2D /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BEE1EAFAB0900B8EC2D /* UIStoryboard.swift */; };
+		BB660BF11EAFADD600B8EC2D /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB660BF01EAFADD600B8EC2D /* NSStoryboard.swift */; };
 		BBE148901EAEF2EF009A2B40 /* GenericID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBE148861EAEF2EE009A2B40 /* GenericID.framework */; };
-		BBE148951EAEF2EF009A2B40 /* GenericIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148941EAEF2EF009A2B40 /* GenericIDTests.swift */; };
-		BBE148971EAEF2EF009A2B40 /* GenericID.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE148891EAEF2EF009A2B40 /* GenericID.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBE148A31EAEF5D9009A2B40 /* GenericID.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE148A21EAEF5D9009A2B40 /* GenericID.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBE148AB1EAEF7A8009A2B40 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */; };
+		BBE148AD1EAEFA15009A2B40 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE148AC1EAEFA15009A2B40 /* Utility.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +31,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BB660BE11EAEFC8500B8EC2D /* AssociatedObjectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssociatedObjectTests.swift; path = Tests/GenericIDTests/AssociatedObjectTests.swift; sourceTree = SOURCE_ROOT; };
+		BB660BE31EAF076F00B8EC2D /* UserDefaultes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserDefaultes.swift; path = Sources/UserDefaultes.swift; sourceTree = SOURCE_ROOT; };
+		BB660BE81EAF28E000B8EC2D /* UserDefaultesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserDefaultesTests.swift; path = Tests/GenericIDTests/UserDefaultesTests.swift; sourceTree = SOURCE_ROOT; };
+		BB660BEA1EAF987000B8EC2D /* UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableView.swift; path = Tests/GenericIDTests/UITableView.swift; sourceTree = SOURCE_ROOT; };
+		BB660BEC1EAFA37A00B8EC2D /* UICollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UICollectionView.swift; path = Tests/GenericIDTests/UICollectionView.swift; sourceTree = SOURCE_ROOT; };
+		BB660BEE1EAFAB0900B8EC2D /* UIStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIStoryboard.swift; path = Tests/GenericIDTests/UIStoryboard.swift; sourceTree = SOURCE_ROOT; };
+		BB660BF01EAFADD600B8EC2D /* NSStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSStoryboard.swift; path = Tests/GenericIDTests/NSStoryboard.swift; sourceTree = SOURCE_ROOT; };
 		BBE148861EAEF2EE009A2B40 /* GenericID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GenericID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BBE148891EAEF2EF009A2B40 /* GenericID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenericID.h; sourceTree = "<group>"; };
-		BBE1488A1EAEF2EF009A2B40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBE1488F1EAEF2EF009A2B40 /* GenericIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GenericIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BBE148941EAEF2EF009A2B40 /* GenericIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericIDTests.swift; sourceTree = "<group>"; };
-		BBE148961EAEF2EF009A2B40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BBE148961EAEF2EF009A2B40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = "<group>"; };
+		BBE148A21EAEF5D9009A2B40 /* GenericID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericID.h; path = "Sources/Supporting Files/GenericID.h"; sourceTree = SOURCE_ROOT; };
+		BBE148A41EAEF5F6009A2B40 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Sources/Supporting Files/Info.plist"; sourceTree = SOURCE_ROOT; };
+		BBE148A51EAEF5F6009A2B40 /* SingleTarget.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = SingleTarget.xcconfig; path = "Sources/Supporting Files/SingleTarget.xcconfig"; sourceTree = SOURCE_ROOT; };
+		BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssociatedObject.swift; path = Sources/AssociatedObject.swift; sourceTree = SOURCE_ROOT; };
+		BBE148AC1EAEFA15009A2B40 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utility.swift; path = Sources/Utility.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,8 +88,14 @@
 		BBE148881EAEF2EE009A2B40 /* GenericID */ = {
 			isa = PBXGroup;
 			children = (
-				BBE148891EAEF2EF009A2B40 /* GenericID.h */,
-				BBE1488A1EAEF2EF009A2B40 /* Info.plist */,
+				BBE148AC1EAEFA15009A2B40 /* Utility.swift */,
+				BBE148AA1EAEF7A8009A2B40 /* AssociatedObject.swift */,
+				BB660BE31EAF076F00B8EC2D /* UserDefaultes.swift */,
+				BB660BEA1EAF987000B8EC2D /* UITableView.swift */,
+				BB660BEC1EAFA37A00B8EC2D /* UICollectionView.swift */,
+				BB660BEE1EAFAB0900B8EC2D /* UIStoryboard.swift */,
+				BB660BF01EAFADD600B8EC2D /* NSStoryboard.swift */,
+				BBE148A11EAEF4FE009A2B40 /* Supporting Files */,
 			);
 			path = GenericID;
 			sourceTree = "<group>";
@@ -80,10 +103,21 @@
 		BBE148931EAEF2EF009A2B40 /* GenericIDTests */ = {
 			isa = PBXGroup;
 			children = (
-				BBE148941EAEF2EF009A2B40 /* GenericIDTests.swift */,
+				BB660BE11EAEFC8500B8EC2D /* AssociatedObjectTests.swift */,
+				BB660BE81EAF28E000B8EC2D /* UserDefaultesTests.swift */,
 				BBE148961EAEF2EF009A2B40 /* Info.plist */,
 			);
 			path = GenericIDTests;
+			sourceTree = "<group>";
+		};
+		BBE148A11EAEF4FE009A2B40 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BBE148A51EAEF5F6009A2B40 /* SingleTarget.xcconfig */,
+				BBE148A21EAEF5D9009A2B40 /* GenericID.h */,
+				BBE148A41EAEF5F6009A2B40 /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,7 +127,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBE148971EAEF2EF009A2B40 /* GenericID.h in Headers */,
+				BBE148A31EAEF5D9009A2B40 /* GenericID.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,11 +183,13 @@
 					BBE148851EAEF2EE009A2B40 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = KCY8NMTG34;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					BBE1488E1EAEF2EF009A2B40 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = KCY8NMTG34;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -198,6 +234,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB660BEF1EAFAB0900B8EC2D /* UIStoryboard.swift in Sources */,
+				BB660BF11EAFADD600B8EC2D /* NSStoryboard.swift in Sources */,
+				BB660BED1EAFA37A00B8EC2D /* UICollectionView.swift in Sources */,
+				BBE148AD1EAEFA15009A2B40 /* Utility.swift in Sources */,
+				BB660BEB1EAF987000B8EC2D /* UITableView.swift in Sources */,
+				BBE148AB1EAEF7A8009A2B40 /* AssociatedObject.swift in Sources */,
+				BB660BE41EAF076F00B8EC2D /* UserDefaultes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,7 +248,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBE148951EAEF2EF009A2B40 /* GenericIDTests.swift in Sources */,
+				BB660BE91EAF28E000B8EC2D /* UserDefaultesTests.swift in Sources */,
+				BB660BE21EAEFC8500B8EC2D /* AssociatedObjectTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +266,7 @@
 /* Begin XCBuildConfiguration section */
 		BBE148981EAEF2EF009A2B40 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BBE148A51EAEF5F6009A2B40 /* SingleTarget.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -262,7 +307,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -275,6 +320,7 @@
 		};
 		BBE148991EAEF2EF009A2B40 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BBE148A51EAEF5F6009A2B40 /* SingleTarget.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -309,7 +355,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -321,6 +367,7 @@
 		BBE1489B1EAEF2EF009A2B40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -329,12 +376,14 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = GenericID/Info.plist;
+				INFOPLIST_FILE = "Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = ddddxxx.GenericID;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -342,6 +391,7 @@
 		BBE1489C1EAEF2EF009A2B40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -350,9 +400,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = GenericID/Info.plist;
+				INFOPLIST_FILE = "Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = ddddxxx.GenericID;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -363,12 +414,15 @@
 		BBE1489E1EAEF2EF009A2B40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KCY8NMTG34;
-				INFOPLIST_FILE = GenericIDTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ddddxxx.GenericIDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -376,9 +430,11 @@
 		BBE1489F1EAEF2EF009A2B40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KCY8NMTG34;
-				INFOPLIST_FILE = GenericIDTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ddddxxx.GenericIDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -405,6 +461,7 @@
 				BBE1489C1EAEF2EF009A2B40 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BBE1489D1EAEF2EF009A2B40 /* Build configuration list for PBXNativeTarget "GenericIDTests" */ = {
 			isa = XCConfigurationList;
@@ -413,6 +470,7 @@
 				BBE1489F1EAEF2EF009A2B40 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
