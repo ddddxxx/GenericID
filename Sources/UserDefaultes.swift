@@ -188,3 +188,103 @@ extension UserDefaults {
         set(data, forKey: key.rawValue)
     }
 }
+
+// MARK: - KVO
+
+extension UserDefaults.AssociateKeys {
+    static let EventsKey: Key<[String: [UserDefaults.Observing]]> = "eventsKey"
+}
+
+extension UserDefaults {
+    
+    var events: [String: [Observing]] {
+        get { return associatedValue(for: .EventsKey) ?? [:] }
+        set { set(newValue, for: .EventsKey) }
+    }
+    
+    @discardableResult public func addObserver<T: NSCoding>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (ValueChange<T>) -> Void) -> Observing {
+        if !events.keys.contains(key.rawValue) {
+            let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
+            addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
+            events[key.rawValue] = []
+        }
+        let subscription = Observing() { old, new in
+            guard let oldData = old as? Data, let newData = new as? Data else {
+                return
+            }
+            guard let oldValue = NSKeyedUnarchiver.unarchiveObject(with: oldData) as? T,
+                let newValue = NSKeyedUnarchiver.unarchiveObject(with: newData) as? T else {
+                    return
+            }
+            using(ValueChange(oldValue, newValue))
+        }
+        events[key.rawValue]?.append(subscription)
+        return subscription
+    }
+    
+    @discardableResult public func addObserver<T>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (ValueChange<T>) -> Void) -> Observing {
+        if !events.keys.contains(key.rawValue) {
+            let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
+            addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
+            events[key.rawValue] = []
+        }
+        let subscription = Observing() { old, new in
+            if let old = old as? T, let new = new as? T {
+                using(ValueChange(old, new))
+            }
+        }
+        events[key.rawValue]?.append(subscription)
+        return subscription
+    }
+    
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard let keyPath = keyPath else { return }
+        
+        events[keyPath] = events[keyPath]?.filter { $0.isValid }
+        guard let observings = events[keyPath] else { return }
+        
+        guard let old = change?[.oldKey], let new = change?[.newKey] else { return }
+        
+        observings.forEach { $0.handler(old, new) }
+        
+        if observings.isEmpty {
+            events.removeValue(forKey: keyPath)
+        }
+    }
+}
+
+extension UserDefaults {
+    
+    public struct ValueChange<T> {
+        
+        public let oldValue: T
+        
+        public let newValue: T
+        
+        init(_ old: T, _ new: T) {
+            oldValue = old
+            newValue = new
+        }
+    }
+}
+
+extension UserDefaults {
+    
+    public class Observing {
+        
+        typealias HandlerType = (_ old: Any, _ new: Any) -> Void
+        
+        var handler: HandlerType
+        
+        var isValid = true
+        
+        init(_ handler: @escaping HandlerType) {
+            self.handler = handler
+        }
+        
+        public func invalidate() {
+            handler = {_,_ in }
+            isValid = false
+        }
+    }
+}

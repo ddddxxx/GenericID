@@ -192,6 +192,40 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertNil(defaults[.StringKey])
     }
     
+    func testKVO() {
+        var exec = false
+        defaults[.IntKey] = 233
+        let token = defaults.addObserver(key: .IntKey) { change in
+            XCTAssertEqual(change.oldValue, 233)
+            XCTAssertEqual(change.newValue, 234)
+            exec = true
+        }
+        defaults[.IntKey] += 1
+        XCTAssert(exec)
+        
+        exec = false
+        token.invalidate()
+        defaults[.IntKey] = 123
+        XCTAssertFalse(exec)
+    }
+    
+    func testKVOWithCoding() {
+        var exec = false
+        defaults.archive(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .ColorKey)
+        let token = defaults.addObserver(key: .ColorKey) { change in
+            XCTAssertEqual(change.oldValue, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+            XCTAssertEqual(change.newValue, #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
+            exec = true
+        }
+        defaults.archive(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .ColorKey)
+        XCTAssert(exec)
+        
+        exec = false
+        token.invalidate()
+        defaults.archive(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .ColorKey)
+        XCTAssertFalse(exec)
+    }
+    
 }
 
 extension UserDefaults.DefaultKeys {
