@@ -195,9 +195,9 @@ class UserDefaultesTests: XCTestCase {
     func testKVO() {
         var exec = false
         defaults[.IntKey] = 233
-        let token = defaults.addObserver(key: .IntKey) { change in
-            XCTAssertEqual(change.oldValue, 233)
-            XCTAssertEqual(change.newValue, 234)
+        let token = defaults.addObserver(key: .IntKey) { oldValue, newValue in
+            XCTAssertEqual(oldValue, 233)
+            XCTAssertEqual(newValue, 234)
             exec = true
         }
         defaults[.IntKey] += 1
@@ -212,9 +212,9 @@ class UserDefaultesTests: XCTestCase {
     func testKVOWithCoding() {
         var exec = false
         defaults.archive(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .ColorKey)
-        let token = defaults.addObserver(key: .ColorKey) { change in
-            XCTAssertEqual(change.oldValue, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-            XCTAssertEqual(change.newValue, #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
+        let token = defaults.addObserver(key: .ColorKey) { oldValue, newValue in
+            XCTAssertEqual(oldValue, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+            XCTAssertEqual(newValue, #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
             exec = true
         }
         defaults.archive(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .ColorKey)

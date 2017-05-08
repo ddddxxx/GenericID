@@ -202,7 +202,7 @@ extension UserDefaults {
         set { set(newValue, for: .EventsKey) }
     }
     
-    @discardableResult public func addObserver<T: NSCoding>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (ValueChange<T>) -> Void) -> Observing {
+    @discardableResult public func addObserver<T: NSCoding>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (_ oldValue: T, _ newValue: T) -> Void) -> Observing {
         if !events.keys.contains(key.rawValue) {
             let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
             addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
@@ -216,13 +216,13 @@ extension UserDefaults {
                 let newValue = NSKeyedUnarchiver.unarchiveObject(with: newData) as? T else {
                     return
             }
-            using(ValueChange(oldValue, newValue))
+            using(oldValue, newValue)
         }
         events[key.rawValue]?.append(subscription)
         return subscription
     }
     
-    @discardableResult public func addObserver<T>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (ValueChange<T>) -> Void) -> Observing {
+    @discardableResult public func addObserver<T>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (_ oldValue: T, _ newValue: T) -> Void) -> Observing {
         if !events.keys.contains(key.rawValue) {
             let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
             addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
@@ -230,7 +230,7 @@ extension UserDefaults {
         }
         let subscription = Observing() { old, new in
             if let old = old as? T, let new = new as? T {
-                using(ValueChange(old, new))
+                using(old, new)
             }
         }
         events[key.rawValue]?.append(subscription)
@@ -249,21 +249,6 @@ extension UserDefaults {
         
         if observings.isEmpty {
             events.removeValue(forKey: keyPath)
-        }
-    }
-}
-
-extension UserDefaults {
-    
-    public struct ValueChange<T> {
-        
-        public let oldValue: T
-        
-        public let newValue: T
-        
-        init(_ old: T, _ new: T) {
-            oldValue = old
-            newValue = new
         }
     }
 }
