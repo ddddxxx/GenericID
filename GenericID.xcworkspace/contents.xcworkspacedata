@@ -5,6 +5,6 @@
       location = "group:GenericID.playground">
    </FileRef>
    <FileRef
-      location = "container:GenericID.xcodeproj">
+      location = "group:GenericID.xcodeproj">
    </FileRef>
 </Workspace>
