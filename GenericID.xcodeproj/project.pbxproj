@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BBDCA01A1ECAE8A10094F7C6 /* UserDefaultes+NSValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDCA0191ECAE8A10094F7C6 /* UserDefaultes+NSValue.swift */; };
 		OBJ_29 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AssociatedObject.swift */; };
 		OBJ_30 /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* NSStoryboard.swift */; };
 		OBJ_31 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* UICollectionView.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BBDCA0191ECAE8A10094F7C6 /* UserDefaultes+NSValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaultes+NSValue.swift"; sourceTree = "<group>"; };
 		OBJ_10 /* NSStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSStoryboard.swift; sourceTree = "<group>"; };
 		OBJ_11 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
 		OBJ_12 /* UIStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
@@ -90,7 +92,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -98,7 +100,6 @@
 				OBJ_16 /* Tests */,
 				OBJ_21 /* Products */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -115,6 +116,7 @@
 				OBJ_15 /* Utility.swift */,
 				OBJ_9 /* AssociatedObject.swift */,
 				OBJ_14 /* UserDefaultes.swift */,
+				BBDCA0191ECAE8A10094F7C6 /* UserDefaultes+NSValue.swift */,
 				OBJ_13 /* UITableView.swift */,
 				OBJ_11 /* UICollectionView.swift */,
 				OBJ_12 /* UIStoryboard.swift */,
@@ -175,7 +177,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_21 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -194,6 +196,7 @@
 				OBJ_29 /* AssociatedObject.swift in Sources */,
 				OBJ_30 /* NSStoryboard.swift in Sources */,
 				OBJ_31 /* UICollectionView.swift in Sources */,
+				BBDCA01A1ECAE8A10094F7C6 /* UserDefaultes+NSValue.swift in Sources */,
 				OBJ_32 /* UIStoryboard.swift in Sources */,
 				OBJ_33 /* UITableView.swift in Sources */,
 				OBJ_34 /* UserDefaultes.swift in Sources */,
