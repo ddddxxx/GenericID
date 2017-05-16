@@ -202,20 +202,15 @@ extension UserDefaults {
         set { set(newValue, for: .EventsKey) }
     }
     
-    @discardableResult public func addObserver<T: NSCoding>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (_ oldValue: T, _ newValue: T) -> Void) -> Observing {
+    @discardableResult public func addObserver<T: NSCoding>(key: DefaultKey<T?>, initial: Bool = false, using: @escaping (_ oldValue: T?, _ newValue: T?) -> Void) -> Observing {
         if !events.keys.contains(key.rawValue) {
             let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
             addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
             events[key.rawValue] = []
         }
         let subscription = Observing() { old, new in
-            guard let oldData = old as? Data, let newData = new as? Data else {
-                return
-            }
-            guard let oldValue = NSKeyedUnarchiver.unarchiveObject(with: oldData) as? T,
-                let newValue = NSKeyedUnarchiver.unarchiveObject(with: newData) as? T else {
-                    return
-            }
+            let oldValue = (old as? Data).flatMap(NSKeyedUnarchiver.unarchiveObject) as? T
+            let newValue = (new as? Data).flatMap(NSKeyedUnarchiver.unarchiveObject) as? T
             using(oldValue, newValue)
         }
         events[key.rawValue]?.append(subscription)
@@ -241,11 +236,9 @@ extension UserDefaults {
         guard let keyPath = keyPath else { return }
         
         events[keyPath] = events[keyPath]?.filter { $0.isValid }
-        guard let observings = events[keyPath] else { return }
+        guard let observings = events[keyPath], let change = change else { return }
         
-        guard let old = change?[.oldKey], let new = change?[.newKey] else { return }
-        
-        observings.forEach { $0.handler(old, new) }
+        observings.forEach { $0.handler(change[.oldKey], change[.newKey]) }
         
         if observings.isEmpty {
             events.removeValue(forKey: keyPath)
@@ -257,7 +250,7 @@ extension UserDefaults {
     
     public class Observing {
         
-        typealias HandlerType = (_ old: Any, _ new: Any) -> Void
+        typealias HandlerType = (_ old: Any?, _ new: Any?) -> Void
         
         var handler: HandlerType
         
