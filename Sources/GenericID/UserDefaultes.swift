@@ -176,14 +176,14 @@ extension UserDefaults {
 //        set { set(newValue, forKey: key.rawValue) }
 //    }
     
-    public func unarchive<T: NSCoding>(_ key: DefaultKey<T>) -> T? {
+    public func unarchive<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
         guard let data = data(forKey: key.rawValue) else {
             return nil
         }
         return NSKeyedUnarchiver.unarchiveObject(with: data) as? T
     }
     
-    public func archive<T: NSCoding>(_ newValue: T, for key: DefaultKey<T>) {
+    public func archive<T: NSCoding>(_ newValue: T, for key: DefaultKey<T?>) {
         let data = NSKeyedArchiver.archivedData(withRootObject: newValue)
         set(data, forKey: key.rawValue)
     }

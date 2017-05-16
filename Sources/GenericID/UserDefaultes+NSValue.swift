@@ -17,14 +17,14 @@ public protocol NSValueConvertable {
 
 extension UserDefaults {
     
-    public func nsValue<T: NSValueConvertable>(_ key: DefaultKey<T>) -> T? {
+    public func nsValue<T: NSValueConvertable>(_ key: DefaultKey<T?>) -> T? {
         guard let value = object(forKey: key.rawValue) as? NSValue else {
             return nil
         }
         return T(nsValue: value)
     }
     
-    public func set<T: NSValueConvertable>(_ value: T?, forKey key: DefaultKey<T>) {
+    public func set<T: NSValueConvertable>(_ value: T?, forKey key: DefaultKey<T?>) {
         set(value?.nsValue, forKey: key.rawValue)
     }
 }
