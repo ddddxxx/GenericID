@@ -12,14 +12,14 @@
     
     extension NSStoryboard {
         
-        public typealias Identifier<T> = Identifiers.ID<T> where T: NSViewController
+        public typealias Identifier<T> = Identifiers.ID<T>
         
         public class Identifiers {}
     }
     
     extension NSStoryboard.Identifiers {
         
-        public class ID<T: NSViewController>: NSStoryboard.Identifiers, RawRepresentable {
+        public class ID<T>: NSStoryboard.Identifiers, RawRepresentable {
             
             public let rawValue: String
             
