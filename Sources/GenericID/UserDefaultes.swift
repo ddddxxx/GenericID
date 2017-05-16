@@ -48,6 +48,10 @@ extension UserDefaults {
     fileprivate func number(forKey defaultName: String) -> NSNumber? {
         return object(forKey: defaultName) as? NSNumber
     }
+    
+    fileprivate func valueObject(forKey defaultName: String) -> NSValue? {
+        return object(forKey: defaultName) as? NSValue
+    }
 }
 
 // MARK: - Optional Key
@@ -188,6 +192,133 @@ extension UserDefaults {
         set(data, forKey: key.rawValue)
     }
 }
+
+
+// MARK: - NSValue
+
+#if os(macOS)
+    
+    extension UserDefaults {
+        
+        public subscript(_ key: DefaultKey<CGPoint?>) -> CGPoint? {
+            get { return valueObject(forKey: key.rawValue)?.pointValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGPoint>) -> CGPoint {
+            get { return valueObject(forKey: key.rawValue)?.pointValue ?? .zero }
+            set { set(NSValue(point: newValue), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGSize?>) -> CGSize? {
+            get { return valueObject(forKey: key.rawValue)?.sizeValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGSize>) -> CGSize {
+            get { return valueObject(forKey: key.rawValue)?.sizeValue ?? .zero }
+            set { set(NSValue(size: newValue), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGRect?>) -> CGRect? {
+            get { return valueObject(forKey: key.rawValue)?.rectValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGRect>) -> CGRect {
+            get { return valueObject(forKey: key.rawValue)?.rectValue ?? .zero }
+            set { set(NSValue(rect: newValue), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<EdgeInsets?>) -> EdgeInsets? {
+            get { return valueObject(forKey: key.rawValue)?.edgeInsetsValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<EdgeInsets>) -> EdgeInsets {
+            get { return valueObject(forKey: key.rawValue)?.edgeInsetsValue ?? EdgeInsets(top: 0, left: 0, bottom: 0, right: 0) }
+            set { set(NSValue(edgeInsets: newValue), forKey: key.rawValue) }
+        }
+    }
+    
+#elseif os(iOS) || os(tvOS) || os(watchOS)
+    
+    import UIKit
+    
+    extension UserDefaults {
+        
+        public subscript(_ key: DefaultKey<CGPoint?>) -> CGPoint? {
+            get { return valueObject(forKey: key.rawValue)?.cgPointValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGPoint>) -> CGPoint {
+            get { return valueObject(forKey: key.rawValue)?.cgPointValue ?? .zero }
+            set { set(NSValue(cgPoint: newValue), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGVector?>) -> CGVector? {
+            get { return valueObject(forKey: key.rawValue)?.cgVectorValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGVector>) -> CGVector {
+            get { return valueObject(forKey: key.rawValue)?.cgVectorValue ?? .zero }
+            set { set(NSValue(cgVector: newValue), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGSize?>) -> CGSize? {
+            get { return valueObject(forKey: key.rawValue)?.cgSizeValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGSize>) -> CGSize {
+            get { return valueObject(forKey: key.rawValue)?.cgSizeValue ?? .zero }
+            set { set(NSValue(cgSize: newValue), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGRect?>) -> CGRect? {
+            get { return valueObject(forKey: key.rawValue)?.cgRectValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGRect>) -> CGRect {
+            get { return valueObject(forKey: key.rawValue)?.cgRectValue ?? .zero }
+            set { set(NSValue(cgRect: newValue), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGAffineTransform?>) -> CGAffineTransform? {
+            get { return valueObject(forKey: key.rawValue)?.cgAffineTransformValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<CGAffineTransform>) -> CGAffineTransform {
+            get { return valueObject(forKey: key.rawValue)?.cgAffineTransformValue ?? .identity }
+            set { set(NSValue(cgAffineTransform: newValue), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<UIEdgeInsets?>) -> UIEdgeInsets? {
+            get { return valueObject(forKey: key.rawValue)?.uiEdgeInsetsValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<UIEdgeInsets>) -> UIEdgeInsets {
+            get { return valueObject(forKey: key.rawValue)?.uiEdgeInsetsValue ?? .zero }
+            set { set(NSValue(uiEdgeInsets: newValue), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<UIOffset?>) -> UIOffset? {
+            get { return valueObject(forKey: key.rawValue)?.uiOffsetValue }
+            set { set(newValue.map(NSValue.init), forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: DefaultKey<UIOffset>) -> UIOffset {
+            get { return valueObject(forKey: key.rawValue)?.uiOffsetValue ?? .zero }
+            set { set(NSValue(uiOffset: newValue), forKey: key.rawValue) }
+        }
+    }
+    
+#endif
 
 // MARK: - KVO
 
