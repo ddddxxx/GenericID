@@ -243,6 +243,6 @@ extension UserDefaults.DefaultKeys {
     static let ArrayKey: Key<[Any]?> = "ArrayKey"
     static let StringArrayKey: Key<[String]?> = "StringArrayKey"
     static let DictionaryKey: Key<[String: Any]?> = "DictionaryKey"
-    static let ColorKey: Key<Color> = "ColorKey"
+    static let ColorKey: Key<Color?> = "ColorKey"
     static let AnyKey: Key<Any?> = "AnyKey"
 }
