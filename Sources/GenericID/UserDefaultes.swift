@@ -122,6 +122,37 @@ extension UserDefaults {
         get { return object(forKey: key.rawValue) }
         set { set(newValue, forKey: key.rawValue) }
     }
+    
+    // TODO: Generic Subscripts in Swift 4.
+    
+//    public subscript<T: NSCoding>(_ key: Key<T?>) -> T?
+//    public subscript<T: NSValueConvertable>(_ key: Key<T?>) -> T?
+//    public subscript<T>(_ key: Key<T>) -> T?
+    
+    public func unarchive<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
+        guard let data = data(forKey: key.rawValue) else {
+            return nil
+        }
+        return NSKeyedUnarchiver.unarchiveObject(with: data) as? T
+    }
+    
+    public func archive<T: NSCoding>(_ newValue: T, for key: DefaultKey<T?>) {
+        let data = NSKeyedArchiver.archivedData(withRootObject: newValue)
+        set(data, forKey: key.rawValue)
+    }
+    
+    public func unwrap<T: NSValueConvertable>(_ key: DefaultKey<T?>) -> T? {
+        guard let data = data(forKey: key.rawValue) else {
+            return nil
+        }
+        let value = NSKeyedUnarchiver.unarchiveObject(with: data) as! NSValue
+        return T(nsValue: value)
+    }
+    
+    public func wrap<T: NSValueConvertable>(_ newValue: T?, for key: DefaultKey<T?>) {
+        let data = (newValue?.nsValue).map(NSKeyedArchiver.archivedData)
+        set(data, forKey: key.rawValue)
+    }
 }
 
 // MARK: - Non-Optional Key
@@ -171,37 +202,6 @@ extension UserDefaults {
     public subscript(_ key: DefaultKey<[String]>) -> [String] {
         get { return stringArray(forKey: key.rawValue) ?? [] }
         set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    // TODO: Generic Subscripts in Swift 4.
-    
-//    public subscript<T: NSCoding>(_ key: Key<T?>) -> T?
-//    public subscript<T: NSValueConvertable>(_ key: Key<T?>) -> T?
-//    public subscript<T>(_ key: Key<T>) -> T?
-    
-    public func unarchive<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
-        guard let data = data(forKey: key.rawValue) else {
-            return nil
-        }
-        return NSKeyedUnarchiver.unarchiveObject(with: data) as? T
-    }
-    
-    public func archive<T: NSCoding>(_ newValue: T, for key: DefaultKey<T?>) {
-        let data = NSKeyedArchiver.archivedData(withRootObject: newValue)
-        set(data, forKey: key.rawValue)
-    }
-        
-    public func unwrap<T: NSValueConvertable>(_ key: DefaultKey<T?>) -> T? {
-        guard let data = data(forKey: key.rawValue) else {
-            return nil
-        }
-        let value = NSKeyedUnarchiver.unarchiveObject(with: data) as! NSValue
-        return T(nsValue: value)
-    }
-    
-    public func wrap<T: NSValueConvertable>(_ newValue: T?, for key: DefaultKey<T?>) {
-        let data = (newValue?.nsValue).map(NSKeyedArchiver.archivedData)
-        set(data, forKey: key.rawValue)
     }
 }
 
