@@ -27,14 +27,17 @@ public protocol NSValueConvertable {
 extension UserDefaults {
     
     public func nsValue<T: NSValueConvertable>(_ key: DefaultKey<T?>) -> T? {
-        guard let value = object(forKey: key.rawValue) as? NSValue else {
+        guard let data = data(forKey: key.rawValue) else {
             return nil
         }
+        
+        let value = NSKeyedUnarchiver.unarchiveObject(with: data) as! NSValue
         return T(nsValue: value)
     }
     
     public func set<T: NSValueConvertable>(_ value: T?, forKey key: DefaultKey<T?>) {
-        set(value?.nsValue, forKey: key.rawValue)
+        let data = (value?.nsValue).map(NSKeyedArchiver.archivedData)
+        set(data, forKey: key.rawValue)
     }
 }
 
