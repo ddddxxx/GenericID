@@ -1,9 +1,18 @@
 //
 //  NSStoryboard.swift
-//  GenericID
 //
-//  Created by 邓翔 on 2017/4/26.
-//  Copyright © 2017年 ddddxxx. All rights reserved.
+//  This file is part of GenericID.
+//  Copyright (c) 2017 Xander Deng
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
 //
 
 #if os(macOS)
@@ -12,14 +21,14 @@
     
     extension NSStoryboard {
         
-        public typealias Identifier<T> = Identifiers.ID<T> where T: NSViewController
+        public typealias Identifier<T> = Identifiers.ID<T>
         
         public class Identifiers {}
     }
     
     extension NSStoryboard.Identifiers {
         
-        public class ID<T: NSViewController>: NSStoryboard.Identifiers, RawRepresentable {
+        public class ID<T>: NSStoryboard.Identifiers, RawRepresentable {
             
             public let rawValue: String
             

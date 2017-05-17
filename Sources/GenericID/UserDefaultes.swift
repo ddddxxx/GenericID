@@ -1,9 +1,18 @@
 //
 //  UserDefaultes.swift
-//  GenericID
 //
-//  Created by 邓翔 on 2017/4/25.
-//  Copyright © 2017年 ddddxxx. All rights reserved.
+//  This file is part of GenericID.
+//  Copyright (c) 2017 Xander Deng
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
 //
 
 import Foundation
@@ -176,14 +185,14 @@ extension UserDefaults {
 //        set { set(newValue, forKey: key.rawValue) }
 //    }
     
-    public func unarchive<T: NSCoding>(_ key: DefaultKey<T>) -> T? {
+    public func unarchive<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
         guard let data = data(forKey: key.rawValue) else {
             return nil
         }
         return NSKeyedUnarchiver.unarchiveObject(with: data) as? T
     }
     
-    public func archive<T: NSCoding>(_ newValue: T, for key: DefaultKey<T>) {
+    public func archive<T: NSCoding>(_ newValue: T, for key: DefaultKey<T?>) {
         let data = NSKeyedArchiver.archivedData(withRootObject: newValue)
         set(data, forKey: key.rawValue)
     }
@@ -202,20 +211,15 @@ extension UserDefaults {
         set { set(newValue, for: .EventsKey) }
     }
     
-    @discardableResult public func addObserver<T: NSCoding>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (_ oldValue: T, _ newValue: T) -> Void) -> Observing {
+    @discardableResult public func addObserver<T: NSCoding>(key: DefaultKey<T?>, initial: Bool = false, using: @escaping (_ oldValue: T?, _ newValue: T?) -> Void) -> Observing {
         if !events.keys.contains(key.rawValue) {
             let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
             addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
             events[key.rawValue] = []
         }
         let subscription = Observing() { old, new in
-            guard let oldData = old as? Data, let newData = new as? Data else {
-                return
-            }
-            guard let oldValue = NSKeyedUnarchiver.unarchiveObject(with: oldData) as? T,
-                let newValue = NSKeyedUnarchiver.unarchiveObject(with: newData) as? T else {
-                    return
-            }
+            let oldValue = (old as? Data).flatMap(NSKeyedUnarchiver.unarchiveObject) as? T
+            let newValue = (new as? Data).flatMap(NSKeyedUnarchiver.unarchiveObject) as? T
             using(oldValue, newValue)
         }
         events[key.rawValue]?.append(subscription)
@@ -241,11 +245,9 @@ extension UserDefaults {
         guard let keyPath = keyPath else { return }
         
         events[keyPath] = events[keyPath]?.filter { $0.isValid }
-        guard let observings = events[keyPath] else { return }
+        guard let observings = events[keyPath], let change = change else { return }
         
-        guard let old = change?[.oldKey], let new = change?[.newKey] else { return }
-        
-        observings.forEach { $0.handler(old, new) }
+        observings.forEach { $0.handler(change[.oldKey], change[.newKey]) }
         
         if observings.isEmpty {
             events.removeValue(forKey: keyPath)
@@ -257,7 +259,7 @@ extension UserDefaults {
     
     public class Observing {
         
-        typealias HandlerType = (_ old: Any, _ new: Any) -> Void
+        typealias HandlerType = (_ old: Any?, _ new: Any?) -> Void
         
         var handler: HandlerType
         
