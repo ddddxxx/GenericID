@@ -34,6 +34,8 @@ class UserDefaultesTests: XCTestCase {
         defaults.removeAll()
     }
     
+    // MARK: - Non-Optional Key
+    
     func testBool() {
         XCTAssertEqual(defaults[.BoolKey], false)
         
@@ -70,6 +72,8 @@ class UserDefaultesTests: XCTestCase {
         defaults[.DoubleKey] += 0.01
         XCTAssertEqual(defaults[.DoubleKey], 3.15)
     }
+    
+    // MARK: - Optional Key
     
     func testString() {
         XCTAssertNil(defaults[.StringKey])
@@ -173,6 +177,8 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(defaults[.AnyKey] as! [Int], [1, 2, 3])
     }
     
+    // MARK: -
+    
     func testArchiving() {
         XCTAssertNil(defaults.unarchive(.ColorKey))
         
@@ -183,6 +189,18 @@ class UserDefaultesTests: XCTestCase {
         color = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         defaults.archive(color, for: .ColorKey)
         XCTAssertEqual(defaults.unarchive(.ColorKey), color)
+    }
+    
+    func testWrapping() {
+        XCTAssertNil(defaults.unwrap(.RectKey))
+        
+        var rect = CGRect(x: 1, y: 2, width: 3, height: 4)
+        defaults.wrap(rect, for: .RectKey)
+        XCTAssertEqual(defaults.unwrap(.RectKey), rect)
+        
+        rect = CGRect(x: 5, y: 6, width: 7, height: 8)
+        defaults.wrap(rect, for: .RectKey)
+        XCTAssertEqual(defaults.unwrap(.RectKey), rect)
     }
     
     func testRemoving() {
@@ -253,5 +271,6 @@ extension UserDefaults.DefaultKeys {
     static let StringArrayKey: Key<[String]?> = "StringArrayKey"
     static let DictionaryKey: Key<[String: Any]?> = "DictionaryKey"
     static let ColorKey: Key<Color?> = "ColorKey"
+    static let RectKey: Key<CGRect?> = "RectKey"
     static let AnyKey: Key<Any?> = "AnyKey"
 }
