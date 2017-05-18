@@ -57,6 +57,10 @@ extension UserDefaults {
     fileprivate func number(forKey defaultName: String) -> NSNumber? {
         return object(forKey: defaultName) as? NSNumber
     }
+    
+    fileprivate func unarchive(forKey defaultName: String) -> Any? {
+        return data(forKey: defaultName).flatMap(NSKeyedUnarchiver.unarchiveObject)
+    }
 }
 
 // MARK: - Optional Key
@@ -130,10 +134,7 @@ extension UserDefaults {
 //    public subscript<T>(_ key: Key<T>) -> T?
     
     public func unarchive<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
-        guard let data = data(forKey: key.rawValue) else {
-            return nil
-        }
-        return NSKeyedUnarchiver.unarchiveObject(with: data) as? T
+        return unarchive(forKey: key.rawValue) as? T
     }
     
     public func archive<T: NSCoding>(_ newValue: T, for key: DefaultKey<T?>) {
@@ -142,11 +143,7 @@ extension UserDefaults {
     }
     
     public func unwrap<T: NSValueConvertable>(_ key: DefaultKey<T?>) -> T? {
-        guard let data = data(forKey: key.rawValue) else {
-            return nil
-        }
-        let value = NSKeyedUnarchiver.unarchiveObject(with: data) as! NSValue
-        return T(nsValue: value)
+        return unarchive(forKey: key.rawValue).flatMap { $0 as? NSValue }.map(T.init)
     }
     
     public func wrap<T: NSValueConvertable>(_ newValue: T?, for key: DefaultKey<T?>) {
