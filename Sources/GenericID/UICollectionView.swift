@@ -30,7 +30,7 @@
     
     extension UICollectionView.CellReuseIdentifiers {
         
-        public class ID<T: UICollectionViewCell>: UICollectionView.CellReuseIdentifiers, RawRepresentable {
+        public class ID<T: UICollectionViewCell>: UICollectionView.CellReuseIdentifiers, StaticKey {
             
             public let rawValue: String
             
@@ -39,8 +39,6 @@
             }
         }
     }
-    
-    extension UICollectionView.CellReuseIdentifier: Hashable, ExpressibleByStringLiteral {}
     
     extension UICollectionView.CellReuseIdentifier: UINibFromTypeGettable {
         typealias NibType = T
@@ -79,7 +77,7 @@
     
     extension UICollectionView.SupplementaryViewReuseIdentifiers {
         
-        public class ID<T: UICollectionReusableView>: UICollectionView.SupplementaryViewReuseIdentifiers, RawRepresentable {
+        public class ID<T: UICollectionReusableView>: UICollectionView.SupplementaryViewReuseIdentifiers, StaticKey {
             
             public let rawValue: String
             
@@ -88,8 +86,6 @@
             }
         }
     }
-    
-    extension UICollectionView.SupplementaryViewReuseIdentifier: Hashable, ExpressibleByStringLiteral {}
     
     extension UICollectionView.SupplementaryViewReuseIdentifier: UINibFromTypeGettable {
         typealias NibType = T

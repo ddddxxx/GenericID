@@ -30,7 +30,7 @@
     
     extension UITableView.CellReuseIdentifiers {
         
-        public class ID<T: UITableViewCell>: UITableView.CellReuseIdentifiers, RawRepresentable {
+        public class ID<T: UITableViewCell>: UITableView.CellReuseIdentifiers, StaticKey {
             
             public let rawValue: String
             
@@ -39,8 +39,6 @@
             }
         }
     }
-    
-    extension UITableView.CellReuseIdentifier: Hashable, ExpressibleByStringLiteral {}
     
     extension UITableView.CellReuseIdentifier: UINibFromTypeGettable {
         typealias NibType = T
@@ -89,7 +87,7 @@
     
     extension UITableView.HeaderFooterViewReuseIdentifiers {
         
-        public class ID<T: UITableViewHeaderFooterView>: UITableView.HeaderFooterViewReuseIdentifiers, RawRepresentable {
+        public class ID<T: UITableViewHeaderFooterView>: UITableView.HeaderFooterViewReuseIdentifiers, StaticKey {
             
             public let rawValue: String
             
@@ -98,8 +96,6 @@
             }
         }
     }
-    
-    extension UITableView.HeaderFooterViewReuseIdentifier: Hashable, ExpressibleByStringLiteral {}
     
     extension UITableView.HeaderFooterViewReuseIdentifier: UINibFromTypeGettable {
         typealias NibType = T

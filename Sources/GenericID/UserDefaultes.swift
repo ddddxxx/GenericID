@@ -26,7 +26,7 @@ extension UserDefaults {
 
 extension UserDefaults.DefaultKeys {
     
-    public class Key<T>: UserDefaults.DefaultKeys, RawRepresentable {
+    public class Key<T>: UserDefaults.DefaultKeys, StaticKey {
         
         public let rawValue: String
         
@@ -35,8 +35,6 @@ extension UserDefaults.DefaultKeys {
         }
     }
 }
-
-extension UserDefaults.DefaultKey: Hashable, ExpressibleByStringLiteral {}
 
 extension UserDefaults {
     
