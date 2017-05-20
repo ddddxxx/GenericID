@@ -135,8 +135,8 @@ extension UserDefaults {
         return unarchive(forKey: key.rawValue) as? T
     }
     
-    public func archive<T: NSCoding>(_ newValue: T, for key: DefaultKey<T?>) {
-        let data = NSKeyedArchiver.archivedData(withRootObject: newValue)
+    public func archive<T: NSCoding>(_ newValue: T?, for key: DefaultKey<T?>) {
+        let data = newValue.map(NSKeyedArchiver.archivedData)
         set(data, forKey: key.rawValue)
     }
     
