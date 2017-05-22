@@ -28,7 +28,7 @@
     
     extension NSStoryboard.Identifiers {
         
-        public class ID<T>: NSStoryboard.Identifiers, RawRepresentable {
+        public class ID<T>: NSStoryboard.Identifiers, StaticKey {
             
             public let rawValue: String
             
@@ -37,8 +37,6 @@
             }
         }
     }
-    
-    extension NSStoryboard.Identifier: Hashable, ExpressibleByStringLiteral {}
     
     extension NSStoryboard {
         

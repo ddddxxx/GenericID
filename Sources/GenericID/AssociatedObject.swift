@@ -26,7 +26,7 @@ extension NSObject {
 
 extension NSObject.AssociateKeys {
     
-    public class Key<T>: NSObject.AssociateKeys, RawRepresentable {
+    public class Key<T>: NSObject.AssociateKeys, StaticKey {
         
         public let rawValue: String
         
@@ -35,8 +35,6 @@ extension NSObject.AssociateKeys {
         }
     }
 }
-
-extension NSObject.AssociateKey: Hashable, ExpressibleByStringLiteral {}
 
 extension NSObject.AssociateKey {
     

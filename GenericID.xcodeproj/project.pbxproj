@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BBE9A9F51ECE92320058FB8D /* NSValueConvertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE9A9F41ECE92320058FB8D /* NSValueConvertable.swift */; };
+		BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */; };
 		OBJ_29 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AssociatedObject.swift */; };
 		OBJ_30 /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* NSStoryboard.swift */; };
 		OBJ_31 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* UICollectionView.swift */; };
 		OBJ_32 /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* UIStoryboard.swift */; };
 		OBJ_33 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* UITableView.swift */; };
 		OBJ_34 /* UserDefaultes.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* UserDefaultes.swift */; };
-		OBJ_35 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* Utility.swift */; };
+		OBJ_35 /* StaticKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* StaticKey.swift */; };
 		OBJ_42 /* AssociatedObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* AssociatedObjectTests.swift */; };
 		OBJ_43 /* UserDefaultesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* UserDefaultesTests.swift */; };
 		OBJ_45 /* GenericID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* GenericID.framework */; };
@@ -30,12 +32,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BBE9A9F41ECE92320058FB8D /* NSValueConvertable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSValueConvertable.swift; sourceTree = "<group>"; };
+		BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINibGettable.swift; sourceTree = "<group>"; };
 		OBJ_10 /* NSStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSStoryboard.swift; sourceTree = "<group>"; };
 		OBJ_11 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
 		OBJ_12 /* UIStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
 		OBJ_13 /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
 		OBJ_14 /* UserDefaultes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultes.swift; sourceTree = "<group>"; };
-		OBJ_15 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		OBJ_15 /* StaticKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticKey.swift; sourceTree = "<group>"; };
 		OBJ_18 /* AssociatedObjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObjectTests.swift; sourceTree = "<group>"; };
 		OBJ_19 /* UserDefaultesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultesTests.swift; sourceTree = "<group>"; };
 		OBJ_22 /* GenericID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GenericID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,7 +115,9 @@
 		OBJ_8 /* GenericID */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_15 /* Utility.swift */,
+				BBE9A9F41ECE92320058FB8D /* NSValueConvertable.swift */,
+				BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */,
+				OBJ_15 /* StaticKey.swift */,
 				OBJ_9 /* AssociatedObject.swift */,
 				OBJ_14 /* UserDefaultes.swift */,
 				OBJ_13 /* UITableView.swift */,
@@ -195,8 +201,10 @@
 				OBJ_31 /* UICollectionView.swift in Sources */,
 				OBJ_32 /* UIStoryboard.swift in Sources */,
 				OBJ_33 /* UITableView.swift in Sources */,
+				BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */,
+				BBE9A9F51ECE92320058FB8D /* NSValueConvertable.swift in Sources */,
 				OBJ_34 /* UserDefaultes.swift in Sources */,
-				OBJ_35 /* Utility.swift in Sources */,
+				OBJ_35 /* StaticKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

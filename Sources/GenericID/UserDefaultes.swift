@@ -26,7 +26,7 @@ extension UserDefaults {
 
 extension UserDefaults.DefaultKeys {
     
-    public class Key<T>: UserDefaults.DefaultKeys, RawRepresentable {
+    public class Key<T>: UserDefaults.DefaultKeys, StaticKey {
         
         public let rawValue: String
         
@@ -35,8 +35,6 @@ extension UserDefaults.DefaultKeys {
         }
     }
 }
-
-extension UserDefaults.DefaultKey: Hashable, ExpressibleByStringLiteral {}
 
 extension UserDefaults {
     
@@ -137,8 +135,8 @@ extension UserDefaults {
         return unarchive(forKey: key.rawValue) as? T
     }
     
-    public func archive<T: NSCoding>(_ newValue: T, for key: DefaultKey<T?>) {
-        let data = NSKeyedArchiver.archivedData(withRootObject: newValue)
+    public func archive<T: NSCoding>(_ newValue: T?, for key: DefaultKey<T?>) {
+        let data = newValue.map(NSKeyedArchiver.archivedData)
         set(data, forKey: key.rawValue)
     }
     

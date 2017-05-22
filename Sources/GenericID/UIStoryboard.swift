@@ -28,7 +28,7 @@
     
     extension UIStoryboard.Identifiers {
         
-        public class ID<T: UIViewController>: UIStoryboard.Identifiers, RawRepresentable {
+        public class ID<T: UIViewController>: UIStoryboard.Identifiers, StaticKey {
             
             public let rawValue: String
             
@@ -37,8 +37,6 @@
             }
         }
     }
-    
-    extension UIStoryboard.Identifier: Hashable, ExpressibleByStringLiteral {}
     
     extension UIStoryboard {
         
