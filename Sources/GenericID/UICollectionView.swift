@@ -25,17 +25,19 @@
         
         public typealias CellReuseIdentifier<T> = CellReuseIdentifiers.ID<T> where T: UICollectionViewCell
         
-        public class CellReuseIdentifiers {}
+        public class CellReuseIdentifiers: StaticKeyBase {}
     }
     
     extension UICollectionView.CellReuseIdentifiers {
         
-        public class ID<T: UICollectionViewCell>: UICollectionView.CellReuseIdentifiers, StaticKey {
+        public class ID<T: UICollectionViewCell>: UICollectionView.CellReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
             
-            public let rawValue: String
+            public var rawValue: String {
+                return key
+            }
             
             public required init(rawValue: String) {
-                self.rawValue = rawValue
+                super.init(rawValue)
             }
         }
     }
@@ -72,17 +74,19 @@
         
         public typealias SupplementaryViewReuseIdentifier<T> = SupplementaryViewReuseIdentifiers.ID<T> where T: UICollectionReusableView
         
-        public class SupplementaryViewReuseIdentifiers {}
+        public class SupplementaryViewReuseIdentifiers: StaticKeyBase {}
     }
     
     extension UICollectionView.SupplementaryViewReuseIdentifiers {
         
-        public class ID<T: UICollectionReusableView>: UICollectionView.SupplementaryViewReuseIdentifiers, StaticKey {
+        public class ID<T: UICollectionReusableView>: UICollectionView.SupplementaryViewReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
             
-            public let rawValue: String
+            public var rawValue: String {
+                return key
+            }
             
             public required init(rawValue: String) {
-                self.rawValue = rawValue
+                super.init(rawValue)
             }
         }
     }

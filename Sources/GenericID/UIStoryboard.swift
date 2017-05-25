@@ -23,17 +23,19 @@
         
         public typealias Identifier<T> = Identifiers.ID<T> where T: UIViewController
         
-        public class Identifiers {}
+        public class Identifiers: StaticKeyBase {}
     }
     
     extension UIStoryboard.Identifiers {
         
-        public class ID<T: UIViewController>: UIStoryboard.Identifiers, StaticKey {
+        public class ID<T: UIViewController>: UIStoryboard.Identifiers, RawRepresentable, ExpressibleByStringLiteral {
             
-            public let rawValue: String
+            public var rawValue: String {
+                return key
+            }
             
             public required init(rawValue: String) {
-                self.rawValue = rawValue
+                super.init(rawValue)
             }
         }
     }

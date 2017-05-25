@@ -21,17 +21,19 @@ extension UserDefaults {
     
     public typealias DefaultKey<T> = DefaultKeys.Key<T>
     
-    public class DefaultKeys {}
+    public class DefaultKeys: StaticKeyBase {}
 }
 
 extension UserDefaults.DefaultKeys {
     
-    public class Key<T>: UserDefaults.DefaultKeys, StaticKey {
+    public class Key<T>: UserDefaults.DefaultKeys, RawRepresentable, ExpressibleByStringLiteral {
         
-        public let rawValue: String
+        public var rawValue: String {
+            return key
+        }
         
         public required init(rawValue: String) {
-            self.rawValue = rawValue
+            super.init(rawValue)
         }
     }
 }

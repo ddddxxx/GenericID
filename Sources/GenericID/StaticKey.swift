@@ -17,23 +17,34 @@
 
 import Foundation
 
-public protocol StaticKey: RawRepresentable, Hashable, ExpressibleByStringLiteral {}
-
-extension StaticKey where RawValue: Hashable {
+public class StaticKeyBase {
     
-    public var hashValue: Int {
-        return rawValue.hashValue
+    let key: String
+    
+    init(_ key: String) {
+        self.key = key
     }
 }
 
-extension StaticKey where RawValue == String {
+extension StaticKeyBase: Hashable {
+
+    public var hashValue: Int {
+        return key.hashValue
+    }
+    
+    public static func ==(lhs: StaticKeyBase, rhs: StaticKeyBase) -> Bool {
+        return lhs.key == rhs.key
+    }
+}
+
+extension RawRepresentable where RawValue == String {
     
     public init(stringLiteral value: String) {
         self.init(rawValue: value)!
     }
 }
 
-extension StaticKey where StringLiteralType == String {
+extension ExpressibleByStringLiteral where StringLiteralType == String {
     
     public init(unicodeScalarLiteral value: String) {
         self.init(stringLiteral: value)

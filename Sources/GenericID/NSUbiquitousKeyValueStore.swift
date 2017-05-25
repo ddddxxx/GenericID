@@ -21,17 +21,19 @@ extension NSUbiquitousKeyValueStore{
     
     public typealias StoreKey<T> = StoreKeys.Key<T>
     
-    public class StoreKeys {}
+    public class StoreKeys: StaticKeyBase {}
 }
 
 extension NSUbiquitousKeyValueStore.StoreKeys {
     
-    public class Key<T>: NSUbiquitousKeyValueStore.StoreKeys, StaticKey {
+    public class Key<T>: NSUbiquitousKeyValueStore.StoreKeys, RawRepresentable, ExpressibleByStringLiteral {
         
-        public let rawValue: String
+        public var rawValue: String {
+            return key
+        }
         
         public required init(rawValue: String) {
-            self.rawValue = rawValue
+            super.init(rawValue)
         }
     }
 }
