@@ -23,17 +23,19 @@
         
         public typealias Identifier<T> = Identifiers.ID<T>
         
-        public class Identifiers {}
+        public class Identifiers: StaticKeyBase {}
     }
     
     extension NSStoryboard.Identifiers {
         
-        public class ID<T>: NSStoryboard.Identifiers, StaticKey {
+        public class ID<T>: NSStoryboard.Identifiers, RawRepresentable, ExpressibleByStringLiteral {
             
-            public let rawValue: String
+            public var rawValue: String {
+                return key
+            }
             
             public required init(rawValue: String) {
-                self.rawValue = rawValue
+                super.init(rawValue)
             }
         }
     }

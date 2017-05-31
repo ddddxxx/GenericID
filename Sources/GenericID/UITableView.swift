@@ -25,17 +25,19 @@
         
         public typealias CellReuseIdentifier<T> = CellReuseIdentifiers.ID<T> where T: UITableViewCell
         
-        public class CellReuseIdentifiers {}
+        public class CellReuseIdentifiers: StaticKeyBase {}
     }
     
     extension UITableView.CellReuseIdentifiers {
         
-        public class ID<T: UITableViewCell>: UITableView.CellReuseIdentifiers, StaticKey {
+        public class ID<T: UITableViewCell>: UITableView.CellReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
             
-            public let rawValue: String
+            public var rawValue: String {
+                return key
+            }
             
             public required init(rawValue: String) {
-                self.rawValue = rawValue
+                super.init(rawValue)
             }
         }
     }
@@ -82,17 +84,19 @@
         
         public typealias HeaderFooterViewReuseIdentifier<T> = HeaderFooterViewReuseIdentifiers.ID<T> where T: UITableViewHeaderFooterView
         
-        public class HeaderFooterViewReuseIdentifiers {}
+        public class HeaderFooterViewReuseIdentifiers: StaticKeyBase {}
     }
     
     extension UITableView.HeaderFooterViewReuseIdentifiers {
         
-        public class ID<T: UITableViewHeaderFooterView>: UITableView.HeaderFooterViewReuseIdentifiers, StaticKey {
+        public class ID<T: UITableViewHeaderFooterView>: UITableView.HeaderFooterViewReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
             
-            public let rawValue: String
+            public var rawValue: String {
+                return key
+            }
             
             public required init(rawValue: String) {
-                self.rawValue = rawValue
+                super.init(rawValue)
             }
         }
     }

@@ -21,17 +21,19 @@ extension NSObject {
     
     public typealias AssociateKey<T> = AssociateKeys.Key<T>
     
-    public class AssociateKeys {}
+    public class AssociateKeys: StaticKeyBase {}
 }
 
 extension NSObject.AssociateKeys {
     
-    public class Key<T>: NSObject.AssociateKeys, StaticKey {
+    public class Key<T>: NSObject.AssociateKeys, RawRepresentable, ExpressibleByStringLiteral {
         
-        public let rawValue: String
+        public var rawValue: String {
+            return key
+        }
         
         public required init(rawValue: String) {
-            self.rawValue = rawValue
+            super.init(rawValue)
         }
     }
 }
