@@ -1,8 +1,8 @@
 # GenericID
 
-[![Build Status](https://travis-ci.org/XQS6LB3A/GenericID.svg?branch=master)](https://travis-ci.org/XQS6LB3A/GenericID)
+[![Build Status](https://travis-ci.org/ddddxxx/GenericID.svg?branch=master)](https://travis-ci.org/ddddxxx/GenericID)
 ![platforms](https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg)
-[![License](https://img.shields.io/github/license/XQS6LB3A/GenericID.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/ddddxxx/GenericID.svg)](LICENSE)
 
 A Swift extension to use string-based API in a type-safe way.
 
@@ -21,7 +21,7 @@ A Swift extension to use string-based API in a type-safe way.
 Add the project to your `Cartfile`:
 
 ```
-github "XQS6LB3A/GenericID"
+github "ddddxxx/GenericID"
 ```
 
 ### [Swift Package Manager](https://github.com/apple/swift-package-manager)
@@ -31,7 +31,7 @@ Add the project to your `Package.swift` file:
 ```swift
 let package = Package(
     dependencies: [
-        .Package(url: "https://github.com/XQS6LB3A/GenericID")
+        .Package(url: "https://github.com/ddddxxx/GenericID")
     ]
 )
 ```
