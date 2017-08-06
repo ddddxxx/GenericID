@@ -42,9 +42,6 @@ extension RawRepresentable where RawValue == String {
     public init(stringLiteral value: String) {
         self.init(rawValue: value)!
     }
-}
-
-extension ExpressibleByStringLiteral where StringLiteralType == String {
     
     public init(unicodeScalarLiteral value: String) {
         self.init(stringLiteral: value)
