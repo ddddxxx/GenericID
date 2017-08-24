@@ -74,6 +74,16 @@ extension UserDefaults {
         register(defaults: dict)
     }
     
+    public func unregister<T>(_ key: DefaultKey<T>) {
+        var domain = volatileDomain(forName: UserDefaults.registrationDomain)
+        domain.removeValue(forKey: key.rawValue)
+        setVolatileDomain(domain, forName: UserDefaults.registrationDomain)
+    }
+    
+    public func unregisterAll() {
+        setVolatileDomain([:], forName: UserDefaults.registrationDomain)
+    }
+    
     fileprivate func number(forKey defaultName: String) -> NSNumber? {
         return object(forKey: defaultName) as? NSNumber
     }
