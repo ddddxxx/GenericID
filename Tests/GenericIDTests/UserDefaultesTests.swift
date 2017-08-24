@@ -30,10 +30,13 @@ class UserDefaultesTests: XCTestCase {
     // MARK: - Non-Optional Key
     
     func testBool() {
-        XCTAssertEqual(defaults[.BoolKey], false)
+        XCTAssertFalse(defaults[.BoolKey])
         
         defaults[.BoolKey] = true
-        XCTAssertEqual(defaults[.BoolKey], true)
+        XCTAssertTrue(defaults[.BoolKey])
+        
+        defaults.remove(.BoolKey)
+        XCTAssertFalse(defaults[.BoolKey])
     }
     
     func testInt() {
@@ -44,6 +47,9 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.IntKey] += 233
         XCTAssertEqual(defaults[.IntKey], 466)
+        
+        defaults.remove(.IntKey)
+        XCTAssertEqual(defaults[.IntKey], 0)
     }
     
     func testFloat() {
@@ -54,6 +60,9 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.FloatKey] += 0.01
         XCTAssertEqual(defaults[.FloatKey], 3.15)
+        
+        defaults.remove(.FloatKey)
+        XCTAssertEqual(defaults[.FloatKey], 0)
     }
     
     func testDouble() {
@@ -64,6 +73,71 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.DoubleKey] += 0.01
         XCTAssertEqual(defaults[.DoubleKey], 3.15)
+        
+        defaults.remove(.DoubleKey)
+        XCTAssertEqual(defaults[.DoubleKey], 0)
+    }
+    
+    func testString() {
+        XCTAssert(defaults[.StringKey].isEmpty)
+        
+        defaults[.StringKey] = "foo"
+        XCTAssertEqual(defaults[.StringKey], "foo")
+        
+        defaults[.StringKey] += "bar"
+        XCTAssertEqual(defaults[.StringKey], "foobar")
+        
+        defaults.remove(.StringKey)
+        XCTAssert(defaults[.StringKey].isEmpty)
+    }
+    
+    func testArray() {
+        XCTAssert(defaults[.ArrayKey].isEmpty)
+        
+        defaults[.ArrayKey] = [true, 233, 3.14]
+        XCTAssertEqual(defaults[.ArrayKey][0] as? Bool,   true)
+        XCTAssertEqual(defaults[.ArrayKey][1] as? Int,    233)
+        XCTAssertEqual(defaults[.ArrayKey][2] as? Double, 3.14)
+        
+        defaults[.ArrayKey].append("foo")
+        XCTAssertEqual(defaults[.ArrayKey][3] as? String, "foo")
+        
+        defaults.remove(.ArrayKey)
+        XCTAssert(defaults[.ArrayKey].isEmpty)
+    }
+    
+    func testStringArray() {
+        XCTAssert(defaults[.StringArrayKey].isEmpty)
+        
+        defaults[.StringArrayKey] = ["foo", "bar", "baz"]
+        XCTAssertEqual(defaults[.StringArrayKey][0], "foo")
+        XCTAssertEqual(defaults[.StringArrayKey][1], "bar")
+        XCTAssertEqual(defaults[.StringArrayKey][2], "baz")
+        
+        defaults[.StringArrayKey].append("qux")
+        XCTAssertEqual(defaults[.StringArrayKey][3], "qux")
+        
+        defaults.remove(.StringArrayKey)
+        XCTAssert(defaults[.StringArrayKey].isEmpty)
+    }
+    
+    func testDictionary() {
+        XCTAssert(defaults[.DictionaryKey].isEmpty)
+        
+        defaults[.DictionaryKey] = [
+            "foo": true,
+            "bar": 233,
+            "baz": 3.14,
+        ]
+        XCTAssertEqual(defaults[.DictionaryKey]["foo"] as? Bool, true)
+        XCTAssertEqual(defaults[.DictionaryKey]["bar"] as? Int, 233)
+        XCTAssertEqual(defaults[.DictionaryKey]["baz"] as? Double, 3.14)
+        
+        defaults[.DictionaryKey]["qux"] = [1, 2, 3]
+        XCTAssertEqual(defaults[.DictionaryKey]["qux"] as! [Int], [1, 2, 3])
+        
+        defaults.remove(.DictionaryKey)
+        XCTAssert(defaults[.DictionaryKey].isEmpty)
     }
     
     // MARK: - Optional Key
