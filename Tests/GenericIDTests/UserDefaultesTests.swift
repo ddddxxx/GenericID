@@ -384,7 +384,7 @@ class UserDefaultesTests: XCTestCase {
         let dict: [UserDefaults.DefaultKeys : Any] = [
             .IntKey: 42,
             .StringOptKey: "foo",
-            .ColorOptKey: NSColor.red,
+            .ColorOptKey: Color.red,
             .RectOptKey: CGRect.infinite
         ]
         defaults.register(defaults: dict)
