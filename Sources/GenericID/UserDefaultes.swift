@@ -49,9 +49,39 @@ extension UserDefaults {
     }
     
     public func removeAll() {
-        for (key, _) in dictionaryRepresentation() {
+        for key in dictionaryRepresentation().keys {
             removeObject(forKey: key)
         }
+    }
+    
+    public func register(defaults: [DefaultKeys: Any]) {
+        var dict = Dictionary<String, Any>(minimumCapacity: defaults.count)
+        for (key, value) in defaults {
+            if value is NSNumber ||
+                value is String ||
+                value is Data ||
+                value is URL ||
+                value is Date ||
+                value is [Any] ||
+                value is [String: Any] {
+                dict[key.key] = value
+            } else if value is NSCoding {
+                dict[key.key] = NSKeyedArchiver.archivedData(withRootObject: value)
+            } else if let v = value as? NSValueConvertable {
+                dict[key.key] = v.nsValue
+            }
+        }
+        register(defaults: dict)
+    }
+    
+    public func unregister<T>(_ key: DefaultKey<T>) {
+        var domain = volatileDomain(forName: UserDefaults.registrationDomain)
+        domain.removeValue(forKey: key.rawValue)
+        setVolatileDomain(domain, forName: UserDefaults.registrationDomain)
+    }
+    
+    public func unregisterAll() {
+        setVolatileDomain([:], forName: UserDefaults.registrationDomain)
     }
     
     fileprivate func number(forKey defaultName: String) -> NSNumber? {
