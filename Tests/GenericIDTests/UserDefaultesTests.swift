@@ -31,6 +31,7 @@ class UserDefaultesTests: XCTestCase {
     let defaults = UserDefaults.standard
     
     override func setUp() {
+        defaults.unregisterAll()
         defaults.removeAll()
     }
     
@@ -219,6 +220,28 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertNil(defaults[.StringKey])
     }
     
+    func testRegistration() {
+        XCTAssertEqual(defaults[.IntKey], 0)
+        XCTAssertNil(defaults[.StringKey])
+        XCTAssertNil(defaults.unarchive(.ColorKey))
+        XCTAssertNil(defaults.unwrap(.RectKey))
+        
+        let dict: [UserDefaults.DefaultKeys : Any] = [
+            .IntKey: 42,
+            .StringKey: "foo",
+            .ColorKey: NSColor.red,
+            .RectKey: CGRect.infinite
+        ]
+        defaults.register(defaults: dict)
+        
+        XCTAssertEqual(defaults[.IntKey], 42)
+        XCTAssertEqual(defaults[.StringKey], "foo")
+        XCTAssertEqual(defaults.unarchive(.ColorKey), .red)
+        XCTAssertEqual(defaults.unwrap(.RectKey), .infinite)
+        
+        defaults.unregisterAll()
+    }
+    
     func testKVO() {
         var exec = false
         defaults[.IntKey] = 233
@@ -254,6 +277,8 @@ class UserDefaultesTests: XCTestCase {
     }
     
 }
+
+// MARK: - Keys
 
 extension UserDefaults.DefaultKeys {
     static let BoolKey: Key<Bool> = "BoolKey"
