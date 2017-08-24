@@ -78,6 +78,20 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(defaults[.DoubleKey], 0)
     }
     
+    func testData() {
+        XCTAssert(defaults[.DataKey].isEmpty)
+        
+        let data = "foo".data(using: .ascii)!
+        defaults[.DataKey] = data
+        XCTAssertEqual(defaults[.DataKey], data)
+        
+        defaults[.DataKey].removeFirst()
+        XCTAssertEqual(defaults[.DataKey], Data(data.dropFirst()))
+        
+        defaults.remove(.DataKey)
+        XCTAssert(defaults[.DataKey].isEmpty)
+    }
+    
     func testString() {
         XCTAssert(defaults[.StringKey].isEmpty)
         

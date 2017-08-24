@@ -49,7 +49,7 @@ extension UserDefaults {
     }
     
     public func removeAll() {
-        for (key, _) in dictionaryRepresentation() {
+        for key in dictionaryRepresentation().keys {
             removeObject(forKey: key)
         }
     }
