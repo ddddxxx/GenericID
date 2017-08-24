@@ -54,6 +54,26 @@ extension UserDefaults {
         }
     }
     
+    public func register(defaults: [DefaultKeys: Any]) {
+        var dict = Dictionary<String, Any>(minimumCapacity: defaults.count)
+        for (key, value) in defaults {
+            if value is NSNumber ||
+                value is String ||
+                value is Data ||
+                value is URL ||
+                value is Date ||
+                value is [Any] ||
+                value is [String: Any] {
+                dict[key.key] = value
+            } else if value is NSCoding {
+                dict[key.key] = NSKeyedArchiver.archivedData(withRootObject: value)
+            } else if let v = value as? NSValueConvertable {
+                dict[key.key] = v.nsValue
+            }
+        }
+        register(defaults: dict)
+    }
+    
     fileprivate func number(forKey defaultName: String) -> NSNumber? {
         return object(forKey: defaultName) as? NSNumber
     }

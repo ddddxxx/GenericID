@@ -17,7 +17,7 @@
 
 import Foundation
 
-extension NSUbiquitousKeyValueStore{
+extension NSUbiquitousKeyValueStore {
     
     public typealias StoreKey<T> = StoreKeys.Key<T>
     
