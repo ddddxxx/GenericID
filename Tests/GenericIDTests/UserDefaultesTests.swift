@@ -68,6 +68,55 @@ class UserDefaultesTests: XCTestCase {
     
     // MARK: - Optional Key
     
+    func testOptBool() {
+        XCTAssertNil(defaults[.BoolOptKey])
+        
+        defaults[.BoolOptKey] = true
+        XCTAssertEqual(defaults[.BoolOptKey], true)
+        
+        defaults[.BoolOptKey] = nil
+        XCTAssertNil(defaults[.BoolOptKey])
+    }
+    
+    func testOptInt() {
+        XCTAssertNil(defaults[.IntOptKey])
+        
+        defaults[.IntOptKey] = 233
+        XCTAssertEqual(defaults[.IntOptKey], 233)
+        
+        defaults[.IntOptKey]? += 233
+        XCTAssertEqual(defaults[.IntOptKey], 466)
+        
+        defaults[.IntOptKey] = nil
+        XCTAssertNil(defaults[.IntOptKey])
+    }
+    
+    func testOptFloat() {
+        XCTAssertNil(defaults[.FloatOptKey])
+        
+        defaults[.FloatOptKey] = 3.14
+        XCTAssertEqual(defaults[.FloatOptKey], 3.14)
+        
+        defaults[.FloatOptKey]? += 0.01
+        XCTAssertEqual(defaults[.FloatOptKey], 3.15)
+        
+        defaults[.FloatOptKey] = nil
+        XCTAssertNil(defaults[.FloatOptKey])
+    }
+    
+    func testOptDouble() {
+        XCTAssertNil(defaults[.DoubleOptKey])
+        
+        defaults[.DoubleOptKey] = 3.14
+        XCTAssertEqual(defaults[.DoubleOptKey], 3.14)
+        
+        defaults[.DoubleOptKey]? += 0.01
+        XCTAssertEqual(defaults[.DoubleOptKey], 3.15)
+        
+        defaults[.DoubleOptKey] = nil
+        XCTAssertNil(defaults[.DoubleOptKey])
+    }
+    
     func testOptString() {
         XCTAssertNil(defaults[.StringOptKey])
         
