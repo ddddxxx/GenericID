@@ -18,14 +18,6 @@
 import XCTest
 @testable import GenericID
 
-#if os(macOS)
-    import Cocoa
-    typealias Color = NSColor
-#else
-    import UIKit
-    typealias Color = UIColor
-#endif
-
 class UserDefaultesTests: XCTestCase {
     
     let defaults = UserDefaults.standard
@@ -76,168 +68,170 @@ class UserDefaultesTests: XCTestCase {
     
     // MARK: - Optional Key
     
-    func testString() {
-        XCTAssertNil(defaults[.StringKey])
+    func testOptString() {
+        XCTAssertNil(defaults[.StringOptKey])
         
-        defaults[.StringKey] = "foo"
-        XCTAssertEqual(defaults[.StringKey], "foo")
+        defaults[.StringOptKey] = "foo"
+        XCTAssertEqual(defaults[.StringOptKey], "foo")
         
-        defaults[.StringKey]?.append("bar")
-        XCTAssertEqual(defaults[.StringKey], "foobar")
+        defaults[.StringOptKey]?.append("bar")
+        XCTAssertEqual(defaults[.StringOptKey], "foobar")
     }
     
-    func testURL() {
-        XCTAssertNil(defaults[.URLKey])
+    func testOptURL() {
+        XCTAssertNil(defaults[.URLOptKey])
         
         let url = URL(string: "https://google.com")
-        defaults[.URLKey] = url
-        XCTAssertEqual(defaults[.URLKey], url)
+        defaults[.URLOptKey] = url
+        XCTAssertEqual(defaults[.URLOptKey], url)
         
-        defaults[.URLKey]?.appendPathComponent("404")
-        XCTAssertEqual(defaults[.URLKey], URL(string: "https://google.com/404")!)
+        defaults[.URLOptKey]?.appendPathComponent("404")
+        XCTAssertEqual(defaults[.URLOptKey], URL(string: "https://google.com/404")!)
     }
     
-    func testDate() {
-        XCTAssertNil(defaults[.DateKey])
+    func testOptDate() {
+        XCTAssertNil(defaults[.DateOptKey])
         
         let date = Date()
-        defaults[.DateKey] = date
-        XCTAssertEqual(defaults[.DateKey], date)
+        defaults[.DateOptKey] = date
+        XCTAssertEqual(defaults[.DateOptKey], date)
         
-        defaults[.DateKey]?.addTimeInterval(123)
-        XCTAssertEqual(defaults[.DateKey], date.addingTimeInterval(123))
+        defaults[.DateOptKey]?.addTimeInterval(123)
+        XCTAssertEqual(defaults[.DateOptKey], date.addingTimeInterval(123))
     }
     
-    func testData() {
-        XCTAssertNil(defaults[.DataKey])
+    func testOptData() {
+        XCTAssertNil(defaults[.DataOptKey])
         
         let data = "foo".data(using: .ascii)!
-        defaults[.DataKey] = data
-        XCTAssertEqual(defaults[.DataKey], data)
+        defaults[.DataOptKey] = data
+        XCTAssertEqual(defaults[.DataOptKey], data)
         
-        defaults[.DataKey]?.removeFirst()
-        XCTAssertEqual(defaults[.DataKey], Data(data.dropFirst()))
+        defaults[.DataOptKey]?.removeFirst()
+        XCTAssertEqual(defaults[.DataOptKey], Data(data.dropFirst()))
     }
     
-    func testArray() {
-        XCTAssertNil(defaults[.ArrayKey])
+    func testOptArray() {
+        XCTAssertNil(defaults[.ArrayOptKey])
         
-        defaults[.ArrayKey] = [true, 233, 3.14]
-        XCTAssertEqual(defaults[.ArrayKey]?[0] as? Bool,   true)
-        XCTAssertEqual(defaults[.ArrayKey]?[1] as? Int,    233)
-        XCTAssertEqual(defaults[.ArrayKey]?[2] as? Double, 3.14)
+        defaults[.ArrayOptKey] = [true, 233, 3.14]
+        XCTAssertEqual(defaults[.ArrayOptKey]?[0] as? Bool,   true)
+        XCTAssertEqual(defaults[.ArrayOptKey]?[1] as? Int,    233)
+        XCTAssertEqual(defaults[.ArrayOptKey]?[2] as? Double, 3.14)
         
-        defaults[.ArrayKey]?.append("foo")
-        XCTAssertEqual(defaults[.ArrayKey]?[3] as? String, "foo")
+        defaults[.ArrayOptKey]?.append("foo")
+        XCTAssertEqual(defaults[.ArrayOptKey]?[3] as? String, "foo")
     }
     
-    func testStringArray() {
-        XCTAssertNil(defaults[.StringArrayKey])
+    func testOptStringArray() {
+        XCTAssertNil(defaults[.StringArrayOptKey])
         
-        defaults[.StringArrayKey] = ["foo", "bar", "baz"]
-        XCTAssertEqual(defaults[.StringArrayKey]?[0], "foo")
-        XCTAssertEqual(defaults[.StringArrayKey]?[1], "bar")
-        XCTAssertEqual(defaults[.StringArrayKey]?[2], "baz")
+        defaults[.StringArrayOptKey] = ["foo", "bar", "baz"]
+        XCTAssertEqual(defaults[.StringArrayOptKey]?[0], "foo")
+        XCTAssertEqual(defaults[.StringArrayOptKey]?[1], "bar")
+        XCTAssertEqual(defaults[.StringArrayOptKey]?[2], "baz")
         
-        defaults[.StringArrayKey]?.append("qux")
-        XCTAssertEqual(defaults[.StringArrayKey]?[3], "qux")
+        defaults[.StringArrayOptKey]?.append("qux")
+        XCTAssertEqual(defaults[.StringArrayOptKey]?[3], "qux")
     }
     
-    func testDictionary() {
-        XCTAssertNil(defaults[.DictionaryKey])
+    func testOptDictionary() {
+        XCTAssertNil(defaults[.DictionaryOptKey])
         
-        defaults[.DictionaryKey] = [
+        defaults[.DictionaryOptKey] = [
             "foo": true,
             "bar": 233,
             "baz": 3.14,
         ]
-        XCTAssertEqual(defaults[.DictionaryKey]?["foo"] as? Bool, true)
-        XCTAssertEqual(defaults[.DictionaryKey]?["bar"] as? Int, 233)
-        XCTAssertEqual(defaults[.DictionaryKey]?["baz"] as? Double, 3.14)
+        XCTAssertEqual(defaults[.DictionaryOptKey]?["foo"] as? Bool, true)
+        XCTAssertEqual(defaults[.DictionaryOptKey]?["bar"] as? Int, 233)
+        XCTAssertEqual(defaults[.DictionaryOptKey]?["baz"] as? Double, 3.14)
         
-        defaults[.DictionaryKey]?["qux"] = [1, 2, 3]
-        XCTAssertEqual(defaults[.DictionaryKey]?["qux"] as! [Int], [1, 2, 3])
+        defaults[.DictionaryOptKey]?["qux"] = [1, 2, 3]
+        XCTAssertEqual(defaults[.DictionaryOptKey]?["qux"] as! [Int], [1, 2, 3])
     }
     
-    func testAny() {
-        XCTAssertNil(defaults[.AnyKey])
+    func testOptAny() {
+        XCTAssertNil(defaults[.AnyOptKey])
         
-        defaults[.AnyKey] = true
-        XCTAssertEqual(defaults[.AnyKey] as? Bool, true)
+        defaults[.AnyOptKey] = true
+        XCTAssertEqual(defaults[.AnyOptKey] as? Bool, true)
         
-        defaults[.AnyKey] = 233
-        XCTAssertEqual(defaults[.AnyKey] as? Int, 233)
+        defaults[.AnyOptKey] = 233
+        XCTAssertEqual(defaults[.AnyOptKey] as? Int, 233)
         
-        defaults[.AnyKey] = 3.14
-        XCTAssertEqual(defaults[.AnyKey] as? Double, 3.14)
+        defaults[.AnyOptKey] = 3.14
+        XCTAssertEqual(defaults[.AnyOptKey] as? Double, 3.14)
         
-        defaults[.AnyKey] = "foo"
-        XCTAssertEqual(defaults[.AnyKey] as? String, "foo")
+        defaults[.AnyOptKey] = "foo"
+        XCTAssertEqual(defaults[.AnyOptKey] as? String, "foo")
         
-        defaults[.AnyKey] = [1, 2, 3]
-        XCTAssertEqual(defaults[.AnyKey] as! [Int], [1, 2, 3])
+        defaults[.AnyOptKey] = [1, 2, 3]
+        XCTAssertEqual(defaults[.AnyOptKey] as! [Int], [1, 2, 3])
+    }
+    
+    // MARK: - Other Key
+    
+    func testArchiving() {
+        XCTAssertNil(defaults.unarchive(.ColorOptKey))
+        
+        var color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        defaults.archive(color, for: .ColorOptKey)
+        XCTAssertEqual(defaults.unarchive(.ColorOptKey), color)
+        
+        color = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        defaults.archive(color, for: .ColorOptKey)
+        XCTAssertEqual(defaults.unarchive(.ColorOptKey), color)
+    }
+    
+    func testWrapping() {
+        XCTAssertNil(defaults.unwrap(.RectOptKey))
+        
+        var rect = CGRect(x: 1, y: 2, width: 3, height: 4)
+        defaults.wrap(rect, for: .RectOptKey)
+        XCTAssertEqual(defaults.unwrap(.RectOptKey), rect)
+        
+        rect = CGRect(x: 5, y: 6, width: 7, height: 8)
+        defaults.wrap(rect, for: .RectOptKey)
+        XCTAssertEqual(defaults.unwrap(.RectOptKey), rect)
+    }
+    
+    func testRemoving() {
+        XCTAssertFalse(defaults.contains(.StringOptKey))
+        XCTAssertNil(defaults[.StringOptKey])
+        
+        defaults[.StringOptKey] = "foo"
+        XCTAssertEqual(defaults[.StringOptKey], "foo")
+        
+        XCTAssertTrue(defaults.contains(.StringOptKey))
+        XCTAssertNotNil(defaults[.StringOptKey])
+        
+        defaults.remove(.StringOptKey)
+        
+        XCTAssertFalse(defaults.contains(.StringOptKey))
+        XCTAssertNil(defaults[.StringOptKey])
     }
     
     // MARK: -
     
-    func testArchiving() {
-        XCTAssertNil(defaults.unarchive(.ColorKey))
-        
-        var color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        defaults.archive(color, for: .ColorKey)
-        XCTAssertEqual(defaults.unarchive(.ColorKey), color)
-        
-        color = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        defaults.archive(color, for: .ColorKey)
-        XCTAssertEqual(defaults.unarchive(.ColorKey), color)
-    }
-    
-    func testWrapping() {
-        XCTAssertNil(defaults.unwrap(.RectKey))
-        
-        var rect = CGRect(x: 1, y: 2, width: 3, height: 4)
-        defaults.wrap(rect, for: .RectKey)
-        XCTAssertEqual(defaults.unwrap(.RectKey), rect)
-        
-        rect = CGRect(x: 5, y: 6, width: 7, height: 8)
-        defaults.wrap(rect, for: .RectKey)
-        XCTAssertEqual(defaults.unwrap(.RectKey), rect)
-    }
-    
-    func testRemoving() {
-        XCTAssertFalse(defaults.contains(.StringKey))
-        XCTAssertNil(defaults[.StringKey])
-        
-        defaults[.StringKey] = "foo"
-        XCTAssertEqual(defaults[.StringKey], "foo")
-        
-        XCTAssertTrue(defaults.contains(.StringKey))
-        XCTAssertNotNil(defaults[.StringKey])
-        
-        defaults.remove(.StringKey)
-        
-        XCTAssertFalse(defaults.contains(.StringKey))
-        XCTAssertNil(defaults[.StringKey])
-    }
-    
     func testRegistration() {
         XCTAssertEqual(defaults[.IntKey], 0)
-        XCTAssertNil(defaults[.StringKey])
-        XCTAssertNil(defaults.unarchive(.ColorKey))
-        XCTAssertNil(defaults.unwrap(.RectKey))
+        XCTAssertNil(defaults[.StringOptKey])
+        XCTAssertNil(defaults.unarchive(.ColorOptKey))
+        XCTAssertNil(defaults.unwrap(.RectOptKey))
         
         let dict: [UserDefaults.DefaultKeys : Any] = [
             .IntKey: 42,
-            .StringKey: "foo",
-            .ColorKey: NSColor.red,
-            .RectKey: CGRect.infinite
+            .StringOptKey: "foo",
+            .ColorOptKey: NSColor.red,
+            .RectOptKey: CGRect.infinite
         ]
         defaults.register(defaults: dict)
         
         XCTAssertEqual(defaults[.IntKey], 42)
-        XCTAssertEqual(defaults[.StringKey], "foo")
-        XCTAssertEqual(defaults.unarchive(.ColorKey), .red)
-        XCTAssertEqual(defaults.unwrap(.RectKey), .infinite)
+        XCTAssertEqual(defaults[.StringOptKey], "foo")
+        XCTAssertEqual(defaults.unarchive(.ColorOptKey), .red)
+        XCTAssertEqual(defaults.unwrap(.RectOptKey), .infinite)
         
         defaults.unregisterAll()
     }
@@ -261,41 +255,19 @@ class UserDefaultesTests: XCTestCase {
     
     func testKVOWithCoding() {
         var exec = false
-        defaults.archive(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .ColorKey)
-        let token = defaults.addObserver(key: .ColorKey) { oldValue, newValue in
+        defaults.archive(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .ColorOptKey)
+        let token = defaults.addObserver(key: .ColorOptKey) { oldValue, newValue in
             XCTAssertEqual(oldValue, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
             XCTAssertEqual(newValue, #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
             exec = true
         }
-        defaults.archive(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .ColorKey)
+        defaults.archive(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .ColorOptKey)
         XCTAssert(exec)
         
         exec = false
         token.invalidate()
-        defaults.archive(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .ColorKey)
+        defaults.archive(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .ColorOptKey)
         XCTAssertFalse(exec)
     }
     
-}
-
-// MARK: - Keys
-
-extension UserDefaults.DefaultKeys {
-    static let BoolKey: Key<Bool> = "BoolKey"
-    static let IntKey: Key<Int> = "IntKey"
-    static let FloatKey: Key<Float> = "FloatKey"
-    static let DoubleKey: Key<Double> = "DoubleKey"
-}
-
-extension UserDefaults.DefaultKeys {
-    static let StringKey: Key<String?> = "StringKey"
-    static let URLKey: Key<URL?> = "URLKey"
-    static let DateKey: Key<Date?> = "DateKey"
-    static let DataKey: Key<Data?> = "DataKey"
-    static let ArrayKey: Key<[Any]?> = "ArrayKey"
-    static let StringArrayKey: Key<[String]?> = "StringArrayKey"
-    static let DictionaryKey: Key<[String: Any]?> = "DictionaryKey"
-    static let ColorKey: Key<Color?> = "ColorKey"
-    static let RectKey: Key<CGRect?> = "RectKey"
-    static let AnyKey: Key<Any?> = "AnyKey"
 }
