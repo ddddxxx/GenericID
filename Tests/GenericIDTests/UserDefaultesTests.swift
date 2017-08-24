@@ -197,8 +197,11 @@ class UserDefaultesTests: XCTestCase {
         defaults[.StringOptKey] = "foo"
         XCTAssertEqual(defaults[.StringOptKey], "foo")
         
-        defaults[.StringOptKey]?.append("bar")
+        defaults[.StringOptKey]? += "bar"
         XCTAssertEqual(defaults[.StringOptKey], "foobar")
+        
+        defaults[.StringOptKey] = nil
+        XCTAssertNil(defaults[.StringOptKey])
     }
     
     func testOptURL() {
@@ -210,6 +213,9 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.URLOptKey]?.appendPathComponent("404")
         XCTAssertEqual(defaults[.URLOptKey], URL(string: "https://google.com/404")!)
+        
+        defaults[.URLOptKey] = nil
+        XCTAssertNil(defaults[.URLOptKey])
     }
     
     func testOptDate() {
@@ -221,6 +227,9 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.DateOptKey]?.addTimeInterval(123)
         XCTAssertEqual(defaults[.DateOptKey], date.addingTimeInterval(123))
+        
+        defaults[.DateOptKey] = nil
+        XCTAssertNil(defaults[.DateOptKey])
     }
     
     func testOptData() {
@@ -232,6 +241,9 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.DataOptKey]?.removeFirst()
         XCTAssertEqual(defaults[.DataOptKey], Data(data.dropFirst()))
+        
+        defaults[.DataOptKey] = nil
+        XCTAssertNil(defaults[.DataOptKey])
     }
     
     func testOptArray() {
@@ -244,6 +256,9 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.ArrayOptKey]?.append("foo")
         XCTAssertEqual(defaults[.ArrayOptKey]?[3] as? String, "foo")
+        
+        defaults[.ArrayOptKey] = nil
+        XCTAssertNil(defaults[.ArrayOptKey])
     }
     
     func testOptStringArray() {
@@ -256,6 +271,9 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.StringArrayOptKey]?.append("qux")
         XCTAssertEqual(defaults[.StringArrayOptKey]?[3], "qux")
+        
+        defaults[.StringArrayOptKey] = nil
+        XCTAssertNil(defaults[.StringArrayOptKey])
     }
     
     func testOptDictionary() {
@@ -272,6 +290,9 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.DictionaryOptKey]?["qux"] = [1, 2, 3]
         XCTAssertEqual(defaults[.DictionaryOptKey]?["qux"] as! [Int], [1, 2, 3])
+        
+        defaults[.DictionaryOptKey] = nil
+        XCTAssertNil(defaults[.DictionaryOptKey])
     }
     
     func testOptAny() {
@@ -291,6 +312,9 @@ class UserDefaultesTests: XCTestCase {
         
         defaults[.AnyOptKey] = [1, 2, 3]
         XCTAssertEqual(defaults[.AnyOptKey] as! [Int], [1, 2, 3])
+        
+        defaults[.AnyOptKey] = nil
+        XCTAssertNil(defaults[.AnyOptKey])
     }
     
     // MARK: - Other Key
@@ -326,7 +350,7 @@ class UserDefaultesTests: XCTestCase {
         defaults[.StringOptKey] = "foo"
         XCTAssertEqual(defaults[.StringOptKey], "foo")
         
-        XCTAssertTrue(defaults.contains(.StringOptKey))
+        XCTAssert(defaults.contains(.StringOptKey))
         XCTAssertNotNil(defaults[.StringOptKey])
         
         defaults.remove(.StringOptKey)
