@@ -96,7 +96,22 @@ extension UserDefaults {
     }
     
     fileprivate func unarchive(forKey defaultName: String) -> Any? {
-        return data(forKey: defaultName).flatMap(NSKeyedUnarchiver.unarchiveObject)
+        guard let data = data(forKey: defaultName) else {
+            return nil
+        }
+        return NSKeyedUnarchiver.unarchiveObject(with: data)
+    }
+    
+    fileprivate func jsonEncode<T>(_ newValue: T?, forKey defaultName: DefaultKey<T?>) throws {
+        let data = try JSONEncoder().encode(newValue)
+        set(data, forKey: defaultName.rawValue)
+    }
+    
+    fileprivate func jsonDecode<T: Decodable>(forKey defaultName: DefaultKey<T?>) throws -> T? {
+        guard let data = data(forKey: defaultName.rawValue) else {
+            return nil
+        }
+        return try JSONDecoder().decode(T.self, from: data)
     }
 }
 
@@ -159,14 +174,19 @@ extension UserDefaults {
         set { set(newValue, forKey: key.rawValue) }
     }
     
-    public subscript<T>(_ key: DefaultKey<T?>) -> T? {
-        get { return object(forKey: key.rawValue) as? T }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
     public subscript<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
         get { return unarchive(forKey: key.rawValue) as? T }
         set { archive(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript<T: Codable>(_ key: DefaultKey<T?>) -> T? {
+        get { return (try? jsonDecode(forKey: key)) ?? nil }
+        set { try? jsonEncode(newValue, forKey: key) }
+    }
+    
+    public subscript<T>(_ key: DefaultKey<T?>) -> T? {
+        get { return object(forKey: key.rawValue) as? T }
+        set { set(newValue, forKey: key.rawValue) }
     }
 }
 
