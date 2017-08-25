@@ -43,7 +43,7 @@
     extension NSStoryboard {
         
         public func instantiateController<T>(withIdentifier identifier: Identifier<T>) -> T {
-            guard let vc = instantiateController(withIdentifier: identifier.rawValue) as? T else {
+            guard let vc = instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: identifier.rawValue)) as? T else {
                 fatalError("instantiate view controller '\(identifier.rawValue)' of '\(self)' is not of class '\(T.self)'")
             }
             return vc
@@ -56,7 +56,7 @@
             guard let mainStoryboardName = Bundle.main.infoDictionary?["NSMainStoryboardFile"] as? String else {
                 fatalError("No NSMainStoryboardFile found in main bundle")
             }
-            return NSStoryboard(name: mainStoryboardName, bundle: .main)
+            return NSStoryboard(name: NSStoryboard.Name(rawValue: mainStoryboardName), bundle: .main)
         }
     }
     

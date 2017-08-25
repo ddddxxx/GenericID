@@ -41,7 +41,7 @@ public protocol NSValueConvertable {
         public init(nsValue: NSValue) { self = nsValue.rectValue }
     }
     
-    extension EdgeInsets: NSValueConvertable {
+    extension NSEdgeInsets: NSValueConvertable {
         public var nsValue: NSValue { return NSValue(edgeInsets: self) }
         public init(nsValue: NSValue) { self = nsValue.edgeInsetsValue }
     }

@@ -47,7 +47,7 @@
 		OBJ_18 /* AssociatedObjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObjectTests.swift; sourceTree = "<group>"; };
 		OBJ_19 /* UserDefaultesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultesTests.swift; sourceTree = "<group>"; };
 		OBJ_22 /* GenericID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GenericID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		OBJ_23 /* GenericIDTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = GenericIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_23 /* GenericIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = GenericIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_9 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -179,6 +179,14 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 9999;
+				TargetAttributes = {
+					OBJ_24 = {
+						LastSwiftMigration = 0900;
+					};
+					OBJ_37 = {
+						LastSwiftMigration = 0900;
+					};
+				};
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "GenericID" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -274,6 +282,8 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericID;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -300,6 +310,8 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericID;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -342,6 +354,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericIDTests;
 			};
 			name = Debug;
@@ -380,6 +394,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericIDTests;
 			};
 			name = Release;
