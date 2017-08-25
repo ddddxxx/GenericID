@@ -90,6 +90,11 @@ extension UserDefaults {
         return object(forKey: defaultName) as? NSNumber
     }
     
+    fileprivate func archive(_ newValue: Any?, forKey defaultName: String) {
+        let data = newValue.map(NSKeyedArchiver.archivedData)
+        set(data, forKey: defaultName)
+    }
+    
     fileprivate func unarchive(forKey defaultName: String) -> Any? {
         return data(forKey: defaultName).flatMap(NSKeyedUnarchiver.unarchiveObject)
     }
@@ -154,33 +159,14 @@ extension UserDefaults {
         set { set(newValue, forKey: key.rawValue) }
     }
     
-    public subscript(_ key: DefaultKey<Any?>) -> Any? {
-        get { return object(forKey: key.rawValue) }
+    public subscript<T>(_ key: DefaultKey<T?>) -> T? {
+        get { return object(forKey: key.rawValue) as? T }
         set { set(newValue, forKey: key.rawValue) }
     }
     
-    // TODO: Generic Subscripts in Swift 4.
-    
-//    public subscript<T: NSCoding>(_ key: Key<T?>) -> T?
-//    public subscript<T: NSValueConvertable>(_ key: Key<T?>) -> T?
-//    public subscript<T>(_ key: Key<T>) -> T?
-    
-    public func unarchive<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
-        return unarchive(forKey: key.rawValue) as? T
-    }
-    
-    public func archive<T: NSCoding>(_ newValue: T?, for key: DefaultKey<T?>) {
-        let data = newValue.map(NSKeyedArchiver.archivedData)
-        set(data, forKey: key.rawValue)
-    }
-    
-    public func unwrap<T: NSValueConvertable>(_ key: DefaultKey<T?>) -> T? {
-        return unarchive(forKey: key.rawValue).flatMap { $0 as? NSValue }.map(T.init)
-    }
-    
-    public func wrap<T: NSValueConvertable>(_ newValue: T?, for key: DefaultKey<T?>) {
-        let data = (newValue?.nsValue).map(NSKeyedArchiver.archivedData)
-        set(data, forKey: key.rawValue)
+    public subscript<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
+        get { return unarchive(forKey: key.rawValue) as? T }
+        set { archive(newValue, forKey: key.rawValue) }
     }
 }
 
