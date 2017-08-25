@@ -49,8 +49,13 @@ extension UserDefaults {
     }
     
     public func removeAll() {
-        for key in dictionaryRepresentation().keys {
-            removeObject(forKey: key)
+        if let appDomain = Bundle.main.bundleIdentifier {
+            removePersistentDomain(forName: appDomain)
+            synchronize()
+        } else {
+            for key in dictionaryRepresentation().keys {
+                removeObject(forKey: key)
+            }
         }
     }
     
