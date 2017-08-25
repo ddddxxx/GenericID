@@ -85,29 +85,34 @@ extension UserDefaults {
     public func unregisterAll() {
         setVolatileDomain([:], forName: UserDefaults.registrationDomain)
     }
+}
+
+// MARK: - Convenience Access
+
+extension UserDefaults {
     
-    fileprivate func number(forKey defaultName: String) -> NSNumber? {
+    private func number(forKey defaultName: String) -> NSNumber? {
         return object(forKey: defaultName) as? NSNumber
     }
     
-    fileprivate func archive(_ newValue: Any?, forKey defaultName: String) {
+    private func archive(_ newValue: Any?, forKey defaultName: String) {
         let data = newValue.map(NSKeyedArchiver.archivedData)
         set(data, forKey: defaultName)
     }
     
-    fileprivate func unarchive(forKey defaultName: String) -> Any? {
+    private func unarchive(forKey defaultName: String) -> Any? {
         guard let data = data(forKey: defaultName) else {
             return nil
         }
         return NSKeyedUnarchiver.unarchiveObject(with: data)
     }
     
-    fileprivate func jsonEncode<T>(_ newValue: T?, forKey defaultName: DefaultKey<T?>) throws {
+    public func jsonEncode<T>(_ newValue: T?, forKey defaultName: DefaultKey<T?>) throws {
         let data = try JSONEncoder().encode(newValue)
         set(data, forKey: defaultName.rawValue)
     }
     
-    fileprivate func jsonDecode<T: Decodable>(forKey defaultName: DefaultKey<T?>) throws -> T? {
+    public func jsonDecode<T: Decodable>(forKey defaultName: DefaultKey<T?>) throws -> T? {
         guard let data = data(forKey: defaultName.rawValue) else {
             return nil
         }
@@ -180,8 +185,25 @@ extension UserDefaults {
     }
     
     public subscript<T: Codable>(_ key: DefaultKey<T?>) -> T? {
-        get { return (try? jsonDecode(forKey: key)) ?? nil }
-        set { try? jsonEncode(newValue, forKey: key) }
+        get {
+            do {
+                return try jsonDecode(forKey: key)
+            } catch {
+                #if DEGBUG
+                    print(error)
+                #endif
+                return nil
+            }
+        }
+        set {
+            do {
+                try jsonEncode(newValue, forKey: key)
+            } catch {
+                #if DEGBUG
+                    print(error)
+                #endif
+            }
+        }
     }
     
     public subscript<T>(_ key: DefaultKey<T?>) -> T? {
