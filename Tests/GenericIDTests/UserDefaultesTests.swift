@@ -221,7 +221,7 @@ class UserDefaultesTests: XCTestCase {
     func testOptURL() {
         XCTAssertNil(defaults[.URLOptKey])
         
-        let url = URL(string: "https://google.com")
+        let url = URL(string: "https://google.com")!
         defaults[.URLOptKey] = url
         XCTAssertEqual(defaults[.URLOptKey], url)
         
@@ -373,24 +373,44 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertNil(defaults[.StringOptKey])
     }
     
+    func testRemovingAll() {
+        XCTAssertFalse(defaults.contains(.StringOptKey))
+        XCTAssertNil(defaults[.StringOptKey])
+        
+        defaults[.StringOptKey] = "foo"
+        XCTAssertEqual(defaults[.StringOptKey], "foo")
+        
+        XCTAssert(defaults.contains(.StringOptKey))
+        XCTAssertNotNil(defaults[.StringOptKey])
+        
+        defaults.removeAll()
+        
+        XCTAssertFalse(defaults.contains(.StringOptKey))
+        XCTAssertNil(defaults[.StringOptKey])
+    }
+    
     // MARK: -
     
     func testRegistration() {
         XCTAssertEqual(defaults[.IntKey], 0)
         XCTAssertNil(defaults[.StringOptKey])
+        XCTAssertNil(defaults[.URLOptKey])
         XCTAssertNil(defaults.unarchive(.ColorOptKey))
         XCTAssertNil(defaults.unwrap(.RectOptKey))
         
+        let url = URL(string: "https://google.com")!
         let dict: [UserDefaults.DefaultKeys : Any] = [
             .IntKey: 42,
             .StringOptKey: "foo",
-            .ColorOptKey: NSColor.red,
+            .URLOptKey: url,
+            .ColorOptKey: Color.red,
             .RectOptKey: CGRect.infinite
         ]
         defaults.register(defaults: dict)
         
         XCTAssertEqual(defaults[.IntKey], 42)
         XCTAssertEqual(defaults[.StringOptKey], "foo")
+        XCTAssertEqual(defaults[.URLOptKey], url)
         XCTAssertEqual(defaults.unarchive(.ColorOptKey), .red)
         XCTAssertEqual(defaults.unwrap(.RectOptKey), .infinite)
         
