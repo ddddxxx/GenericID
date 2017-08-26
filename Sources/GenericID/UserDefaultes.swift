@@ -264,78 +264,84 @@ extension UserDefaults {
 
 // MARK: - KVO
 
-extension UserDefaults.AssociateKeys {
-    static let EventsKey: Key<[String: [UserDefaults.Observing]]> = "eventsKey"
-}
-
 extension UserDefaults {
     
-    var events: [String: [Observing]] {
-        get { return associatedValue(for: .EventsKey) ?? [:] }
-        set { set(newValue, for: .EventsKey) }
+    public struct KeyValueObservedChange<T> {
+        public typealias Kind = NSKeyValueChange
+        public let kind: Kind
+        public let newValue: T?
+        public let oldValue: T?
+        public let indexes: IndexSet?
+        public let isPrior:Bool
     }
     
-    @discardableResult public func addObserver<T: NSCoding>(key: DefaultKey<T?>, initial: Bool = false, using: @escaping (_ oldValue: T?, _ newValue: T?) -> Void) -> Observing {
-        if !events.keys.contains(key.rawValue) {
-            let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
-            addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
-            events[key.rawValue] = []
-        }
-        let subscription = Observing() { old, new in
-            let oldValue = (old as? Data).flatMap(NSKeyedUnarchiver.unarchiveObject) as? T
-            let newValue = (new as? Data).flatMap(NSKeyedUnarchiver.unarchiveObject) as? T
-            using(oldValue, newValue)
-        }
-        events[key.rawValue]?.append(subscription)
-        return subscription
-    }
-    
-    @discardableResult public func addObserver<T>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (_ oldValue: T, _ newValue: T) -> Void) -> Observing {
-        if !events.keys.contains(key.rawValue) {
-            let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
-            addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
-            events[key.rawValue] = []
-        }
-        let subscription = Observing() { old, new in
-            if let old = old as? T, let new = new as? T {
-                using(old, new)
+    public class KeyValueObservation: NSObject {
+        
+        typealias Callback = (UserDefaults, KeyValueObservedChange<Any>) -> Void
+        
+        weak var object : UserDefaults?
+        let callback : Callback
+        let path : String
+        
+        static var swizzler : KeyValueObservation? = {
+            let bridgeClass: AnyClass = NSKeyValueObservation.self
+            let observeSel = #selector(NSObject.observeValue(forKeyPath:of:change:context:))
+            let swapSel = #selector(KeyValueObservation._swizzle_defaults_observeValue(forKeyPath:of:change:context:))
+            guard let rootObserveImpl = class_getInstanceMethod(bridgeClass, observeSel),
+                let swapObserveImpl = class_getInstanceMethod(bridgeClass, swapSel) else {
+                    fatalError("failed to swizzle method \(observeSel) and \(swapSel)")
             }
+            method_exchangeImplementations(rootObserveImpl, swapObserveImpl)
+            return nil
+        }()
+        
+        fileprivate init(object: UserDefaults, path: String, callback: @escaping Callback) {
+            let _ = KeyValueObservation.swizzler
+            self.path = path
+            self.object = object
+            self.callback = callback
         }
-        events[key.rawValue]?.append(subscription)
-        return subscription
-    }
-    
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard let keyPath = keyPath else { return }
         
-        events[keyPath] = events[keyPath]?.filter { $0.isValid }
-        guard let observings = events[keyPath], let change = change else { return }
-        
-        observings.forEach { $0.handler(change[.oldKey], change[.newKey]) }
-        
-        if observings.isEmpty {
-            events.removeValue(forKey: keyPath)
+        deinit {
+            invalidate()
         }
-    }
-}
-
-extension UserDefaults {
-    
-    public class Observing {
         
-        typealias HandlerType = (_ old: Any?, _ new: Any?) -> Void
-        
-        var handler: HandlerType
-        
-        var isValid = true
-        
-        init(_ handler: @escaping HandlerType) {
-            self.handler = handler
+        fileprivate func start(_ options: NSKeyValueObservingOptions) {
+            object?.addObserver(self, forKeyPath: path, options: options, context: nil)
         }
         
         public func invalidate() {
-            handler = {_,_ in }
-            isValid = false
+            object?.removeObserver(self, forKeyPath: path, context: nil)
+            object = nil
+        }
+        
+        @objc func _swizzle_defaults_observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+            guard let ourObject = self.object, object as? NSObject == ourObject, let change = change else { return }
+            let rawKind = change[.kindKey] as! UInt
+            let kind = NSKeyValueChange(rawValue: rawKind)!
+            let notification = KeyValueObservedChange(kind: kind,
+                                                      newValue: change[.newKey],
+                                                      oldValue: change[.oldKey],
+                                                      indexes: change[.indexesKey] as! IndexSet?,
+                                                      isPrior: change[.notificationIsPriorKey] as? Bool ?? false)
+            callback(ourObject, notification)
         }
     }
+}
+
+extension UserDefaults {
+    
+    public func observe<T>(_ defaultName: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+        let result = KeyValueObservation(object: self, path: defaultName.rawValue) { (defaults, change) in
+            let notification = KeyValueObservedChange(kind: change.kind,
+                                                      newValue: change.newValue as? T,
+                                                      oldValue: change.oldValue as? T,
+                                                      indexes: change.indexes,
+                                                      isPrior: change.isPrior)
+            changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
+    
 }
