@@ -22,68 +22,68 @@ class AssociatedObjectTests: XCTestCase {
     
     func testValueType() {
         let obj = NSObject()
-        XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
+        XCTAssertNil(obj[.ValueTypeKey])
         
-        obj.set(10, for: .ValueTypeKey)
-        XCTAssertEqual(obj.associatedValue(for: .ValueTypeKey), 10)
+        obj[.ValueTypeKey] = 10
+        XCTAssertEqual(obj[.ValueTypeKey], 10)
         
-        obj.set(20, for: .ValueTypeKey)
-        XCTAssertEqual(obj.associatedValue(for: .ValueTypeKey), 20)
+        obj[.ValueTypeKey] = 20
+        XCTAssertEqual(obj[.ValueTypeKey], 20)
     }
     
     func testReferenceType() {
         let obj = NSObject()
-        XCTAssertNil(obj.associatedValue(for: .ReferenceTypeKey))
+        XCTAssertNil(obj[.ReferenceTypeKey])
         
         var date = NSDate()
-        obj.set(date, for: .ReferenceTypeKey)
-        XCTAssertEqual(obj.associatedValue(for: .ReferenceTypeKey), date)
+        obj[.ReferenceTypeKey] = date
+        XCTAssertEqual(obj[.ReferenceTypeKey], date)
         
         date = NSDate()
-        obj.set(date, for: .ReferenceTypeKey)
-        XCTAssertEqual(obj.associatedValue(for: .ReferenceTypeKey), date)
+        obj[.ReferenceTypeKey] = date
+        XCTAssertEqual(obj[.ReferenceTypeKey], date)
     }
     
     func testRemoving() {
         let obj = NSObject()
-        XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
+        XCTAssertNil(obj[.ValueTypeKey])
         
-        obj.set(233, for: .ValueTypeKey)
-        XCTAssertEqual(obj.associatedValue(for: .ValueTypeKey), 233)
+        obj[.ValueTypeKey] = 233
+        XCTAssertEqual(obj[.ValueTypeKey], 233)
         
         obj.removeAssociateValue(for: .ValueTypeKey)
-        XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
+        XCTAssertNil(obj[.ValueTypeKey])
     }
     
     func testRemovingAll() {
         let obj = NSObject()
-        XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
-        XCTAssertNil(obj.associatedValue(for: .ReferenceTypeKey))
+        XCTAssertNil(obj[.ValueTypeKey])
+        XCTAssertNil(obj[.ReferenceTypeKey])
         
         
         let date = NSDate()
-        obj.set(date, for: .ReferenceTypeKey)
-        XCTAssertEqual(obj.associatedValue(for: .ReferenceTypeKey), date)
+        obj[.ReferenceTypeKey] = date
+        XCTAssertEqual(obj[.ReferenceTypeKey], date)
 
-        obj.set(233, for: .ValueTypeKey)
-        XCTAssertEqual(obj.associatedValue(for: .ValueTypeKey), 233)
+        obj[.ValueTypeKey] = 233
+        XCTAssertEqual(obj[.ValueTypeKey], 233)
         
         obj.removeAssociateValues()
-        XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
-        XCTAssertNil(obj.associatedValue(for: .ReferenceTypeKey))
+        XCTAssertNil(obj[.ValueTypeKey])
+        XCTAssertNil(obj[.ReferenceTypeKey])
     }
     
     func testDynamicKey() {
         let key: NSObject.AssociateKey<Int> = "ValueTypeKey"
         let obj = NSObject()
-        XCTAssertNil(obj.associatedValue(for: .ValueTypeKey))
-        XCTAssertNil(obj.associatedValue(for: key))
+        XCTAssertNil(obj[.ValueTypeKey])
+        XCTAssertNil(obj[key])
         
-        obj.set(10, for: .ValueTypeKey)
-        XCTAssertEqual(obj.associatedValue(for: key), 10)
+        obj[.ValueTypeKey] = 10
+        XCTAssertEqual(obj[key], 10)
         
-        obj.set(20, for: key)
-        XCTAssertEqual(obj.associatedValue(for: .ValueTypeKey), 20)
+        obj[key] = 20
+        XCTAssertEqual(obj[.ValueTypeKey], 20)
     }
     
 }
