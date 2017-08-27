@@ -118,7 +118,7 @@ extension UserDefaults {
     }
 }
 
-// MARK: - Optional Key
+// MARK: - Subscript
 
 extension UserDefaults {
     
@@ -208,54 +208,9 @@ extension UserDefaults {
         get { return object(forKey: key.rawValue) as? T }
         set { set(newValue, forKey: key.rawValue) }
     }
-}
-
-// MARK: - Non-Optional Key
-
-extension UserDefaults {
     
-    public subscript(_ key: DefaultKey<Bool>) -> Bool {
-        get { return number(forKey: key.rawValue)?.boolValue ?? false }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Int>) -> Int {
-        get { return number(forKey: key.rawValue)?.intValue ?? 0 }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Float>) -> Float {
-        get { return number(forKey: key.rawValue)?.floatValue ?? 0 }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Double>) -> Double {
-        get { return number(forKey: key.rawValue)?.doubleValue ?? 0 }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<String>) -> String {
-        get { return string(forKey: key.rawValue) ?? "" }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Data>) -> Data {
-        get { return data(forKey: key.rawValue) ?? Data() }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<[Any]>) -> [Any] {
-        get { return array(forKey: key.rawValue) ?? [] }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<[String: Any]>) -> [String: Any] {
-        get { return dictionary(forKey: key.rawValue) ?? [:] }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<[String]>) -> [String] {
-        get { return stringArray(forKey: key.rawValue) ?? [] }
+    public subscript<T: DefaultConstructible>(_ key: DefaultKey<T>) -> T {
+        get { return object(forKey: key.rawValue) as? T ?? T.init() }
         set { set(newValue, forKey: key.rawValue) }
     }
 }
