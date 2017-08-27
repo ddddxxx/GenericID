@@ -372,4 +372,17 @@ extension UserDefaults {
         return result
     }
     
+    public func observe<T: DefaultConstructible>(_ defaultName: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+        let result = KeyValueObservation(object: self, path: defaultName.rawValue) { (defaults, change) in
+            let notification = KeyValueObservedChange(kind: change.kind,
+                                                      newValue: change.newValue as? T ?? T.init(),
+                                                      oldValue: change.oldValue as? T ?? T.init(),
+                                                      indexes: change.indexes,
+                                                      isPrior: change.isPrior)
+            changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
+    
 }
