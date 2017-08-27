@@ -85,7 +85,7 @@ extension UserDefaults {
     }
 }
 
-// MARK: - Convenience Access
+// MARK: -
 
 extension UserDefaults {
     
@@ -105,13 +105,13 @@ extension UserDefaults {
         return NSKeyedUnarchiver.unarchiveObject(with: data)
     }
     
-    public func jsonEncode<T>(_ newValue: T?, forKey defaultName: DefaultKey<T?>) throws {
+    public func jsonEncode<T>(_ newValue: T?, forKey key: DefaultKey<T?>) throws {
         let data = try JSONEncoder().encode(newValue)
-        set(data, forKey: defaultName.rawValue)
+        set(data, forKey: key.rawValue)
     }
     
-    public func jsonDecode<T: Decodable>(forKey defaultName: DefaultKey<T?>) throws -> T? {
-        guard let data = data(forKey: defaultName.rawValue) else {
+    public func jsonDecode<T: Decodable>(forKey key: DefaultKey<T?>) throws -> T? {
+        guard let data = data(forKey: key.rawValue) else {
             return nil
         }
         return try JSONDecoder().decode(T.self, from: data)
