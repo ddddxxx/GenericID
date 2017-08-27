@@ -282,7 +282,7 @@ extension UserDefaults {
         let path : String
         
         static var swizzler : KeyValueObservation? = {
-            let bridgeClass: AnyClass = NSKeyValueObservation.self
+            let bridgeClass: AnyClass = KeyValueObservation.self
             let observeSel = #selector(NSObject.observeValue(forKeyPath:of:change:context:))
             let swapSel = #selector(KeyValueObservation._swizzle_defaults_observeValue(forKeyPath:of:change:context:))
             guard let rootObserveImpl = class_getInstanceMethod(bridgeClass, observeSel),
@@ -328,6 +328,36 @@ extension UserDefaults {
 }
 
 extension UserDefaults {
+    
+    public func observeArchived<T: NSCoding>(_ defaultName: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+        let result = KeyValueObservation(object: self, path: defaultName.rawValue) { (defaults, change) in
+            let oldValue = (change.oldValue as? Data).map(NSKeyedUnarchiver.unarchiveObject) as? T
+            let newValue = (change.newValue as? Data).map(NSKeyedUnarchiver.unarchiveObject) as? T
+            let notification = KeyValueObservedChange(kind: change.kind,
+                                                      newValue: newValue,
+                                                      oldValue: oldValue,
+                                                      indexes: change.indexes,
+                                                      isPrior: change.isPrior)
+            changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
+    
+    public func observeCoded<T: Codable>(_ defaultName: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+        let result = KeyValueObservation(object: self, path: defaultName.rawValue) { (defaults, change) in
+            let oldValue = (change.oldValue as? Data).map { try? JSONDecoder().decode(T.self, from: $0) } as? T
+            let newValue = (change.newValue as? Data).map { try? JSONDecoder().decode(T.self, from: $0) } as? T
+            let notification = KeyValueObservedChange(kind: change.kind,
+                                                      newValue: newValue,
+                                                      oldValue: oldValue,
+                                                      indexes: change.indexes,
+                                                      isPrior: change.isPrior)
+            changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
     
     public func observe<T>(_ defaultName: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, path: defaultName.rawValue) { (defaults, change) in
