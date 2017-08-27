@@ -67,8 +67,6 @@ extension UserDefaults {
                 dict[key.key] = value
             case is NSCoding:
                 dict[key.key] = NSKeyedArchiver.archivedData(withRootObject: value)
-            case let value as NSValueConvertable:
-                dict[key.key] = value.nsValue
             default:
                 break
             }
