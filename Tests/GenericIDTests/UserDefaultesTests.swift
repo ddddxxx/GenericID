@@ -429,7 +429,7 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertFalse(exec)
     }
     
-    func testKVOWithCoding() {
+    func testKVOWithArchiving() {
         var exec = false
         defaults[.ColorOptKey] = .red
         let token = defaults.observeArchived(UserDefaults.DefaultKeys.ColorOptKey, options: [.old, .new]) { (defaults, change) in
@@ -443,6 +443,26 @@ class UserDefaultesTests: XCTestCase {
         exec = false
         token.invalidate()
         defaults[.ColorOptKey] = .blue
+        XCTAssertFalse(exec)
+    }
+    
+    func testKVOWithCoding() {
+        var exec = false
+        let rect1 = CGRect(x: 1, y: 2, width: 3, height: 4)
+        let rect2 = CGRect(x: 5, y: 6, width: 7, height: 8)
+        
+        defaults[.RectOptKey] = rect1
+        let token = defaults.observeCoded(UserDefaults.DefaultKeys.RectOptKey, options: [.old, .new]) { (defaults, change) in
+            XCTAssertEqual(change.oldValue, rect1)
+            XCTAssertEqual(change.newValue, rect2)
+            exec = true
+        }
+        defaults[.RectOptKey] = rect2
+        XCTAssert(exec)
+        
+        exec = false
+        token.invalidate()
+        defaults[.RectOptKey] = rect1
         XCTAssertFalse(exec)
     }
     
