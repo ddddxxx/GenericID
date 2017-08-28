@@ -12,7 +12,6 @@
 		BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */; };
 		BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */; };
 		OBJ_29 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AssociatedObject.swift */; };
-		OBJ_30 /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* NSStoryboard.swift */; };
 		OBJ_31 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* UICollectionView.swift */; };
 		OBJ_32 /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* UIStoryboard.swift */; };
 		OBJ_33 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* UITableView.swift */; };
@@ -38,7 +37,6 @@
 		BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConstructible.swift; sourceTree = "<group>"; };
 		BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUbiquitousKeyValueStore.swift; sourceTree = "<group>"; };
 		BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINibGettable.swift; sourceTree = "<group>"; };
-		OBJ_10 /* NSStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSStoryboard.swift; sourceTree = "<group>"; };
 		OBJ_11 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
 		OBJ_12 /* UIStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
 		OBJ_13 /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
@@ -129,7 +127,6 @@
 				OBJ_13 /* UITableView.swift */,
 				OBJ_11 /* UICollectionView.swift */,
 				OBJ_12 /* UIStoryboard.swift */,
-				OBJ_10 /* NSStoryboard.swift */,
 			);
 			name = GenericID;
 			path = Sources/GenericID;
@@ -229,7 +226,6 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_29 /* AssociatedObject.swift in Sources */,
-				OBJ_30 /* NSStoryboard.swift in Sources */,
 				BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */,
 				OBJ_31 /* UICollectionView.swift in Sources */,
 				OBJ_32 /* UIStoryboard.swift in Sources */,
