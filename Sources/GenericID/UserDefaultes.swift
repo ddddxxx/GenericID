@@ -340,4 +340,28 @@ extension UserDefaults {
         return result
     }
     
+    public func willChangeValue<T>(for key: DefaultKey<T>) {
+        self.willChangeValue(forKey: key.rawValue)
+    }
+    
+    public func willChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
+        self.willChange(changeKind, valuesAt: indexes, forKey: key.rawValue)
+    }
+    
+    public func willChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
+        self.willChangeValue(forKey: key.rawValue, withSetMutation: mutation, using: set)
+    }
+    
+    public func didChangeValue<T>(for key: DefaultKey<T>) {
+        self.didChangeValue(forKey: key.rawValue)
+    }
+    
+    public func didChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
+        self.didChange(changeKind, valuesAt: indexes, forKey: key.rawValue)
+    }
+    
+    public func didChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
+        self.didChangeValue(forKey: key.rawValue, withSetMutation: mutation, using: set)
+    }
+    
 }
