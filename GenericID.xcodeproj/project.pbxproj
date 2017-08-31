@@ -8,11 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		BB3952321F4EC79800CF0EA2 /* TestKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3952311F4EC79800CF0EA2 /* TestKeys.swift */; };
+		BB4AFBC71F52643400373ABA /* DefaultConstructible.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */; };
 		BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */; };
-		BBE9A9F51ECE92320058FB8D /* NSValueConvertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE9A9F41ECE92320058FB8D /* NSValueConvertable.swift */; };
 		BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */; };
 		OBJ_29 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AssociatedObject.swift */; };
-		OBJ_30 /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* NSStoryboard.swift */; };
 		OBJ_31 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* UICollectionView.swift */; };
 		OBJ_32 /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* UIStoryboard.swift */; };
 		OBJ_33 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* UITableView.swift */; };
@@ -35,10 +34,9 @@
 
 /* Begin PBXFileReference section */
 		BB3952311F4EC79800CF0EA2 /* TestKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestKeys.swift; sourceTree = "<group>"; };
+		BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConstructible.swift; sourceTree = "<group>"; };
 		BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUbiquitousKeyValueStore.swift; sourceTree = "<group>"; };
-		BBE9A9F41ECE92320058FB8D /* NSValueConvertable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSValueConvertable.swift; sourceTree = "<group>"; };
 		BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINibGettable.swift; sourceTree = "<group>"; };
-		OBJ_10 /* NSStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSStoryboard.swift; sourceTree = "<group>"; };
 		OBJ_11 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
 		OBJ_12 /* UIStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
 		OBJ_13 /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
@@ -47,7 +45,7 @@
 		OBJ_18 /* AssociatedObjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObjectTests.swift; sourceTree = "<group>"; };
 		OBJ_19 /* UserDefaultesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultesTests.swift; sourceTree = "<group>"; };
 		OBJ_22 /* GenericID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GenericID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		OBJ_23 /* GenericIDTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = GenericIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_23 /* GenericIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = GenericIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_9 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -120,7 +118,7 @@
 		OBJ_8 /* GenericID */ = {
 			isa = PBXGroup;
 			children = (
-				BBE9A9F41ECE92320058FB8D /* NSValueConvertable.swift */,
+				BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */,
 				BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */,
 				OBJ_15 /* StaticKey.swift */,
 				OBJ_9 /* AssociatedObject.swift */,
@@ -129,7 +127,6 @@
 				OBJ_13 /* UITableView.swift */,
 				OBJ_11 /* UICollectionView.swift */,
 				OBJ_12 /* UIStoryboard.swift */,
-				OBJ_10 /* NSStoryboard.swift */,
 			);
 			name = GenericID;
 			path = Sources/GenericID;
@@ -179,6 +176,14 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 9999;
+				TargetAttributes = {
+					OBJ_24 = {
+						LastSwiftMigration = 0900;
+					};
+					OBJ_37 = {
+						LastSwiftMigration = 0900;
+					};
+				};
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "GenericID" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -221,13 +226,12 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_29 /* AssociatedObject.swift in Sources */,
-				OBJ_30 /* NSStoryboard.swift in Sources */,
 				BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */,
 				OBJ_31 /* UICollectionView.swift in Sources */,
 				OBJ_32 /* UIStoryboard.swift in Sources */,
+				BB4AFBC71F52643400373ABA /* DefaultConstructible.swift in Sources */,
 				OBJ_33 /* UITableView.swift in Sources */,
 				BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */,
-				BBE9A9F51ECE92320058FB8D /* NSValueConvertable.swift in Sources */,
 				OBJ_34 /* UserDefaultes.swift in Sources */,
 				OBJ_35 /* StaticKey.swift in Sources */,
 			);
@@ -274,6 +278,7 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericID;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -300,6 +305,7 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericID;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -342,6 +348,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericIDTests;
 			};
 			name = Debug;
@@ -380,6 +387,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericIDTests;
 			};
 			name = Release;
