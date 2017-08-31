@@ -47,23 +47,13 @@ extension NSObject.AssociateKey {
 
 extension NSObject {
     
-    // TODO: Generic Subscripts in Swift 4.
-    
-//    public subscript<T>(_ associated: AssociatedKey<T>) -> T {
-//        get {
-//            return objc_getAssociatedObject(self, associated.key)
-//        }
-//        set {
-//            objc_setAssociatedObject(self, associated.key, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-//        }
-//    }
-    
-    public func associatedValue<T>(for key: AssociateKey<T>) -> T? {
-        return objc_getAssociatedObject(self, key.opaqueKey) as? T
-    }
-    
-    public func set<T>(_ associatedValue: T, for key: AssociateKey<T>, policy: objc_AssociationPolicy = .OBJC_ASSOCIATION_COPY_NONATOMIC) {
-        objc_setAssociatedObject(self, key.opaqueKey, associatedValue, policy)
+    public subscript<T>(_ associated: AssociateKeys.Key<T>) -> T? {
+        get {
+            return objc_getAssociatedObject(self, associated.opaqueKey) as? T
+        }
+        set {
+            objc_setAssociatedObject(self, associated.opaqueKey, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
     }
     
     public func removeAssociateValue<T>(for key: AssociateKey<T>) {

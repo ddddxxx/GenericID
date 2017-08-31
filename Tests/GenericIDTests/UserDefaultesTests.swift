@@ -334,27 +334,25 @@ class UserDefaultesTests: XCTestCase {
     // MARK: - Other Key
     
     func testArchiving() {
-        XCTAssertNil(defaults.unarchive(.ColorOptKey))
+        XCTAssertNil(defaults[.ColorOptKey])
         
-        var color = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        defaults.archive(color, for: .ColorOptKey)
-        XCTAssertEqual(defaults.unarchive(.ColorOptKey), color)
+        defaults[.ColorOptKey] = .red
+        XCTAssertEqual(defaults[.ColorOptKey], .red)
         
-        color = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        defaults.archive(color, for: .ColorOptKey)
-        XCTAssertEqual(defaults.unarchive(.ColorOptKey), color)
+        defaults[.ColorOptKey] = .green
+        XCTAssertEqual(defaults[.ColorOptKey], .green)
     }
     
-    func testWrapping() {
-        XCTAssertNil(defaults.unwrap(.RectOptKey))
+    func testCoding() {
+        XCTAssertNil(defaults[.RectOptKey])
         
         var rect = CGRect(x: 1, y: 2, width: 3, height: 4)
-        defaults.wrap(rect, for: .RectOptKey)
-        XCTAssertEqual(defaults.unwrap(.RectOptKey), rect)
+        defaults[.RectOptKey] = rect
+        XCTAssertEqual(defaults[.RectOptKey], rect)
         
         rect = CGRect(x: 5, y: 6, width: 7, height: 8)
-        defaults.wrap(rect, for: .RectOptKey)
-        XCTAssertEqual(defaults.unwrap(.RectOptKey), rect)
+        defaults[.RectOptKey] = rect
+        XCTAssertEqual(defaults[.RectOptKey], rect)
     }
     
     func testRemoving() {
@@ -395,8 +393,7 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(defaults[.IntKey], 0)
         XCTAssertNil(defaults[.StringOptKey])
         XCTAssertNil(defaults[.URLOptKey])
-        XCTAssertNil(defaults.unarchive(.ColorOptKey))
-        XCTAssertNil(defaults.unwrap(.RectOptKey))
+        XCTAssertNil(defaults[.ColorOptKey])
         
         let url = URL(string: "https://google.com")!
         let dict: [UserDefaults.DefaultKeys : Any] = [
@@ -404,15 +401,13 @@ class UserDefaultesTests: XCTestCase {
             .StringOptKey: "foo",
             .URLOptKey: url,
             .ColorOptKey: Color.red,
-            .RectOptKey: CGRect.infinite
         ]
         defaults.register(defaults: dict)
         
         XCTAssertEqual(defaults[.IntKey], 42)
         XCTAssertEqual(defaults[.StringOptKey], "foo")
         XCTAssertEqual(defaults[.URLOptKey], url)
-        XCTAssertEqual(defaults.unarchive(.ColorOptKey), .red)
-        XCTAssertEqual(defaults.unwrap(.RectOptKey), .infinite)
+        XCTAssertEqual(defaults[.ColorOptKey], .red)
         
         defaults.unregisterAll()
     }
@@ -420,9 +415,9 @@ class UserDefaultesTests: XCTestCase {
     func testKVO() {
         var exec = false
         defaults[.IntKey] = 233
-        let token = defaults.addObserver(key: .IntKey) { oldValue, newValue in
-            XCTAssertEqual(oldValue, 233)
-            XCTAssertEqual(newValue, 234)
+        let token = defaults.observe(UserDefaults.DefaultKeys.IntKey, options: [.old, .new]) { (defaults, change) in
+            XCTAssertEqual(change.oldValue, 233)
+            XCTAssertEqual(change.newValue, 234)
             exec = true
         }
         defaults[.IntKey] += 1
@@ -434,20 +429,40 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertFalse(exec)
     }
     
-    func testKVOWithCoding() {
+    func testKVOWithArchiving() {
         var exec = false
-        defaults.archive(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .ColorOptKey)
-        let token = defaults.addObserver(key: .ColorOptKey) { oldValue, newValue in
-            XCTAssertEqual(oldValue, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-            XCTAssertEqual(newValue, #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
+        defaults[.ColorOptKey] = .red
+        let token = defaults.observeArchived(UserDefaults.DefaultKeys.ColorOptKey, options: [.old, .new]) { (defaults, change) in
+            XCTAssertEqual(change.oldValue, .red)
+            XCTAssertEqual(change.newValue, .green)
             exec = true
         }
-        defaults.archive(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .ColorOptKey)
+        defaults[.ColorOptKey] = .green
+        XCTAssert(exec)
+
+        exec = false
+        token.invalidate()
+        defaults[.ColorOptKey] = .blue
+        XCTAssertFalse(exec)
+    }
+    
+    func testKVOWithCoding() {
+        var exec = false
+        let rect1 = CGRect(x: 1, y: 2, width: 3, height: 4)
+        let rect2 = CGRect(x: 5, y: 6, width: 7, height: 8)
+        
+        defaults[.RectOptKey] = rect1
+        let token = defaults.observeCoded(UserDefaults.DefaultKeys.RectOptKey, options: [.old, .new]) { (defaults, change) in
+            XCTAssertEqual(change.oldValue, rect1)
+            XCTAssertEqual(change.newValue, rect2)
+            exec = true
+        }
+        defaults[.RectOptKey] = rect2
         XCTAssert(exec)
         
         exec = false
         token.invalidate()
-        defaults.archive(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .ColorOptKey)
+        defaults[.RectOptKey] = rect1
         XCTAssertFalse(exec)
     }
     

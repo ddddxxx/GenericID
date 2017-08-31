@@ -61,7 +61,7 @@
         }
         
         public func dequeueReusableCell<T>(withIdentifier identifier: CellReuseIdentifier<T>) -> T? {
-            guard let dequeue = dequeueReusableHeaderFooterView(withIdentifier: identifier.rawValue) else {
+            guard let dequeue = dequeueReusableCell(withIdentifier: identifier.rawValue) else {
                 return nil
             }
             guard let cell = dequeue as? T else {

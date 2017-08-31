@@ -67,8 +67,6 @@ extension UserDefaults {
                 dict[key.key] = value
             case is NSCoding:
                 dict[key.key] = NSKeyedArchiver.archivedData(withRootObject: value)
-            case let value as NSValueConvertable:
-                dict[key.key] = value.nsValue
             default:
                 break
             }
@@ -85,17 +83,42 @@ extension UserDefaults {
     public func unregisterAll() {
         setVolatileDomain([:], forName: UserDefaults.registrationDomain)
     }
+}
+
+// MARK: -
+
+extension UserDefaults {
     
-    fileprivate func number(forKey defaultName: String) -> NSNumber? {
+    private func number(forKey defaultName: String) -> NSNumber? {
         return object(forKey: defaultName) as? NSNumber
     }
     
-    fileprivate func unarchive(forKey defaultName: String) -> Any? {
-        return data(forKey: defaultName).flatMap(NSKeyedUnarchiver.unarchiveObject)
+    private func archive(_ newValue: Any?, forKey defaultName: String) {
+        let data = newValue.map(NSKeyedArchiver.archivedData)
+        set(data, forKey: defaultName)
+    }
+    
+    private func unarchive(forKey defaultName: String) -> Any? {
+        guard let data = data(forKey: defaultName) else {
+            return nil
+        }
+        return NSKeyedUnarchiver.unarchiveObject(with: data)
+    }
+    
+    public func jsonEncode<T>(_ newValue: T?, forKey key: DefaultKey<T?>) throws {
+        let data = try JSONEncoder().encode(newValue)
+        set(data, forKey: key.rawValue)
+    }
+    
+    public func jsonDecode<T: Decodable>(forKey key: DefaultKey<T?>) throws -> T? {
+        guard let data = data(forKey: key.rawValue) else {
+            return nil
+        }
+        return try JSONDecoder().decode(T.self, from: data)
     }
 }
 
-// MARK: - Optional Key
+// MARK: - Subscript
 
 extension UserDefaults {
     
@@ -154,160 +177,191 @@ extension UserDefaults {
         set { set(newValue, forKey: key.rawValue) }
     }
     
-    public subscript(_ key: DefaultKey<Any?>) -> Any? {
-        get { return object(forKey: key.rawValue) }
+    public subscript<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
+        get { return unarchive(forKey: key.rawValue) as? T }
+        set { archive(newValue, forKey: key.rawValue) }
+    }
+    
+    public subscript<T: Codable>(_ key: DefaultKey<T?>) -> T? {
+        get {
+            do {
+                return try jsonDecode(forKey: key)
+            } catch {
+                #if DEGBUG
+                    print(error)
+                #endif
+                return nil
+            }
+        }
+        set {
+            do {
+                try jsonEncode(newValue, forKey: key)
+            } catch {
+                #if DEGBUG
+                    print(error)
+                #endif
+            }
+        }
+    }
+    
+    public subscript<T>(_ key: DefaultKey<T?>) -> T? {
+        get { return object(forKey: key.rawValue) as? T }
         set { set(newValue, forKey: key.rawValue) }
     }
     
-    // TODO: Generic Subscripts in Swift 4.
-    
-//    public subscript<T: NSCoding>(_ key: Key<T?>) -> T?
-//    public subscript<T: NSValueConvertable>(_ key: Key<T?>) -> T?
-//    public subscript<T>(_ key: Key<T>) -> T?
-    
-    public func unarchive<T: NSCoding>(_ key: DefaultKey<T?>) -> T? {
-        return unarchive(forKey: key.rawValue) as? T
-    }
-    
-    public func archive<T: NSCoding>(_ newValue: T?, for key: DefaultKey<T?>) {
-        let data = newValue.map(NSKeyedArchiver.archivedData)
-        set(data, forKey: key.rawValue)
-    }
-    
-    public func unwrap<T: NSValueConvertable>(_ key: DefaultKey<T?>) -> T? {
-        return unarchive(forKey: key.rawValue).flatMap { $0 as? NSValue }.map(T.init)
-    }
-    
-    public func wrap<T: NSValueConvertable>(_ newValue: T?, for key: DefaultKey<T?>) {
-        let data = (newValue?.nsValue).map(NSKeyedArchiver.archivedData)
-        set(data, forKey: key.rawValue)
-    }
-}
-
-// MARK: - Non-Optional Key
-
-extension UserDefaults {
-    
-    public subscript(_ key: DefaultKey<Bool>) -> Bool {
-        get { return number(forKey: key.rawValue)?.boolValue ?? false }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Int>) -> Int {
-        get { return number(forKey: key.rawValue)?.intValue ?? 0 }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Float>) -> Float {
-        get { return number(forKey: key.rawValue)?.floatValue ?? 0 }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Double>) -> Double {
-        get { return number(forKey: key.rawValue)?.doubleValue ?? 0 }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<String>) -> String {
-        get { return string(forKey: key.rawValue) ?? "" }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<Data>) -> Data {
-        get { return data(forKey: key.rawValue) ?? Data() }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<[Any]>) -> [Any] {
-        get { return array(forKey: key.rawValue) ?? [] }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<[String: Any]>) -> [String: Any] {
-        get { return dictionary(forKey: key.rawValue) ?? [:] }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: DefaultKey<[String]>) -> [String] {
-        get { return stringArray(forKey: key.rawValue) ?? [] }
+    public subscript<T: DefaultConstructible>(_ key: DefaultKey<T>) -> T {
+        get { return object(forKey: key.rawValue) as? T ?? T.init() }
         set { set(newValue, forKey: key.rawValue) }
     }
 }
 
 // MARK: - KVO
 
-extension UserDefaults.AssociateKeys {
-    static let EventsKey: Key<[String: [UserDefaults.Observing]]> = "eventsKey"
-}
-
 extension UserDefaults {
     
-    var events: [String: [Observing]] {
-        get { return associatedValue(for: .EventsKey) ?? [:] }
-        set { set(newValue, for: .EventsKey) }
+    public struct KeyValueObservedChange<T> {
+        public typealias Kind = NSKeyValueChange
+        public let kind: Kind
+        public let newValue: T?
+        public let oldValue: T?
+        public let indexes: IndexSet?
+        public let isPrior:Bool
     }
     
-    @discardableResult public func addObserver<T: NSCoding>(key: DefaultKey<T?>, initial: Bool = false, using: @escaping (_ oldValue: T?, _ newValue: T?) -> Void) -> Observing {
-        if !events.keys.contains(key.rawValue) {
-            let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
-            addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
-            events[key.rawValue] = []
-        }
-        let subscription = Observing() { old, new in
-            let oldValue = (old as? Data).flatMap(NSKeyedUnarchiver.unarchiveObject) as? T
-            let newValue = (new as? Data).flatMap(NSKeyedUnarchiver.unarchiveObject) as? T
-            using(oldValue, newValue)
-        }
-        events[key.rawValue]?.append(subscription)
-        return subscription
-    }
-    
-    @discardableResult public func addObserver<T>(key: DefaultKey<T>, initial: Bool = false, using: @escaping (_ oldValue: T, _ newValue: T) -> Void) -> Observing {
-        if !events.keys.contains(key.rawValue) {
-            let option: NSKeyValueObservingOptions = initial ? [.old, .new, .initial] : [.old, .new]
-            addObserver(self, forKeyPath: key.rawValue, options: option, context: nil)
-            events[key.rawValue] = []
-        }
-        let subscription = Observing() { old, new in
-            if let old = old as? T, let new = new as? T {
-                using(old, new)
+    public class KeyValueObservation: NSObject {
+        
+        typealias Callback = (UserDefaults, KeyValueObservedChange<Any>) -> Void
+        
+        weak var object : UserDefaults?
+        let callback : Callback
+        let path : String
+        
+        static var swizzler : KeyValueObservation? = {
+            let bridgeClass: AnyClass = KeyValueObservation.self
+            let observeSel = #selector(NSObject.observeValue(forKeyPath:of:change:context:))
+            let swapSel = #selector(KeyValueObservation._swizzle_defaults_observeValue(forKeyPath:of:change:context:))
+            guard let rootObserveImpl = class_getInstanceMethod(bridgeClass, observeSel),
+                let swapObserveImpl = class_getInstanceMethod(bridgeClass, swapSel) else {
+                    fatalError("failed to swizzle method \(observeSel) and \(swapSel)")
             }
+            method_exchangeImplementations(rootObserveImpl, swapObserveImpl)
+            return nil
+        }()
+        
+        fileprivate init(object: UserDefaults, path: String, callback: @escaping Callback) {
+            let _ = KeyValueObservation.swizzler
+            self.path = path
+            self.object = object
+            self.callback = callback
         }
-        events[key.rawValue]?.append(subscription)
-        return subscription
-    }
-    
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard let keyPath = keyPath else { return }
         
-        events[keyPath] = events[keyPath]?.filter { $0.isValid }
-        guard let observings = events[keyPath], let change = change else { return }
-        
-        observings.forEach { $0.handler(change[.oldKey], change[.newKey]) }
-        
-        if observings.isEmpty {
-            events.removeValue(forKey: keyPath)
+        deinit {
+            invalidate()
         }
-    }
-}
-
-extension UserDefaults {
-    
-    public class Observing {
         
-        typealias HandlerType = (_ old: Any?, _ new: Any?) -> Void
-        
-        var handler: HandlerType
-        
-        var isValid = true
-        
-        init(_ handler: @escaping HandlerType) {
-            self.handler = handler
+        fileprivate func start(_ options: NSKeyValueObservingOptions) {
+            object?.addObserver(self, forKeyPath: path, options: options, context: nil)
         }
         
         public func invalidate() {
-            handler = {_,_ in }
-            isValid = false
+            object?.removeObserver(self, forKeyPath: path, context: nil)
+            object = nil
+        }
+        
+        @objc func _swizzle_defaults_observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+            guard let ourObject = self.object, object as? NSObject == ourObject, let change = change else { return }
+            let rawKind = change[.kindKey] as! UInt
+            let kind = NSKeyValueChange(rawValue: rawKind)!
+            let notification = KeyValueObservedChange(kind: kind,
+                                                      newValue: change[.newKey],
+                                                      oldValue: change[.oldKey],
+                                                      indexes: change[.indexesKey] as! IndexSet?,
+                                                      isPrior: change[.notificationIsPriorKey] as? Bool ?? false)
+            callback(ourObject, notification)
         }
     }
+}
+
+extension UserDefaults {
+    
+    public func observeArchived<T: NSCoding>(_ defaultName: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+        let result = KeyValueObservation(object: self, path: defaultName.rawValue) { (defaults, change) in
+            let oldValue = (change.oldValue as? Data).map(NSKeyedUnarchiver.unarchiveObject) as? T
+            let newValue = (change.newValue as? Data).map(NSKeyedUnarchiver.unarchiveObject) as? T
+            let notification = KeyValueObservedChange(kind: change.kind,
+                                                      newValue: newValue,
+                                                      oldValue: oldValue,
+                                                      indexes: change.indexes,
+                                                      isPrior: change.isPrior)
+            changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
+    
+    public func observeCoded<T: Codable>(_ defaultName: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+        let result = KeyValueObservation(object: self, path: defaultName.rawValue) { (defaults, change) in
+            let oldValue = (change.oldValue as? Data).map { try? JSONDecoder().decode(T.self, from: $0) } as? T
+            let newValue = (change.newValue as? Data).map { try? JSONDecoder().decode(T.self, from: $0) } as? T
+            let notification = KeyValueObservedChange(kind: change.kind,
+                                                      newValue: newValue,
+                                                      oldValue: oldValue,
+                                                      indexes: change.indexes,
+                                                      isPrior: change.isPrior)
+            changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
+    
+    public func observe<T>(_ defaultName: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+        let result = KeyValueObservation(object: self, path: defaultName.rawValue) { (defaults, change) in
+            let notification = KeyValueObservedChange(kind: change.kind,
+                                                      newValue: change.newValue as? T,
+                                                      oldValue: change.oldValue as? T,
+                                                      indexes: change.indexes,
+                                                      isPrior: change.isPrior)
+            changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
+    
+    public func observe<T: DefaultConstructible>(_ defaultName: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+        let result = KeyValueObservation(object: self, path: defaultName.rawValue) { (defaults, change) in
+            let notification = KeyValueObservedChange(kind: change.kind,
+                                                      newValue: change.newValue as? T ?? T.init(),
+                                                      oldValue: change.oldValue as? T ?? T.init(),
+                                                      indexes: change.indexes,
+                                                      isPrior: change.isPrior)
+            changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
+    
+    public func willChangeValue<T>(for key: DefaultKey<T>) {
+        self.willChangeValue(forKey: key.rawValue)
+    }
+    
+    public func willChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
+        self.willChange(changeKind, valuesAt: indexes, forKey: key.rawValue)
+    }
+    
+    public func willChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
+        self.willChangeValue(forKey: key.rawValue, withSetMutation: mutation, using: set)
+    }
+    
+    public func didChangeValue<T>(for key: DefaultKey<T>) {
+        self.didChangeValue(forKey: key.rawValue)
+    }
+    
+    public func didChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
+        self.didChange(changeKind, valuesAt: indexes, forKey: key.rawValue)
+    }
+    
+    public func didChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
+        self.didChangeValue(forKey: key.rawValue, withSetMutation: mutation, using: set)
+    }
+    
 }
