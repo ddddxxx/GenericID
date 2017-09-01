@@ -357,6 +357,11 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(defaults[.RectOptKey], rect)
     }
     
+    func testContainment() {
+        XCTAssertFalse(defaults.contains(.StringOptKey))
+        XCTAssertTrue(defaults.contains(.StringKey))
+    }
+    
     func testRemoving() {
         XCTAssertFalse(defaults.contains(.StringOptKey))
         XCTAssertNil(defaults[.StringOptKey])
