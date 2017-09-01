@@ -10,7 +10,7 @@
 
 A Swift extension to use string-based API in a **type-safe** way.
 
-All these fantastic methods are compatible with traditional string-based API
+All these fantastic API are compatible with traditional string-based API.
 
 ## Requirements
 
@@ -24,7 +24,7 @@ All these fantastic methods are compatible with traditional string-based API
 
 ```swift
 extension UserDefaults.DefaultKeys {
-    static let intKey: Key<String?> = "intKey"
+    static let intKey:   Key<String?> = "intKey"
     static let colorKey: ArchivedKey<UIColor?> = "colorKey"
     static let pointKey: JSONCodedKey<CGPoint?> = "pointKey"
 }
@@ -45,7 +45,7 @@ ud[.stringKey] += "bar"
 
 // Typed array
 ud[.stringArrayKey].contains("foo")
-ud[.stringArrayKey][0] += "baz"
+ud[.intArrayKey][0] += 1
 
 // Work with NSKeyedArchiver
 ud[.colorKey] = UIColor.orange
@@ -86,7 +86,7 @@ Here's types that conforms `DefaultConstructible` and its default value:
 
 Note: `Optional` also conforms `DefaultConstructible`, therefore a key typed as `DefaultKey<Any?>` aka `DefaultKey<Optional<Any>>` will still returns `nil`, which is the result of default construction of `Optional`.
 
-You can always associate an optional type if you want an optional result.
+You can always associate an optional type if you want an optional value.
 
 <!--### Observing-->
 
