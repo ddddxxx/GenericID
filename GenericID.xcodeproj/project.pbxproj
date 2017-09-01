@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BB3952321F4EC79800CF0EA2 /* TestKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3952311F4EC79800CF0EA2 /* TestKeys.swift */; };
 		BB4AFBC71F52643400373ABA /* DefaultConstructible.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */; };
+		BBC222AB1F592BE5008F1183 /* OptionalProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */; };
 		BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */; };
 		BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */; };
 		OBJ_29 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AssociatedObject.swift */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		BB3952311F4EC79800CF0EA2 /* TestKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestKeys.swift; sourceTree = "<group>"; };
 		BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConstructible.swift; sourceTree = "<group>"; };
+		BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalProtocol.swift; sourceTree = "<group>"; };
 		BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUbiquitousKeyValueStore.swift; sourceTree = "<group>"; };
 		BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINibGettable.swift; sourceTree = "<group>"; };
 		OBJ_11 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */,
+				BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */,
 				BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */,
 				OBJ_15 /* StaticKey.swift */,
 				OBJ_9 /* AssociatedObject.swift */,
@@ -232,6 +235,7 @@
 				BB4AFBC71F52643400373ABA /* DefaultConstructible.swift in Sources */,
 				OBJ_33 /* UITableView.swift in Sources */,
 				BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */,
+				BBC222AB1F592BE5008F1183 /* OptionalProtocol.swift in Sources */,
 				OBJ_34 /* UserDefaultes.swift in Sources */,
 				OBJ_35 /* StaticKey.swift in Sources */,
 			);

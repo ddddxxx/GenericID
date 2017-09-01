@@ -109,11 +109,13 @@ class UserDefaultesTests: XCTestCase {
         XCTAssert(defaults[.ArrayKey].isEmpty)
         
         defaults[.ArrayKey] = [true, 233, 3.14]
+        XCTAssertEqual(defaults[.ArrayKey].count, 3)
         XCTAssertEqual(defaults[.ArrayKey][0] as? Bool,   true)
         XCTAssertEqual(defaults[.ArrayKey][1] as? Int,    233)
         XCTAssertEqual(defaults[.ArrayKey][2] as? Double, 3.14)
         
         defaults[.ArrayKey].append("foo")
+        XCTAssertEqual(defaults[.ArrayKey].count, 4)
         XCTAssertEqual(defaults[.ArrayKey][3] as? String, "foo")
         
         defaults.remove(.ArrayKey)
@@ -355,6 +357,11 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(defaults[.RectOptKey], rect)
     }
     
+    func testContainment() {
+        XCTAssertFalse(defaults.contains(.StringOptKey))
+        XCTAssertTrue(defaults.contains(.StringKey))
+    }
+    
     func testRemoving() {
         XCTAssertFalse(defaults.contains(.StringOptKey))
         XCTAssertNil(defaults[.StringOptKey])
@@ -415,7 +422,7 @@ class UserDefaultesTests: XCTestCase {
     func testKVO() {
         var exec = false
         defaults[.IntKey] = 233
-        let token = defaults.observe(UserDefaults.DefaultKeys.IntKey, options: [.old, .new]) { (defaults, change) in
+        let token = defaults.observe(.IntKey, options: [.old, .new]) { (defaults, change) in
             XCTAssertEqual(change.oldValue, 233)
             XCTAssertEqual(change.newValue, 234)
             exec = true
@@ -432,7 +439,7 @@ class UserDefaultesTests: XCTestCase {
     func testKVOWithArchiving() {
         var exec = false
         defaults[.ColorOptKey] = .red
-        let token = defaults.observeArchived(UserDefaults.DefaultKeys.ColorOptKey, options: [.old, .new]) { (defaults, change) in
+        let token = defaults.observe(.ColorOptKey, options: [.old, .new]) { (defaults, change) in
             XCTAssertEqual(change.oldValue, .red)
             XCTAssertEqual(change.newValue, .green)
             exec = true
@@ -452,7 +459,7 @@ class UserDefaultesTests: XCTestCase {
         let rect2 = CGRect(x: 5, y: 6, width: 7, height: 8)
         
         defaults[.RectOptKey] = rect1
-        let token = defaults.observeCoded(UserDefaults.DefaultKeys.RectOptKey, options: [.old, .new]) { (defaults, change) in
+        let token = defaults.observe(.RectOptKey, options: [.old, .new]) { (defaults, change) in
             XCTAssertEqual(change.oldValue, rect1)
             XCTAssertEqual(change.newValue, rect2)
             exec = true

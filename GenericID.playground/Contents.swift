@@ -4,15 +4,32 @@ import GenericID
 let ud = UserDefaults.standard
 
 extension UserDefaults.DefaultKeys {
-    static let colorKey: Key<NSColor?> = "colorKey"
-    static let pointKey: Key<CGPoint?> = "pointKey"
+    static let intKey: Key<Int> = "intKey"
+    static let stringKey: Key<String> = "stringKey"
+    static let stringArrayKey: Key<[String]> = "arrayKey"
+    static let dictKey: Key<[String: Int]> = "dictKey"
+    static let colorKey: ArchivedKey<NSColor?> = "colorKey"
+    static let pointKey: JSONCodedKey<CGPoint?> = "pointKey"
 }
 
-ud.archive(#colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1), for: .colorKey)
-ud.unarchive(.colorKey)
+ud.removeAll()
 
-let p = CGPoint(x: 1, y: 1)
+ud[.intKey] = 42
+ud[.intKey] += 1
 
-ud.wrap(p, for: .pointKey)
-ud.unwrap(.pointKey)
+ud[.stringKey] = "foo"
+ud[.stringKey] += "bar"
 
+ud[.stringArrayKey] = ["foo", "bar"]
+ud[.stringArrayKey].contains("foo")
+ud[.stringArrayKey][0] += "baz"
+
+ud[.dictKey] = ["foo": 42]
+ud[.dictKey]["bar"] = 233
+ud[.dictKey].removeValue(forKey: "foo")
+
+ud[.colorKey] = .orange
+ud[.colorKey]?.redComponent
+
+ud[.pointKey] = CGPoint(x: 1, y: 1)
+ud[.pointKey]?.x += 1
