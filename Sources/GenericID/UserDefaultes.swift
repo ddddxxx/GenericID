@@ -85,6 +85,10 @@ extension UserDefaults.DefaultKeys {
 extension UserDefaults {
     
     public func contains<T>(_ key: DefaultKey<T>) -> Bool {
+        if T.self is DefaultConstructible.Type,
+            !(T.self is OptionalProtocol.Type) {
+            return true
+        }
         return object(forKey: key.key) != nil
     }
     
