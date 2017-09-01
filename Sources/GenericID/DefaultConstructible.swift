@@ -29,3 +29,10 @@ extension String: DefaultConstructible {}
 extension Data: DefaultConstructible {}
 extension Array: DefaultConstructible {}
 extension Dictionary: DefaultConstructible {}
+
+extension Optional: DefaultConstructible {
+    public init() {
+        self = .none
+    }
+}
+
