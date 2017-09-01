@@ -6,7 +6,7 @@
 ![platforms](https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg)
 ![supports](https://img.shields.io/badge/supports-Carthage%20%7C%20Swift_PM-brightgreen.svg)
 ![swift](https://img.shields.io/badge/swift-4.0-orange.svg)
-[![License](https://img.shields.io/github/license/ddddxxx/GenericID.svg)](LICENSE)
+[![codebeat badge](https://codebeat.co/badges/2bf7d7e0-2bfe-4280-bbb3-ed64566ddd10)](https://codebeat.co/projects/github-com-ddddxxx-genericid-master)
 
 A Swift extension to use string-based API in a **type-safe** way.
 
@@ -19,6 +19,8 @@ All these fantastic API are compatible with traditional string-based API.
 - Swift 4.0+
 
 ## Type-safe `UserDefaults`
+
+> You can use `NSUbiquitousKeyValueStore` with almost the same API.
 
 ### 1. Define your keys
 
@@ -134,7 +136,7 @@ tableView.registerNib(id: .customCell)
 
 ```swift
 extension UIStoryboard.Identifiers {
-    static let customVC : ID<MyCustomViewController> = "CustomVCStoryboardIdentifier"
+    static let customVC: ID<MyCustomViewController> = "CustomVCStoryboardIdentifier"
 }
 ```
 
@@ -146,6 +148,18 @@ let sb = UIStoryboard.main()
 
 let vc = sb.instantiateViewController(withIdentifier: .customVC)
 // Typed as MyCustomViewController
+```
+
+## Type-safe Associated Object
+
+```
+// Define your associate keys
+extension YourClass.AssociateKeys {
+    static let someKey: Key<Int> = "someKey"
+}
+
+// Use it!
+yourObject[.someKey] = 42
 ```
 
 ## Installation
