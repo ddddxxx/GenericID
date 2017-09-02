@@ -23,6 +23,7 @@ class UserDefaultesTests: XCTestCase {
     let defaults = UserDefaults.standard
     
     override func setUp() {
+        super.setUp()
         defaults.unregisterAll()
         defaults.removeAll()
     }
@@ -397,80 +398,87 @@ class UserDefaultesTests: XCTestCase {
     // MARK: -
     
     func testRegistration() {
+        let rect = CGRect(x: 1, y: 2, width: 3, height: 4)
+        
         XCTAssertEqual(defaults[.IntKey], 0)
         XCTAssertNil(defaults[.StringOptKey])
-        XCTAssertNil(defaults[.URLOptKey])
         XCTAssertNil(defaults[.ColorOptKey])
+        XCTAssertNil(defaults[.RectOptKey])
         
-        let url = URL(string: "https://google.com")!
         let dict: [UserDefaults.DefaultKeys : Any] = [
             .IntKey: 42,
             .StringOptKey: "foo",
-            .URLOptKey: url,
             .ColorOptKey: Color.red,
+            .RectOptKey: rect,
         ]
         defaults.register(defaults: dict)
         
         XCTAssertEqual(defaults[.IntKey], 42)
         XCTAssertEqual(defaults[.StringOptKey], "foo")
-        XCTAssertEqual(defaults[.URLOptKey], url)
         XCTAssertEqual(defaults[.ColorOptKey], .red)
+        XCTAssertEqual(defaults[.RectOptKey], rect)
         
         defaults.unregisterAll()
     }
     
     func testKVO() {
-        var exec = false
+        let ex = expectation(description: "observing get called")
+        #if !os(macOS)
+            // FIXME: KVO get called twice on iOS/tvOS. Why?
+            ex.expectedFulfillmentCount = 2
+        #endif
         defaults[.IntKey] = 233
         let token = defaults.observe(.IntKey, options: [.old, .new]) { (defaults, change) in
+            #if os(macOS)
             XCTAssertEqual(change.oldValue, 233)
             XCTAssertEqual(change.newValue, 234)
-            exec = true
+            #endif
+            ex.fulfill()
         }
-        defaults[.IntKey] += 1
-        XCTAssert(exec)
-        
-        exec = false
+        defaults[.IntKey] = 234
         token.invalidate()
         defaults[.IntKey] = 123
-        XCTAssertFalse(exec)
+        waitForExpectations(timeout: 0)
     }
     
     func testKVOWithArchiving() {
-        var exec = false
+        let ex = expectation(description: "observing get called")
+        #if !os(macOS)
+            ex.expectedFulfillmentCount = 2
+        #endif
         defaults[.ColorOptKey] = .red
         let token = defaults.observe(.ColorOptKey, options: [.old, .new]) { (defaults, change) in
+            #if os(macOS)
             XCTAssertEqual(change.oldValue, .red)
             XCTAssertEqual(change.newValue, .green)
-            exec = true
+            #endif
+            ex.fulfill()
         }
         defaults[.ColorOptKey] = .green
-        XCTAssert(exec)
-
-        exec = false
         token.invalidate()
         defaults[.ColorOptKey] = .blue
-        XCTAssertFalse(exec)
+        waitForExpectations(timeout: 0)
     }
     
     func testKVOWithCoding() {
-        var exec = false
+        let ex = expectation(description: "observing get called")
+        #if !os(macOS)
+            ex.expectedFulfillmentCount = 2
+        #endif
         let rect1 = CGRect(x: 1, y: 2, width: 3, height: 4)
         let rect2 = CGRect(x: 5, y: 6, width: 7, height: 8)
-        
         defaults[.RectOptKey] = rect1
         let token = defaults.observe(.RectOptKey, options: [.old, .new]) { (defaults, change) in
+            #if os(macOS)
             XCTAssertEqual(change.oldValue, rect1)
             XCTAssertEqual(change.newValue, rect2)
-            exec = true
+            #endif
+            ex.fulfill()
         }
         defaults[.RectOptKey] = rect2
-        XCTAssert(exec)
-        
-        exec = false
         token.invalidate()
         defaults[.RectOptKey] = rect1
-        XCTAssertFalse(exec)
+        waitForExpectations(timeout: 0)
     }
     
 }

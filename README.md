@@ -6,11 +6,11 @@
 ![platforms](https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg)
 ![supports](https://img.shields.io/badge/supports-Carthage%20%7C%20Swift_PM-brightgreen.svg)
 ![swift](https://img.shields.io/badge/swift-4.0-orange.svg)
-[![License](https://img.shields.io/github/license/ddddxxx/GenericID.svg)](LICENSE)
+[![codebeat badge](https://codebeat.co/badges/2bf7d7e0-2bfe-4280-bbb3-ed64566ddd10)](https://codebeat.co/projects/github-com-ddddxxx-genericid-master)
 
 A Swift extension to use string-based API in a **type-safe** way.
 
-All these fantastic methods are compatible with traditional string-based API
+All these fantastic API are compatible with traditional string-based API.
 
 ## Requirements
 
@@ -20,11 +20,13 @@ All these fantastic methods are compatible with traditional string-based API
 
 ## Type-safe `UserDefaults`
 
+> You can use `NSUbiquitousKeyValueStore` with almost the same API.
+
 ### 1. Define your keys
 
 ```swift
 extension UserDefaults.DefaultKeys {
-    static let intKey: Key<String?> = "intKey"
+    static let intKey:   Key<String?> = "intKey"
     static let colorKey: ArchivedKey<UIColor?> = "colorKey"
     static let pointKey: JSONCodedKey<CGPoint?> = "pointKey"
 }
@@ -45,7 +47,7 @@ ud[.stringKey] += "bar"
 
 // Typed array
 ud[.stringArrayKey].contains("foo")
-ud[.stringArrayKey][0] += "baz"
+ud[.intArrayKey][0] += 1
 
 // Work with NSKeyedArchiver
 ud[.colorKey] = UIColor.orange
@@ -59,6 +61,22 @@ ud[.pointKey]?.x += 1
 let observation = defaults.observe(.someKey, options: [.old, .new]) { (defaults, change) in
     print(change.newValue)
 }
+
+// KVO with deserializer
+let observation = defaults.observe(.rectKey, options: [.old, .new]) { (defaults, change) in
+    // deserialized automatically
+    if let rect = change.newValue {
+        someView.frame = rect
+    }
+}
+
+// Register with serializer
+ud.register(defaults: [
+    .intKey: 42,
+    .stringKey: "foo",
+    .colorKey: UIColor.blue, // serialized automatically
+    .pointKey: CGPoint(x: 1, y: 1),
+])
 ```
 
 ### Default value
@@ -86,7 +104,7 @@ Here's types that conforms `DefaultConstructible` and its default value:
 
 Note: `Optional` also conforms `DefaultConstructible`, therefore a key typed as `DefaultKey<Any?>` aka `DefaultKey<Optional<Any>>` will still returns `nil`, which is the result of default construction of `Optional`.
 
-You can always associate an optional type if you want an optional result.
+You can always associate an optional type if you want an optional value.
 
 <!--### Observing-->
 
@@ -134,7 +152,7 @@ tableView.registerNib(id: .customCell)
 
 ```swift
 extension UIStoryboard.Identifiers {
-    static let customVC : ID<MyCustomViewController> = "CustomVCStoryboardIdentifier"
+    static let customVC: ID<MyCustomViewController> = "CustomVCStoryboardIdentifier"
 }
 ```
 
@@ -146,6 +164,18 @@ let sb = UIStoryboard.main()
 
 let vc = sb.instantiateViewController(withIdentifier: .customVC)
 // Typed as MyCustomViewController
+```
+
+## Type-safe Associated Object
+
+```
+// Define your associate keys
+extension YourClass.AssociateKeys {
+    static let someKey: Key<Int> = "someKey"
+}
+
+// Use it!
+yourObject[.someKey] = 42
 ```
 
 ## Installation

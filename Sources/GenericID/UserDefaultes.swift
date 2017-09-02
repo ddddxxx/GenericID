@@ -59,7 +59,9 @@ extension UserDefaults.DefaultKeys {
     final public class ArchivedKey<T>: Key<T> /* where T: NSCoding */ {
         
         override class func persist(_ value: Any) -> Any? {
-            guard let value = value as? T else { return nil }
+            guard let value = value as? T else {
+                fatalError("Should never be reached")
+            }
             return NSKeyedArchiver.archivedData(withRootObject: value)
         }
         
@@ -70,8 +72,11 @@ extension UserDefaults.DefaultKeys {
     }
     
     final public class JSONCodedKey<T>: Key<T> where T: Codable {
+        
         override class func persist(_ value: Any) -> Any? {
-            guard let value = value as? T else { return nil }
+            guard let value = value as? T else {
+                fatalError("Should never be reached")
+            }
             return try? JSONEncoder().encode(value)
         }
         
