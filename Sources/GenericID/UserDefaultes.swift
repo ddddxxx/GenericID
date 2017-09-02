@@ -70,6 +70,7 @@ extension UserDefaults.DefaultKeys {
     }
     
     final public class JSONCodedKey<T>: Key<T> where T: Codable {
+        
         override class func persist(_ value: Any) -> Any? {
             guard let value = value as? T else { return nil }
             return try? JSONEncoder().encode(value)
