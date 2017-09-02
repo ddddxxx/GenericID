@@ -61,6 +61,22 @@ ud[.pointKey]?.x += 1
 let observation = defaults.observe(.someKey, options: [.old, .new]) { (defaults, change) in
     print(change.newValue)
 }
+
+// KVO with deserializer
+let observation = defaults.observe(.rectKey, options: [.old, .new]) { (defaults, change) in
+    // deserialized automatically
+    if let rect = change.newValue {
+        someView.frame = rect
+    }
+}
+
+// Register with serializer
+ud.register(defaults: [
+    .intKey: 42,
+    .stringKey: "foo",
+    .colorKey: UIColor.blue, // serialized automatically
+    .pointKey: CGPoint(x: 1, y: 1),
+])
 ```
 
 ### Default value
