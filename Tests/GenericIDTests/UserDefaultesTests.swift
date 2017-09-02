@@ -398,24 +398,25 @@ class UserDefaultesTests: XCTestCase {
     // MARK: -
     
     func testRegistration() {
+        let rect = CGRect(x: 1, y: 2, width: 3, height: 4)
+        
         XCTAssertEqual(defaults[.IntKey], 0)
         XCTAssertNil(defaults[.StringOptKey])
-        XCTAssertNil(defaults[.URLOptKey])
         XCTAssertNil(defaults[.ColorOptKey])
+        XCTAssertNil(defaults[.RectOptKey])
         
-        let url = URL(string: "https://google.com")!
         let dict: [UserDefaults.DefaultKeys : Any] = [
             .IntKey: 42,
             .StringOptKey: "foo",
-            .URLOptKey: url,
             .ColorOptKey: Color.red,
+            .RectOptKey: rect,
         ]
         defaults.register(defaults: dict)
         
         XCTAssertEqual(defaults[.IntKey], 42)
         XCTAssertEqual(defaults[.StringOptKey], "foo")
-        XCTAssertEqual(defaults[.URLOptKey], url)
         XCTAssertEqual(defaults[.ColorOptKey], .red)
+        XCTAssertEqual(defaults[.RectOptKey], rect)
         
         defaults.unregisterAll()
     }
