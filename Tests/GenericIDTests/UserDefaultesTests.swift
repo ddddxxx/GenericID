@@ -420,41 +420,35 @@ class UserDefaultesTests: XCTestCase {
     }
     
     func testKVO() {
-        var exec = false
+        let ex = expectation(description: "observing get called")
         defaults[.IntKey] = 233
         let token = defaults.observe(.IntKey, options: [.old, .new]) { (defaults, change) in
             XCTAssertEqual(change.oldValue, 233)
             XCTAssertEqual(change.newValue, 234)
-            exec = true
+            ex.fulfill()
         }
-        defaults[.IntKey] += 1
-        XCTAssert(exec)
-        
-        exec = false
+        defaults[.IntKey] = 234
         token.invalidate()
         defaults[.IntKey] = 123
-        XCTAssertFalse(exec)
+        waitForExpectations(timeout: 0)
     }
     
     func testKVOWithArchiving() {
-        var exec = false
+        let ex = expectation(description: "observing get called")
         defaults[.ColorOptKey] = .red
         let token = defaults.observe(.ColorOptKey, options: [.old, .new]) { (defaults, change) in
             XCTAssertEqual(change.oldValue, .red)
             XCTAssertEqual(change.newValue, .green)
-            exec = true
+            ex.fulfill()
         }
         defaults[.ColorOptKey] = .green
-        XCTAssert(exec)
-
-        exec = false
         token.invalidate()
         defaults[.ColorOptKey] = .blue
-        XCTAssertFalse(exec)
+        waitForExpectations(timeout: 0)
     }
     
     func testKVOWithCoding() {
-        var exec = false
+        let ex = expectation(description: "observing get called")
         let rect1 = CGRect(x: 1, y: 2, width: 3, height: 4)
         let rect2 = CGRect(x: 5, y: 6, width: 7, height: 8)
         
@@ -462,15 +456,12 @@ class UserDefaultesTests: XCTestCase {
         let token = defaults.observe(.RectOptKey, options: [.old, .new]) { (defaults, change) in
             XCTAssertEqual(change.oldValue, rect1)
             XCTAssertEqual(change.newValue, rect2)
-            exec = true
+            ex.fulfill()
         }
         defaults[.RectOptKey] = rect2
-        XCTAssert(exec)
-        
-        exec = false
         token.invalidate()
         defaults[.RectOptKey] = rect1
-        XCTAssertFalse(exec)
+        waitForExpectations(timeout: 0)
     }
     
 }
