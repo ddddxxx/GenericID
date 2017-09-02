@@ -17,168 +17,172 @@
 
 import Foundation
 
-extension NSUbiquitousKeyValueStore {
+#if !os(watchOS)
     
-    public typealias StoreKey<T> = StoreKeys.Key<T>
-    
-    public class StoreKeys: StaticKeyBase {}
-}
-
-extension NSUbiquitousKeyValueStore.StoreKeys {
-    
-    public class Key<T>: NSUbiquitousKeyValueStore.StoreKeys, RawRepresentable, ExpressibleByStringLiteral {
+    extension NSUbiquitousKeyValueStore {
         
-        public var rawValue: String {
-            return key
+        public typealias StoreKey<T> = StoreKeys.Key<T>
+        
+        public class StoreKeys: StaticKeyBase {}
+    }
+
+    extension NSUbiquitousKeyValueStore.StoreKeys {
+        
+        public class Key<T>: NSUbiquitousKeyValueStore.StoreKeys, RawRepresentable, ExpressibleByStringLiteral {
+            
+            public var rawValue: String {
+                return key
+            }
+            
+            public required init(rawValue: String) {
+                super.init(rawValue)
+            }
+        }
+    }
+
+    extension NSUbiquitousKeyValueStore {
+        
+        public func contains<T>(_ key: StoreKey<T>) -> Bool {
+            return object(forKey: key.rawValue) != nil
         }
         
-        public required init(rawValue: String) {
-            super.init(rawValue)
+        public func remove<T>(_ key: StoreKey<T>) {
+            removeObject(forKey: key.rawValue)
+        }
+        
+        public func removeAll() {
+            for (key, _) in dictionaryRepresentation {
+                removeObject(forKey: key)
+            }
+        }
+        
+        fileprivate func number(forKey defaultName: String) -> NSNumber? {
+            return object(forKey: defaultName) as? NSNumber
+        }
+        
+        fileprivate func unarchive(forKey defaultName: String) -> Any? {
+            return data(forKey: defaultName).flatMap(NSKeyedUnarchiver.unarchiveObject)
         }
     }
-}
 
-extension NSUbiquitousKeyValueStore {
-    
-    public func contains<T>(_ key: StoreKey<T>) -> Bool {
-        return object(forKey: key.rawValue) != nil
+    // MARK: - Optional Key
+
+    extension NSUbiquitousKeyValueStore {
+        
+        public subscript(_ key: StoreKey<Bool?>) -> Bool? {
+            get { return number(forKey: key.rawValue)?.boolValue }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<Int?>) -> Int? {
+            get { return number(forKey: key.rawValue)?.intValue }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<Float?>) -> Float? {
+            get { return number(forKey: key.rawValue)?.floatValue }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<Double?>) -> Double? {
+            get { return number(forKey: key.rawValue)?.doubleValue }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<String?>) -> String? {
+            get { return string(forKey: key.rawValue) }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<Data?>) -> Data? {
+            get { return data(forKey: key.rawValue) }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<Date?>) -> Date? {
+            get { return object(forKey: key.rawValue) as? Date }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<[Any]?>) -> [Any]? {
+            get { return array(forKey: key.rawValue) }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<[String: Any]?>) -> [String: Any]? {
+            get { return dictionary(forKey: key.rawValue) }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<[String]?>) -> [String]? {
+            get { return array(forKey: key.rawValue) as? [String] }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript<T>(_ key: StoreKey<T?>) -> T? {
+            get { return object(forKey: key.rawValue) as? T }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript<T: NSCoding>(_ key: StoreKey<T?>) -> T? {
+            get {
+                return unarchive(forKey: key.rawValue) as? T
+            }
+            set {
+                let data = newValue.map(NSKeyedArchiver.archivedData)
+                set(data, forKey: key.rawValue)
+            }
+        }
     }
-    
-    public func remove<T>(_ key: StoreKey<T>) {
-        removeObject(forKey: key.rawValue)
-    }
-    
-    public func removeAll() {
-        for (key, _) in dictionaryRepresentation {
-            removeObject(forKey: key)
+
+    // MARK: - Non-Optional Key
+
+    extension NSUbiquitousKeyValueStore {
+        
+        public subscript(_ key: StoreKey<Bool>) -> Bool {
+            get { return number(forKey: key.rawValue)?.boolValue ?? false }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<Int>) -> Int {
+            get { return number(forKey: key.rawValue)?.intValue ?? 0 }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<Float>) -> Float {
+            get { return number(forKey: key.rawValue)?.floatValue ?? 0 }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<Double>) -> Double {
+            get { return number(forKey: key.rawValue)?.doubleValue ?? 0 }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<String>) -> String {
+            get { return string(forKey: key.rawValue) ?? "" }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<Data>) -> Data {
+            get { return data(forKey: key.rawValue) ?? Data() }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<[Any]>) -> [Any] {
+            get { return array(forKey: key.rawValue) ?? [] }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<[String: Any]>) -> [String: Any] {
+            get { return dictionary(forKey: key.rawValue) ?? [:] }
+            set { set(newValue, forKey: key.rawValue) }
+        }
+        
+        public subscript(_ key: StoreKey<[String]>) -> [String] {
+            get { return array(forKey: key.rawValue) as? [String] ?? [] }
+            set { set(newValue, forKey: key.rawValue) }
         }
     }
     
-    fileprivate func number(forKey defaultName: String) -> NSNumber? {
-        return object(forKey: defaultName) as? NSNumber
-    }
-    
-    fileprivate func unarchive(forKey defaultName: String) -> Any? {
-        return data(forKey: defaultName).flatMap(NSKeyedUnarchiver.unarchiveObject)
-    }
-}
-
-// MARK: - Optional Key
-
-extension NSUbiquitousKeyValueStore {
-    
-    public subscript(_ key: StoreKey<Bool?>) -> Bool? {
-        get { return number(forKey: key.rawValue)?.boolValue }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<Int?>) -> Int? {
-        get { return number(forKey: key.rawValue)?.intValue }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<Float?>) -> Float? {
-        get { return number(forKey: key.rawValue)?.floatValue }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<Double?>) -> Double? {
-        get { return number(forKey: key.rawValue)?.doubleValue }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<String?>) -> String? {
-        get { return string(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<Data?>) -> Data? {
-        get { return data(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<Date?>) -> Date? {
-        get { return object(forKey: key.rawValue) as? Date }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<[Any]?>) -> [Any]? {
-        get { return array(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<[String: Any]?>) -> [String: Any]? {
-        get { return dictionary(forKey: key.rawValue) }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<[String]?>) -> [String]? {
-        get { return array(forKey: key.rawValue) as? [String] }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript<T>(_ key: StoreKey<T?>) -> T? {
-        get { return object(forKey: key.rawValue) as? T }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript<T: NSCoding>(_ key: StoreKey<T?>) -> T? {
-        get {
-            return unarchive(forKey: key.rawValue) as? T
-        }
-        set {
-            let data = newValue.map(NSKeyedArchiver.archivedData)
-            set(data, forKey: key.rawValue)
-        }
-    }
-}
-
-// MARK: - Non-Optional Key
-
-extension NSUbiquitousKeyValueStore {
-    
-    public subscript(_ key: StoreKey<Bool>) -> Bool {
-        get { return number(forKey: key.rawValue)?.boolValue ?? false }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<Int>) -> Int {
-        get { return number(forKey: key.rawValue)?.intValue ?? 0 }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<Float>) -> Float {
-        get { return number(forKey: key.rawValue)?.floatValue ?? 0 }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<Double>) -> Double {
-        get { return number(forKey: key.rawValue)?.doubleValue ?? 0 }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<String>) -> String {
-        get { return string(forKey: key.rawValue) ?? "" }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<Data>) -> Data {
-        get { return data(forKey: key.rawValue) ?? Data() }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<[Any]>) -> [Any] {
-        get { return array(forKey: key.rawValue) ?? [] }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<[String: Any]>) -> [String: Any] {
-        get { return dictionary(forKey: key.rawValue) ?? [:] }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-    
-    public subscript(_ key: StoreKey<[String]>) -> [String] {
-        get { return array(forKey: key.rawValue) as? [String] ?? [] }
-        set { set(newValue, forKey: key.rawValue) }
-    }
-}
+#endif
