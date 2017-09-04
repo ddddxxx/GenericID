@@ -26,7 +26,7 @@ All these fantastic API are compatible with traditional string-based API.
 
 ```swift
 extension UserDefaults.DefaultKeys {
-    static let intKey:   Key<String?> = "intKey"
+    static let intKey:   Key<Int?> = "intKey"
     static let colorKey: ArchivedKey<UIColor?> = "colorKey"
     static let pointKey: JSONCodedKey<CGPoint?> = "pointKey"
 }
@@ -168,7 +168,7 @@ let vc = sb.instantiateViewController(withIdentifier: .customVC)
 
 ## Type-safe Associated Object
 
-```
+```swift
 // Define your associate keys
 extension YourClass.AssociateKeys {
     static let someKey: Key<Int> = "someKey"
