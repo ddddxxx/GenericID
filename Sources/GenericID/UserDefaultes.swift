@@ -180,11 +180,11 @@ extension UserDefaults {
         
         typealias Callback = (UserDefaults, KeyValueObservedChange<Any>) -> Void
         
-        weak var object : UserDefaults?
-        let callback : Callback
-        let path : String
+        weak var object: UserDefaults?
+        let callback: Callback
+        let paths: [String]
         
-        static var swizzler : KeyValueObservation? = {
+        static var swizzler: KeyValueObservation? = {
             let bridgeClass: AnyClass = KeyValueObservation.self
             let observeSel = #selector(NSObject.observeValue(forKeyPath:of:change:context:))
             let swapSel = #selector(KeyValueObservation._swizzle_defaults_observeValue(forKeyPath:of:change:context:))
@@ -196,9 +196,9 @@ extension UserDefaults {
             return nil
         }()
         
-        fileprivate init(object: UserDefaults, path: String, callback: @escaping Callback) {
+        fileprivate init(object: UserDefaults, paths: [String], callback: @escaping Callback) {
             let _ = KeyValueObservation.swizzler
-            self.path = path
+            self.paths = paths
             self.object = object
             self.callback = callback
         }
@@ -208,15 +208,19 @@ extension UserDefaults {
         }
         
         fileprivate func start(_ options: NSKeyValueObservingOptions) {
-            object?.addObserver(self, forKeyPath: path, options: options, context: nil)
+            for path in paths {
+                object?.addObserver(self, forKeyPath: path, options: options, context: nil)
+            }
         }
         
         public func invalidate() {
-            object?.removeObserver(self, forKeyPath: path, context: nil)
+            for path in paths {
+                object?.removeObserver(self, forKeyPath: path, context: nil)
+            }
             object = nil
         }
         
-        @objc func _swizzle_defaults_observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        @objc func _swizzle_defaults_observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
             guard let ourObject = self.object, object as? NSObject == ourObject, let change = change else { return }
             let rawKind = change[.kindKey] as! UInt
             let kind = NSKeyValueChange(rawValue: rawKind)!
@@ -233,7 +237,7 @@ extension UserDefaults {
 extension UserDefaults {
     
     public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
-        let result = KeyValueObservation(object: self, path: key.key) { (defaults, change) in
+        let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
             let newValue = change.newValue.flatMap(type(of: key).depersist) as? T
             let oldValue = change.oldValue.flatMap(type(of: key).depersist) as? T
             let notification = KeyValueObservedChange(kind: change.kind,
@@ -248,7 +252,7 @@ extension UserDefaults {
     }
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
-        let result = KeyValueObservation(object: self, path: key.key) { (defaults, change) in
+        let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
             let newValue = change.newValue.flatMap(type(of: key).depersist) as? T ?? T()
             let oldValue = change.oldValue.flatMap(type(of: key).depersist) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
@@ -263,7 +267,7 @@ extension UserDefaults {
     }
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
-        let result = KeyValueObservation(object: self, path: key.key) { (defaults, change) in
+        let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
             let newValue = change.newValue.flatMap(type(of: key).depersist) as? T ?? T()
             let oldValue = change.oldValue.flatMap(type(of: key).depersist) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
@@ -272,6 +276,15 @@ extension UserDefaults {
                                                       indexes: change.indexes,
                                                       isPrior: change.isPrior)
             changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
+    
+    public func observe(_ keys: [DefaultKeys], options: NSKeyValueObservingOptions, changeHandler: @escaping () -> Void) -> KeyValueObservation {
+        let paths = keys.map { $0.key }
+        let result = KeyValueObservation(object: self, paths: paths) { (defaults, change) in
+            changeHandler()
         }
         result.start(options)
         return result
