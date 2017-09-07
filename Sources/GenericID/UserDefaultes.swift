@@ -25,11 +25,11 @@ extension UserDefaults {
     
     public class DefaultKeys: StaticKeyBase {
         
-        class func persist(_ value: Any) -> Any? {
+        class func serialize(_ value: Any) -> Any? {
             fatalError("Must override")
         }
         
-        class func depersist(_ value: Any) -> Any? {
+        class func deserialize(_ value: Any) -> Any? {
             fatalError("Must override")
         }
     }
@@ -47,25 +47,25 @@ extension UserDefaults.DefaultKeys {
             super.init(rawValue)
         }
         
-        override class func persist(_ value: Any) -> Any? {
+        override class func serialize(_ value: Any) -> Any? {
             return value
         }
         
-        override class func depersist(_ value: Any) -> Any? {
+        override class func deserialize(_ value: Any) -> Any? {
             return value
         }
     }
     
     final public class ArchivedKey<T>: Key<T> /* where T: NSCoding */ {
         
-        override class func persist(_ value: Any) -> Any? {
+        override class func serialize(_ value: Any) -> Any? {
             guard let value = value as? T else {
                 fatalError("Should never be reached")
             }
             return NSKeyedArchiver.archivedData(withRootObject: value)
         }
         
-        override class func depersist(_ value: Any) -> Any? {
+        override class func deserialize(_ value: Any) -> Any? {
             guard let data = value as? Data else { return nil }
             return NSKeyedUnarchiver.unarchiveObject(with: data)
         }
@@ -73,14 +73,14 @@ extension UserDefaults.DefaultKeys {
     
     final public class JSONCodedKey<T>: Key<T> where T: Codable {
         
-        override class func persist(_ value: Any) -> Any? {
+        override class func serialize(_ value: Any) -> Any? {
             guard let value = value as? T else {
                 fatalError("Should never be reached")
             }
             return try? JSONEncoder().encode(value)
         }
         
-        override class func depersist(_ value: Any) -> Any? {
+        override class func deserialize(_ value: Any) -> Any? {
             guard let data = value as? Data else { return nil }
             return try? JSONDecoder().decode(T.self, from: data)
         }
@@ -115,7 +115,7 @@ extension UserDefaults {
     public func register(defaults: [DefaultKeys: Any]) {
         var dict = Dictionary<String, Any>(minimumCapacity: defaults.count)
         for (key, value) in defaults {
-            dict[key.key] = type(of: key).persist(value)
+            dict[key.key] = type(of: key).serialize(value)
         }
         register(defaults: dict)
     }
@@ -137,28 +137,28 @@ extension UserDefaults {
     
     public subscript<T>(_ key: DefaultKey<T>) -> T? {
         get {
-            return object(forKey: key.rawValue).flatMap(type(of: key).depersist) as? T
+            return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T
         }
         set {
-            set(newValue.flatMap(type(of: key).persist), forKey: key.key)
+            set(newValue.flatMap(type(of: key).serialize), forKey: key.key)
         }
     }
     
     public subscript<T>(_ key: DefaultKey<T?>) -> T? {
         get {
-            return object(forKey: key.rawValue).flatMap(type(of: key).depersist) as? T
+            return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T
         }
         set {
-            set(newValue.flatMap(type(of: key).persist), forKey: key.key)
+            set(newValue.flatMap(type(of: key).serialize), forKey: key.key)
         }
     }
     
     public subscript<T: DefaultConstructible>(_ key: DefaultKey<T>) -> T {
         get {
-            return object(forKey: key.rawValue).flatMap(type(of: key).depersist) as? T ?? T()
+            return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T ?? T()
         }
         set {
-            set(type(of: key).persist(newValue), forKey: key.key)
+            set(type(of: key).serialize(newValue), forKey: key.key)
         }
     }
 }
@@ -238,8 +238,8 @@ extension UserDefaults {
     
     public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
-            let newValue = change.newValue.flatMap(type(of: key).depersist) as? T
-            let oldValue = change.oldValue.flatMap(type(of: key).depersist) as? T
+            let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T
+            let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T
             let notification = KeyValueObservedChange(kind: change.kind,
                                                       newValue: newValue,
                                                       oldValue: oldValue,
@@ -253,8 +253,8 @@ extension UserDefaults {
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
-            let newValue = change.newValue.flatMap(type(of: key).depersist) as? T ?? T()
-            let oldValue = change.oldValue.flatMap(type(of: key).depersist) as? T ?? T()
+            let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T ?? T()
+            let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
                                                       newValue: newValue,
                                                       oldValue: oldValue,
@@ -268,8 +268,8 @@ extension UserDefaults {
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
-            let newValue = change.newValue.flatMap(type(of: key).depersist) as? T ?? T()
-            let oldValue = change.oldValue.flatMap(type(of: key).depersist) as? T ?? T()
+            let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T ?? T()
+            let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
                                                       newValue: newValue,
                                                       oldValue: oldValue,
