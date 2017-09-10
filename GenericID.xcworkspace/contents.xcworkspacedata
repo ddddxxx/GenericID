@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:GenericID.playground">
+      location = "group:GenericID.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:GenericID.xcodeproj">
+      location = "group:GenericID.playground">
    </FileRef>
 </Workspace>

@@ -25,11 +25,11 @@ extension UserDefaults {
     
     public class DefaultKeys: StaticKeyBase {
         
-        class func persist(_ value: Any) -> Any? {
+        class func serialize(_ value: Any) -> Any? {
             fatalError("Must override")
         }
         
-        class func depersist(_ value: Any) -> Any? {
+        class func deserialize(_ value: Any) -> Any? {
             fatalError("Must override")
         }
     }
@@ -47,25 +47,25 @@ extension UserDefaults.DefaultKeys {
             super.init(rawValue)
         }
         
-        override class func persist(_ value: Any) -> Any? {
+        override class func serialize(_ value: Any) -> Any? {
             return value
         }
         
-        override class func depersist(_ value: Any) -> Any? {
+        override class func deserialize(_ value: Any) -> Any? {
             return value
         }
     }
     
     final public class ArchivedKey<T>: Key<T> /* where T: NSCoding */ {
         
-        override class func persist(_ value: Any) -> Any? {
+        override class func serialize(_ value: Any) -> Any? {
             guard let value = value as? T else {
                 fatalError("Should never be reached")
             }
             return NSKeyedArchiver.archivedData(withRootObject: value)
         }
         
-        override class func depersist(_ value: Any) -> Any? {
+        override class func deserialize(_ value: Any) -> Any? {
             guard let data = value as? Data else { return nil }
             return NSKeyedUnarchiver.unarchiveObject(with: data)
         }
@@ -73,14 +73,14 @@ extension UserDefaults.DefaultKeys {
     
     final public class JSONCodedKey<T>: Key<T> where T: Codable {
         
-        override class func persist(_ value: Any) -> Any? {
+        override class func serialize(_ value: Any) -> Any? {
             guard let value = value as? T else {
                 fatalError("Should never be reached")
             }
             return try? JSONEncoder().encode(value)
         }
         
-        override class func depersist(_ value: Any) -> Any? {
+        override class func deserialize(_ value: Any) -> Any? {
             guard let data = value as? Data else { return nil }
             return try? JSONDecoder().decode(T.self, from: data)
         }
@@ -115,7 +115,7 @@ extension UserDefaults {
     public func register(defaults: [DefaultKeys: Any]) {
         var dict = Dictionary<String, Any>(minimumCapacity: defaults.count)
         for (key, value) in defaults {
-            dict[key.key] = type(of: key).persist(value)
+            dict[key.key] = type(of: key).serialize(value)
         }
         register(defaults: dict)
     }
@@ -137,28 +137,28 @@ extension UserDefaults {
     
     public subscript<T>(_ key: DefaultKey<T>) -> T? {
         get {
-            return object(forKey: key.rawValue).flatMap(type(of: key).depersist) as? T
+            return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T
         }
         set {
-            set(newValue.flatMap(type(of: key).persist), forKey: key.key)
+            set(newValue.flatMap(type(of: key).serialize), forKey: key.key)
         }
     }
     
     public subscript<T>(_ key: DefaultKey<T?>) -> T? {
         get {
-            return object(forKey: key.rawValue).flatMap(type(of: key).depersist) as? T
+            return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T
         }
         set {
-            set(newValue.flatMap(type(of: key).persist), forKey: key.key)
+            set(newValue.flatMap(type(of: key).serialize), forKey: key.key)
         }
     }
     
     public subscript<T: DefaultConstructible>(_ key: DefaultKey<T>) -> T {
         get {
-            return object(forKey: key.rawValue).flatMap(type(of: key).depersist) as? T ?? T()
+            return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T ?? T()
         }
         set {
-            set(type(of: key).persist(newValue), forKey: key.key)
+            set(type(of: key).serialize(newValue), forKey: key.key)
         }
     }
 }
@@ -180,11 +180,11 @@ extension UserDefaults {
         
         typealias Callback = (UserDefaults, KeyValueObservedChange<Any>) -> Void
         
-        weak var object : UserDefaults?
-        let callback : Callback
-        let path : String
+        weak var object: UserDefaults?
+        let callback: Callback
+        let paths: [String]
         
-        static var swizzler : KeyValueObservation? = {
+        static var swizzler: KeyValueObservation? = {
             let bridgeClass: AnyClass = KeyValueObservation.self
             let observeSel = #selector(NSObject.observeValue(forKeyPath:of:change:context:))
             let swapSel = #selector(KeyValueObservation._swizzle_defaults_observeValue(forKeyPath:of:change:context:))
@@ -196,9 +196,9 @@ extension UserDefaults {
             return nil
         }()
         
-        fileprivate init(object: UserDefaults, path: String, callback: @escaping Callback) {
+        fileprivate init(object: UserDefaults, paths: [String], callback: @escaping Callback) {
             let _ = KeyValueObservation.swizzler
-            self.path = path
+            self.paths = paths
             self.object = object
             self.callback = callback
         }
@@ -208,15 +208,19 @@ extension UserDefaults {
         }
         
         fileprivate func start(_ options: NSKeyValueObservingOptions) {
-            object?.addObserver(self, forKeyPath: path, options: options, context: nil)
+            for path in paths {
+                object?.addObserver(self, forKeyPath: path, options: options, context: nil)
+            }
         }
         
         public func invalidate() {
-            object?.removeObserver(self, forKeyPath: path, context: nil)
+            for path in paths {
+                object?.removeObserver(self, forKeyPath: path, context: nil)
+            }
             object = nil
         }
         
-        @objc func _swizzle_defaults_observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        @objc func _swizzle_defaults_observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
             guard let ourObject = self.object, object as? NSObject == ourObject, let change = change else { return }
             let rawKind = change[.kindKey] as! UInt
             let kind = NSKeyValueChange(rawValue: rawKind)!
@@ -233,9 +237,9 @@ extension UserDefaults {
 extension UserDefaults {
     
     public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
-        let result = KeyValueObservation(object: self, path: key.key) { (defaults, change) in
-            let newValue = change.newValue.flatMap(type(of: key).depersist) as? T
-            let oldValue = change.oldValue.flatMap(type(of: key).depersist) as? T
+        let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
+            let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T
+            let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T
             let notification = KeyValueObservedChange(kind: change.kind,
                                                       newValue: newValue,
                                                       oldValue: oldValue,
@@ -248,9 +252,9 @@ extension UserDefaults {
     }
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
-        let result = KeyValueObservation(object: self, path: key.key) { (defaults, change) in
-            let newValue = change.newValue.flatMap(type(of: key).depersist) as? T ?? T()
-            let oldValue = change.oldValue.flatMap(type(of: key).depersist) as? T ?? T()
+        let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
+            let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T ?? T()
+            let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
                                                       newValue: newValue,
                                                       oldValue: oldValue,
@@ -263,15 +267,24 @@ extension UserDefaults {
     }
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
-        let result = KeyValueObservation(object: self, path: key.key) { (defaults, change) in
-            let newValue = change.newValue.flatMap(type(of: key).depersist) as? T ?? T()
-            let oldValue = change.oldValue.flatMap(type(of: key).depersist) as? T ?? T()
+        let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
+            let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T ?? T()
+            let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
                                                       newValue: newValue,
                                                       oldValue: oldValue,
                                                       indexes: change.indexes,
                                                       isPrior: change.isPrior)
             changeHandler(defaults, notification)
+        }
+        result.start(options)
+        return result
+    }
+    
+    public func observe(_ keys: [DefaultKeys], options: NSKeyValueObservingOptions, changeHandler: @escaping () -> Void) -> KeyValueObservation {
+        let paths = keys.map { $0.key }
+        let result = KeyValueObservation(object: self, paths: paths) { (defaults, change) in
+            changeHandler()
         }
         result.start(options)
         return result

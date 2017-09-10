@@ -7,4 +7,4 @@
 
 protocol OptionalProtocol {}
 
-extension Optional : OptionalProtocol {}
+extension Optional: OptionalProtocol {}

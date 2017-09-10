@@ -421,7 +421,7 @@ class UserDefaultesTests: XCTestCase {
         defaults.unregisterAll()
     }
     
-    func testKVO() {
+    func testObserving() {
         let ex = expectation(description: "observing get called")
         #if !os(macOS)
             // FIXME: KVO get called twice on iOS/tvOS. Why?
@@ -441,7 +441,7 @@ class UserDefaultesTests: XCTestCase {
         waitForExpectations(timeout: 0)
     }
     
-    func testKVOWithArchiving() {
+    func testObservingWithArchiving() {
         let ex = expectation(description: "observing get called")
         #if !os(macOS)
             ex.expectedFulfillmentCount = 2
@@ -460,7 +460,7 @@ class UserDefaultesTests: XCTestCase {
         waitForExpectations(timeout: 0)
     }
     
-    func testKVOWithCoding() {
+    func testObservingWithCoding() {
         let ex = expectation(description: "observing get called")
         #if !os(macOS)
             ex.expectedFulfillmentCount = 2
@@ -478,6 +478,24 @@ class UserDefaultesTests: XCTestCase {
         defaults[.RectOptKey] = rect2
         token.invalidate()
         defaults[.RectOptKey] = rect1
+        waitForExpectations(timeout: 0)
+    }
+    
+    func testObservingMultipleKeys() {
+        let ex = expectation(description: "observing get called")
+        #if os(macOS)
+            ex.expectedFulfillmentCount = 2
+        #else
+            // FIXME: KVO get called twice on iOS/tvOS. Why?
+            ex.expectedFulfillmentCount = 4
+        #endif
+        let token = defaults.observe([.IntKey, .StringKey], options: [.old, .new]) {
+            ex.fulfill()
+        }
+        defaults[.IntKey] = 42
+        defaults[.StringKey] = "foo"
+        token.invalidate()
+        defaults[.IntKey] = 123
         waitForExpectations(timeout: 0)
     }
     
