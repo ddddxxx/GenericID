@@ -76,7 +76,7 @@
 			children = (
 				OBJ_17 /* GenericIDTests */,
 			);
-			name = Tests;
+			path = Tests;
 			sourceTree = SOURCE_ROOT;
 		};
 		OBJ_17 /* GenericIDTests */ = {
@@ -114,7 +114,7 @@
 			children = (
 				OBJ_8 /* GenericID */,
 			);
-			name = Sources;
+			path = Sources;
 			sourceTree = SOURCE_ROOT;
 		};
 		OBJ_8 /* GenericID */ = {
