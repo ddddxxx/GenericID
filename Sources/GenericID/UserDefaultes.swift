@@ -236,7 +236,7 @@ extension UserDefaults {
 
 extension UserDefaults {
     
-    public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+    public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
             let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T
             let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T
@@ -251,7 +251,7 @@ extension UserDefaults {
         return result
     }
     
-    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
             let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T ?? T()
             let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T ?? T()
@@ -266,7 +266,7 @@ extension UserDefaults {
         return result
     }
     
-    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions, changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
             let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T ?? T()
             let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T ?? T()
@@ -281,7 +281,7 @@ extension UserDefaults {
         return result
     }
     
-    public func observe(_ keys: [DefaultKeys], options: NSKeyValueObservingOptions, changeHandler: @escaping () -> Void) -> KeyValueObservation {
+    public func observe(keys: [DefaultKeys], options: NSKeyValueObservingOptions, changeHandler: @escaping () -> Void) -> KeyValueObservation {
         let paths = keys.map { $0.key }
         let result = KeyValueObservation(object: self, paths: paths) { (defaults, change) in
             changeHandler()
