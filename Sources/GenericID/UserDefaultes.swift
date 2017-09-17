@@ -281,7 +281,7 @@ extension UserDefaults {
         return result
     }
     
-    public func observe(keys: [DefaultKeys], options: NSKeyValueObservingOptions, changeHandler: @escaping () -> Void) -> KeyValueObservation {
+    public func observe(keys: [DefaultKeys], options: NSKeyValueObservingOptions = [], changeHandler: @escaping () -> Void) -> KeyValueObservation {
         let paths = keys.map { $0.key }
         let result = KeyValueObservation(object: self, paths: paths) { (defaults, change) in
             changeHandler()
