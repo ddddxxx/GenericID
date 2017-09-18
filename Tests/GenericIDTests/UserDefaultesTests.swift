@@ -441,6 +441,25 @@ class UserDefaultesTests: XCTestCase {
         waitForExpectations(timeout: 0)
     }
     
+    func testObservingWithOptional() {
+        let ex = expectation(description: "observing get called")
+        #if !os(macOS)
+            ex.expectedFulfillmentCount = 2
+        #endif
+        defaults[.StringOptKey] = "foo"
+        let token = defaults.observe(.StringOptKey, options: [.old, .new]) { (defaults: UserDefaults, change: UserDefaults.KeyValueObservedChange<String>) in
+            #if os(macOS)
+                XCTAssertEqual(change.oldValue, "foo")
+                XCTAssertEqual(change.newValue, "bar")
+            #endif
+            ex.fulfill()
+        }
+        defaults[.StringOptKey] = "bar"
+        token.invalidate()
+        defaults[.StringOptKey] = "baz"
+        waitForExpectations(timeout: 0)
+    }
+    
     func testObservingWithArchiving() {
         let ex = expectation(description: "observing get called")
         #if !os(macOS)
@@ -489,7 +508,7 @@ class UserDefaultesTests: XCTestCase {
             // FIXME: KVO get called twice on iOS/tvOS. Why?
             ex.expectedFulfillmentCount = 4
         #endif
-        let token = defaults.observe([.IntKey, .StringKey], options: [.old, .new]) {
+        let token = defaults.observe(keys: [.IntKey, .StringKey], options: [.old, .new]) {
             ex.fulfill()
         }
         defaults[.IntKey] = 42
