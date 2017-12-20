@@ -25,6 +25,11 @@ extension UserDefaults {
         
         public private(set) var valueTransformer: ValueTransformer?
         
+        public init(_ key: String, transformer: ValueTransformer? = nil) {
+            self.valueTransformer = transformer
+            super.init(key)
+        }
+        
         func serialize(_ v: Any) -> Any? {
             guard let t = valueTransformer else { return v }
             return t.serialize(v)
@@ -40,15 +45,13 @@ extension UserDefaults {
 
 extension UserDefaults.DefaultKeys {
     
-    public class Key<T>: UserDefaults.DefaultKeys, RawRepresentable, ExpressibleByStringLiteral {
-        
-        public var rawValue: String {
-            return key
-        }
-        
-        public required init(rawValue: String) {
-            super.init(rawValue)
-        }
+    public final class Key<T>: UserDefaults.DefaultKeys {}
+}
+
+extension UserDefaults.DefaultKeys.Key: ExpressibleByStringLiteral {
+    
+    public convenience init(stringLiteral value: String) {
+        self.init(value)
     }
 }
 
@@ -106,7 +109,7 @@ extension UserDefaults {
     
     public subscript<T>(_ key: DefaultKey<T>) -> T? {
         get {
-            return object(forKey: key.rawValue).flatMap(key.deserialize) as? T
+            return object(forKey: key.key).flatMap(key.deserialize) as? T
         }
         set {
             set(newValue.flatMap(key.serialize), forKey: key.key)
@@ -115,7 +118,7 @@ extension UserDefaults {
     
     public subscript<T>(_ key: DefaultKey<T?>) -> T? {
         get {
-            return object(forKey: key.rawValue).flatMap(key.deserialize) as? T
+            return object(forKey: key.key).flatMap(key.deserialize) as? T
         }
         set {
             set(newValue.flatMap(key.serialize), forKey: key.key)
@@ -124,7 +127,7 @@ extension UserDefaults {
     
     public subscript<T: DefaultConstructible>(_ key: DefaultKey<T>) -> T {
         get {
-            return object(forKey: key.rawValue).flatMap(key.deserialize) as? T ?? T()
+            return object(forKey: key.key).flatMap(key.deserialize) as? T ?? T()
         }
         set {
             set(key.serialize(newValue), forKey: key.key)
@@ -260,27 +263,27 @@ extension UserDefaults {
     }
     
     public func willChangeValue<T>(for key: DefaultKey<T>) {
-        self.willChangeValue(forKey: key.rawValue)
+        self.willChangeValue(forKey: key.key)
     }
     
     public func willChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
-        self.willChange(changeKind, valuesAt: indexes, forKey: key.rawValue)
+        self.willChange(changeKind, valuesAt: indexes, forKey: key.key)
     }
     
     public func willChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
-        self.willChangeValue(forKey: key.rawValue, withSetMutation: mutation, using: set)
+        self.willChangeValue(forKey: key.key, withSetMutation: mutation, using: set)
     }
     
     public func didChangeValue<T>(for key: DefaultKey<T>) {
-        self.didChangeValue(forKey: key.rawValue)
+        self.didChangeValue(forKey: key.key)
     }
     
     public func didChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
-        self.didChange(changeKind, valuesAt: indexes, forKey: key.rawValue)
+        self.didChange(changeKind, valuesAt: indexes, forKey: key.key)
     }
     
     public func didChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
-        self.didChangeValue(forKey: key.rawValue, withSetMutation: mutation, using: set)
+        self.didChangeValue(forKey: key.key, withSetMutation: mutation, using: set)
     }
     
 }
