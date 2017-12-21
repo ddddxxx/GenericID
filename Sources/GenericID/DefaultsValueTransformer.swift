@@ -42,6 +42,17 @@ extension UserDefaults {
             return t.init(codedData: value) as? T
         }
     }
+    
+    public class KeyedArchiveValueTransformer: ValueTransformer {
+        
+        public override func serialize<T>(_ value: T) -> Data? {
+            return NSKeyedArchiver.archivedData(withRootObject: value)
+        }
+        
+        public override func deserialize<T>(_ value: Data) -> T? {
+            return NSKeyedUnarchiver.unarchiveObjectWithoutException(with: value) as? T
+        }
+    }
 }
 
 extension Encodable {
