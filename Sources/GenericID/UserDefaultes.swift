@@ -56,7 +56,7 @@ extension UserDefaults.DefaultKeys {
         override func deserialize(_ v: Any) -> Any? {
             guard let t = valueTransformer else { return v }
             guard let data = v as? Data else { return nil }
-            return t.deserialize(data) as T?
+            return t.deserialize(T.self, from: data)
         }
     }
 }

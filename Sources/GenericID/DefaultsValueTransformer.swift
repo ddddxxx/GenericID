@@ -25,7 +25,7 @@ extension UserDefaults {
             fatalError("Must override")
         }
         
-        public func deserialize<T>(_ value: Data) -> T? {
+        public func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
             fatalError("Must override")
         }
     }
@@ -37,9 +37,9 @@ extension UserDefaults {
             return v.jsonData
         }
         
-        public override func deserialize<T>(_ value: Data) -> T? {
+        public override func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
             guard let t = T.self as? Decodable.Type else { return nil }
-            return t.init(jsonData: value) as? T
+            return t.init(jsonData: data) as? T
         }
     }
     
@@ -50,9 +50,9 @@ extension UserDefaults {
             return v.plistData
         }
         
-        public override func deserialize<T>(_ value: Data) -> T? {
+        public override func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
             guard let t = T.self as? Decodable.Type else { return nil }
-            return t.init(plistData: value) as? T
+            return t.init(plistData: data) as? T
         }
     }
     
@@ -62,8 +62,8 @@ extension UserDefaults {
             return NSKeyedArchiver.archivedData(withRootObject: value)
         }
         
-        public override func deserialize<T>(_ value: Data) -> T? {
-            return NSKeyedUnarchiver.unarchiveObjectWithoutException(with: value) as? T
+        public override func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
+            return NSKeyedUnarchiver.unarchiveObjectWithoutException(with: data) as? T
         }
     }
     
@@ -75,8 +75,8 @@ extension UserDefaults {
                 return NSArchiver.archivedData(withRootObject: value)
             }
             
-            public override func deserialize<T>(_ value: Data) -> T? {
-                return NSUnarchiver.unarchiveObjectWithoutException(with: value) as? T
+            public override func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
+                return NSUnarchiver.unarchiveObjectWithoutException(with: data) as? T
             }
         }
     
