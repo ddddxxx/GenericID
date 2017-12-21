@@ -34,12 +34,25 @@ extension UserDefaults {
         
         public override func serialize<T>(_ value: T) -> Data? {
             guard let v = value as? Encodable else { return nil }
-            return v.codedData
+            return v.jsonData
         }
         
         public override func deserialize<T>(_ value: Data) -> T? {
             guard let t = T.self as? Decodable.Type else { return nil }
-            return t.init(codedData: value) as? T
+            return t.init(jsonData: value) as? T
+        }
+    }
+    
+    public class PropertyListValueTransformer: ValueTransformer {
+        
+        public override func serialize<T>(_ value: T) -> Data? {
+            guard let v = value as? Encodable else { return nil }
+            return v.plistData
+        }
+        
+        public override func deserialize<T>(_ value: Data) -> T? {
+            guard let t = T.self as? Decodable.Type else { return nil }
+            return t.init(plistData: value) as? T
         }
     }
     
@@ -74,6 +87,8 @@ extension UserDefaults.ValueTransformer {
     
     public static let json = UserDefaults.JSONValueTransformer()
     
+    public static let plist = UserDefaults.PropertyListValueTransformer()
+    
     public static let keyedArchive = UserDefaults.KeyedArchiveValueTransformer()
     
     #if os(macOS)
@@ -83,17 +98,26 @@ extension UserDefaults.ValueTransformer {
     #endif
 }
 
-extension Encodable {
+fileprivate extension Encodable {
     
-    var codedData: Data? {
+    var jsonData: Data? {
         return try? JSONEncoder().encode(self)
+    }
+    
+    var plistData: Data? {
+        return try? PropertyListEncoder().encode(self)
     }
 }
 
-extension Decodable {
+fileprivate extension Decodable {
     
-    init?(codedData: Data) {
-        guard let v = try? JSONDecoder().decode(Self.self, from: codedData) else { return nil }
+    init?(jsonData: Data) {
+        guard let v = try? JSONDecoder().decode(Self.self, from: jsonData) else { return nil }
+        self = v
+    }
+    
+    init?(plistData: Data) {
+        guard let v = try? PropertyListDecoder().decode(Self.self, from: plistData) else { return nil }
         self = v
     }
 }
