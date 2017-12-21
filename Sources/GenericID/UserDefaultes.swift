@@ -25,27 +25,40 @@ extension UserDefaults {
         
         public private(set) var valueTransformer: ValueTransformer?
         
-        public init(_ key: String, transformer: ValueTransformer? = nil) {
+        public override init(_ key: String) {
+            super.init(key)
+        }
+        
+        public init(_ key: String, transformer: ValueTransformer) {
             self.valueTransformer = transformer
             super.init(key)
         }
         
         func serialize(_ v: Any) -> Any? {
-            guard let t = valueTransformer else { return v }
-            return t.serialize(v)
+            fatalError("Must override")
         }
         
         func deserialize(_ v: Any) -> Any? {
-            guard let t = valueTransformer else { return v }
-            guard let data = v as? Data else { return nil }
-            return t.deserialize(data)
+            fatalError("Must override")
         }
     }
 }
 
 extension UserDefaults.DefaultKeys {
     
-    public final class Key<T>: UserDefaults.DefaultKeys {}
+    public final class Key<T>: UserDefaults.DefaultKeys {
+        
+        override func serialize(_ v: Any) -> Any? {
+            guard let t = valueTransformer else { return v }
+            return t.serialize(v)
+        }
+        
+        override func deserialize(_ v: Any) -> Any? {
+            guard let t = valueTransformer else { return v }
+            guard let data = v as? Data else { return nil }
+            return t.deserialize(data) as T?
+        }
+    }
 }
 
 extension UserDefaults.DefaultKeys.Key: ExpressibleByStringLiteral {
