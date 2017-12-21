@@ -21,17 +21,20 @@ extension UserDefaults {
     
     public typealias DefaultKey<T> = DefaultKeys.Key<T>
     
-    public class DefaultKeys: StaticKeyBase {
+    public class DefaultKeys {
         
-        public private(set) var valueTransformer: ValueTransformer?
+        public let key: String
         
-        public override init(_ key: String) {
-            super.init(key)
+        public let valueTransformer: ValueTransformer?
+        
+        public init(_ key: String) {
+            self.key = key
+            self.valueTransformer = nil
         }
         
         public init(_ key: String, transformer: ValueTransformer) {
+            self.key = key
             self.valueTransformer = transformer
-            super.init(key)
         }
         
         func serialize(_ v: Any) -> Any? {
@@ -42,6 +45,23 @@ extension UserDefaults {
             fatalError("Must override")
         }
     }
+}
+
+extension UserDefaults.DefaultKeys: Equatable, Hashable {
+    
+    public static func ==(lhs: UserDefaults.DefaultKeys, rhs: UserDefaults.DefaultKeys) -> Bool {
+        guard lhs.key == rhs.key else { return false }
+        switch (lhs.valueTransformer, rhs.valueTransformer) {
+        case (nil, nil):            return true
+        case (_, nil), (nil, _):    return false
+        case let (l, r):            return type(of: l) == type(of: r)
+        }
+    }
+    
+    public var hashValue: Int {
+        return key.hashValue
+    }
+    
 }
 
 extension UserDefaults.DefaultKeys {
