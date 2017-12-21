@@ -19,18 +19,18 @@ import Foundation
 
 extension UserDefaults {
     
-    public class ValueTransformer {
+    open class ValueTransformer {
         
-        public func serialize<T>(_ value: T) -> Data? {
+        open func serialize<T>(_ value: T) -> Data? {
             fatalError("Must override")
         }
         
-        public func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
+        open func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
             fatalError("Must override")
         }
     }
     
-    public class JSONValueTransformer: ValueTransformer {
+    public final class JSONValueTransformer: ValueTransformer {
         
         public override func serialize<T>(_ value: T) -> Data? {
             guard let v = value as? Encodable else { return nil }
@@ -43,7 +43,7 @@ extension UserDefaults {
         }
     }
     
-    public class PropertyListValueTransformer: ValueTransformer {
+    public final class PropertyListValueTransformer: ValueTransformer {
         
         public override func serialize<T>(_ value: T) -> Data? {
             guard let v = value as? Encodable else { return nil }
@@ -56,7 +56,7 @@ extension UserDefaults {
         }
     }
     
-    public class KeyedArchiveValueTransformer: ValueTransformer {
+    public final class KeyedArchiveValueTransformer: ValueTransformer {
         
         public override func serialize<T>(_ value: T) -> Data? {
             return NSKeyedArchiver.archivedData(withRootObject: value)
@@ -69,7 +69,7 @@ extension UserDefaults {
     
     #if os(macOS)
         
-        public class ArchiveValueTransformer: ValueTransformer {
+        public final class ArchiveValueTransformer: ValueTransformer {
             
             public override func serialize<T>(_ value: T) -> Data? {
                 return NSArchiver.archivedData(withRootObject: value)
