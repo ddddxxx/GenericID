@@ -1,5 +1,5 @@
 //
-//  NSKeyedUnarchiver+UnarchiveWithoutException.m
+//  Unarchiver+UnarchiveWithoutException.m
 //
 //  This file is part of GenericID.
 //  Copyright (c) 2017 Xander Deng
@@ -15,9 +15,22 @@
 //  all copies or substantial portions of the Software.
 //
 
-#import "NSKeyedUnarchiver+UnarchiveWithoutException.h"
+#import "Unarchiver+UnarchiveWithoutException.h"
 
 @implementation NSKeyedUnarchiver (UnarchiveWithoutException)
+
++ (id _Nullable)unarchiveObjectWithoutExceptionWithData:(NSData * _Nonnull)data {
+    @try {
+        return [self unarchiveObjectWithData:data];
+    }
+    @catch (NSException *exception) {
+        return nil;
+    }
+}
+
+@end
+
+@implementation NSUnarchiver (UnarchiveWithoutException)
 
 + (id _Nullable)unarchiveObjectWithoutExceptionWithData:(NSData * _Nonnull)data {
     @try {

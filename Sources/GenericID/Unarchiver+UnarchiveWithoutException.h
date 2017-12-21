@@ -1,5 +1,5 @@
 //
-//  NSKeyedUnarchiver+UnarchiveWithoutException.h
+//  Unarchiver+UnarchiveWithoutException.h
 //
 //  This file is part of GenericID.
 //  Copyright (c) 2017 Xander Deng
@@ -18,6 +18,12 @@
 #import <Foundation/Foundation.h>
 
 @interface NSKeyedUnarchiver (UnarchiveWithoutException)
+
++ (id _Nullable)unarchiveObjectWithoutExceptionWithData:(NSData * _Nonnull)data;
+
+@end
+
+@interface NSUnarchiver (UnarchiveWithoutException)
 
 + (id _Nullable)unarchiveObjectWithoutExceptionWithData:(NSData * _Nonnull)data;
 

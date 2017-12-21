@@ -53,6 +53,21 @@ extension UserDefaults {
             return NSKeyedUnarchiver.unarchiveObjectWithoutException(with: value) as? T
         }
     }
+    
+    #if os(macOS)
+        
+        public class ArchiveValueTransformer: ValueTransformer {
+            
+            public override func serialize<T>(_ value: T) -> Data? {
+                return NSArchiver.archivedData(withRootObject: value)
+            }
+            
+            public override func deserialize<T>(_ value: Data) -> T? {
+                return NSUnarchiver.unarchiveObjectWithoutException(with: value) as? T
+            }
+        }
+    
+    #endif
 }
 
 extension UserDefaults.ValueTransformer {
@@ -60,6 +75,12 @@ extension UserDefaults.ValueTransformer {
     public static let json = UserDefaults.JSONValueTransformer()
     
     public static let keyedArchive = UserDefaults.KeyedArchiveValueTransformer()
+    
+    #if os(macOS)
+    
+        public static let archive = UserDefaults.ArchiveValueTransformer()
+    
+    #endif
 }
 
 extension Encodable {
