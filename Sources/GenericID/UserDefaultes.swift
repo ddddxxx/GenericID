@@ -27,12 +27,12 @@ extension UserDefaults {
         
         public let valueTransformer: ValueTransformer?
         
-        public init(_ key: String) {
+        private init(_ key: String) {
             self.key = key
             self.valueTransformer = nil
         }
         
-        public init(_ key: String, transformer: ValueTransformer) {
+        private init(_ key: String, transformer: ValueTransformer) {
             self.key = key
             self.valueTransformer = transformer
         }
@@ -67,6 +67,14 @@ extension UserDefaults.DefaultKeys: Equatable, Hashable {
 extension UserDefaults.DefaultKeys {
     
     public final class Key<T>: UserDefaults.DefaultKeys {
+        
+        public override init(_ key: String) {
+            super.init(key)
+        }
+        
+        public override init(_ key: String, transformer: UserDefaults.ValueTransformer) {
+            super.init(key, transformer: transformer)
+        }
         
         override func serialize(_ v: Any) -> Any? {
             guard let t = valueTransformer else { return v }
@@ -294,29 +302,4 @@ extension UserDefaults {
         result.start(options)
         return result
     }
-    
-    public func willChangeValue<T>(for key: DefaultKey<T>) {
-        self.willChangeValue(forKey: key.key)
-    }
-    
-    public func willChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
-        self.willChange(changeKind, valuesAt: indexes, forKey: key.key)
-    }
-    
-    public func willChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
-        self.willChangeValue(forKey: key.key, withSetMutation: mutation, using: set)
-    }
-    
-    public func didChangeValue<T>(for key: DefaultKey<T>) {
-        self.didChangeValue(forKey: key.key)
-    }
-    
-    public func didChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
-        self.didChange(changeKind, valuesAt: indexes, forKey: key.key)
-    }
-    
-    public func didChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
-        self.didChangeValue(forKey: key.key, withSetMutation: mutation, using: set)
-    }
-    
 }
