@@ -21,82 +21,18 @@ import Foundation
     
     extension NSUbiquitousKeyValueStore {
         
+        public typealias StoreKeys = UserDefaults.DefaultKeys
         public typealias StoreKey<T> = StoreKeys.Key<T>
-        public typealias ArchivedKey<T> = StoreKeys.ArchivedKey<T> // where T: NSCoding
-        public typealias JSONCodedKey<T> = StoreKeys.JSONCodedKey<T> where T: Codable
-        
-        public class StoreKeys: StaticKeyBase {
-            
-            class func serialize(_ value: Any) -> Any? {
-                fatalError("Must override")
-            }
-            
-            class func deserialize(_ value: Any) -> Any? {
-                fatalError("Must override")
-            }
-        }
-    }
-
-    extension NSUbiquitousKeyValueStore.StoreKeys {
-        
-        public class Key<T>: NSUbiquitousKeyValueStore.StoreKeys, RawRepresentable, ExpressibleByStringLiteral {
-            
-            public var rawValue: String {
-                return key
-            }
-            
-            public required init(rawValue: String) {
-                super.init(rawValue)
-            }
-            
-            override class func serialize(_ value: Any) -> Any? {
-                return value
-            }
-            
-            override class func deserialize(_ value: Any) -> Any? {
-                return value
-            }
-        }
-        
-        final public class ArchivedKey<T>: Key<T> /* where T: NSCoding */ {
-            
-            override class func serialize(_ value: Any) -> Any? {
-                guard let value = value as? T else {
-                    fatalError("Should never be reached")
-                }
-                return NSKeyedArchiver.archivedData(withRootObject: value)
-            }
-            
-            override class func deserialize(_ value: Any) -> Any? {
-                guard let data = value as? Data else { return nil }
-                return NSKeyedUnarchiver.unarchiveObject(with: data)
-            }
-        }
-        
-        final public class JSONCodedKey<T>: Key<T> where T: Codable {
-            
-            override class func serialize(_ value: Any) -> Any? {
-                guard let value = value as? T else {
-                    fatalError("Should never be reached")
-                }
-                return try? JSONEncoder().encode(value)
-            }
-            
-            override class func deserialize(_ value: Any) -> Any? {
-                guard let data = value as? Data else { return nil }
-                return try? JSONDecoder().decode(T.self, from: data)
-            }
-        }
     }
 
     extension NSUbiquitousKeyValueStore {
         
         public func contains<T>(_ key: StoreKey<T>) -> Bool {
-            return object(forKey: key.rawValue) != nil
+            return object(forKey: key.key) != nil
         }
         
         public func remove<T>(_ key: StoreKey<T>) {
-            removeObject(forKey: key.rawValue)
+            removeObject(forKey: key.key)
         }
         
         public func removeAll() {
@@ -110,28 +46,28 @@ import Foundation
         
         public subscript<T>(_ key: StoreKey<T>) -> T? {
             get {
-                return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T
+                return object(forKey: key.key).flatMap(key.deserialize) as? T
             }
             set {
-                set(newValue.flatMap(type(of: key).serialize), forKey: key.key)
+                set(newValue.flatMap(key.serialize), forKey: key.key)
             }
         }
         
         public subscript<T>(_ key: StoreKey<T?>) -> T? {
             get {
-                return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T
+                return object(forKey: key.key).flatMap(key.deserialize) as? T
             }
             set {
-                set(newValue.flatMap(type(of: key).serialize), forKey: key.key)
+                set(newValue.flatMap(key.serialize), forKey: key.key)
             }
         }
         
         public subscript<T: DefaultConstructible>(_ key: StoreKey<T>) -> T {
             get {
-                return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T ?? T()
+                return object(forKey: key.key).flatMap(key.deserialize) as? T ?? T()
             }
             set {
-                set(type(of: key).serialize(newValue), forKey: key.key)
+                set(key.serialize(newValue), forKey: key.key)
             }
         }
     }
