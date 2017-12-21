@@ -55,6 +55,13 @@ extension UserDefaults {
     }
 }
 
+extension UserDefaults.ValueTransformer {
+    
+    public static let json = UserDefaults.JSONValueTransformer()
+    
+    public static let keyedArchive = UserDefaults.KeyedArchiveValueTransformer()
+}
+
 extension Encodable {
     
     var codedData: Data? {
