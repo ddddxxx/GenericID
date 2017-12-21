@@ -12,6 +12,7 @@
 		BBC222AB1F592BE5008F1183 /* OptionalProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */; };
 		BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */; };
 		BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */; };
+		BBF348B51FEB485E001E76C4 /* DefaultsValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF348B41FEB485E001E76C4 /* DefaultsValueTransformer.swift */; };
 		OBJ_29 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AssociatedObject.swift */; };
 		OBJ_31 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* UICollectionView.swift */; };
 		OBJ_32 /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* UIStoryboard.swift */; };
@@ -39,6 +40,7 @@
 		BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalProtocol.swift; sourceTree = "<group>"; };
 		BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUbiquitousKeyValueStore.swift; sourceTree = "<group>"; };
 		BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINibGettable.swift; sourceTree = "<group>"; };
+		BBF348B41FEB485E001E76C4 /* DefaultsValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsValueTransformer.swift; sourceTree = "<group>"; };
 		OBJ_11 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
 		OBJ_12 /* UIStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
 		OBJ_13 /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				OBJ_15 /* StaticKey.swift */,
 				OBJ_9 /* AssociatedObject.swift */,
 				OBJ_14 /* UserDefaultes.swift */,
+				BBF348B41FEB485E001E76C4 /* DefaultsValueTransformer.swift */,
 				BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */,
 				OBJ_13 /* UITableView.swift */,
 				OBJ_11 /* UICollectionView.swift */,
@@ -237,6 +240,7 @@
 				BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */,
 				BBC222AB1F592BE5008F1183 /* OptionalProtocol.swift in Sources */,
 				OBJ_34 /* UserDefaultes.swift in Sources */,
+				BBF348B51FEB485E001E76C4 /* DefaultsValueTransformer.swift in Sources */,
 				OBJ_35 /* StaticKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
