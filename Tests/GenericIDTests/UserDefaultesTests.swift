@@ -358,6 +358,16 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(defaults[.RectOptKey], rect)
     }
     
+    func testBrokenData() {
+        XCTAssertNil(defaults[.ColorOptKey])
+        
+        let data = "BrokenData".data(using: .utf8)!
+        defaults.set(data, forKey: UserDefaults.DefaultKeys.ColorOptKey.key)
+        
+        XCTAssertTrue(defaults.contains(.ColorOptKey))
+        XCTAssertNil(defaults[.ColorOptKey])
+    }
+    
     func testContainment() {
         XCTAssertFalse(defaults.contains(.StringOptKey))
         XCTAssertTrue(defaults.contains(.StringKey))
