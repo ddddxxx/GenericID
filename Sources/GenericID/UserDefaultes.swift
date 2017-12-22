@@ -197,20 +197,7 @@ extension UserDefaults {
         let callback: Callback
         let paths: [String]
         
-        static var swizzler: KeyValueObservation? = {
-            let bridgeClass: AnyClass = KeyValueObservation.self
-            let observeSel = #selector(NSObject.observeValue(forKeyPath:of:change:context:))
-            let swapSel = #selector(KeyValueObservation._swizzle_defaults_observeValue(forKeyPath:of:change:context:))
-            guard let rootObserveImpl = class_getInstanceMethod(bridgeClass, observeSel),
-                let swapObserveImpl = class_getInstanceMethod(bridgeClass, swapSel) else {
-                    fatalError("failed to swizzle method \(observeSel) and \(swapSel)")
-            }
-            method_exchangeImplementations(rootObserveImpl, swapObserveImpl)
-            return nil
-        }()
-        
         fileprivate init(object: UserDefaults, paths: [String], callback: @escaping Callback) {
-            let _ = KeyValueObservation.swizzler
             self.paths = paths
             self.object = object
             self.callback = callback
@@ -233,7 +220,7 @@ extension UserDefaults {
             object = nil
         }
         
-        @objc func _swizzle_defaults_observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
             guard let ourObject = self.object, object as? NSObject == ourObject, let change = change else { return }
             let rawKind = change[.kindKey] as! UInt
             let kind = NSKeyValueChange(rawValue: rawKind)!
