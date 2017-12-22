@@ -23,8 +23,12 @@
 
 @end
 
+#if TARGET_OS_OSX
+
 @interface NSUnarchiver (UnarchiveWithoutException)
 
 + (id _Nullable)unarchiveObjectWithoutExceptionWithData:(NSData * _Nonnull)data;
 
 @end
+
+#endif
