@@ -20,70 +20,79 @@ import Foundation
 extension UserDefaults {
     
     public typealias DefaultKey<T> = DefaultKeys.Key<T>
-    public typealias ArchivedKey<T> = DefaultKeys.ArchivedKey<T> // where T: NSCoding
-    public typealias JSONCodedKey<T> = DefaultKeys.JSONCodedKey<T> where T: Codable
     
-    public class DefaultKeys: StaticKeyBase {
+    public class DefaultKeys {
         
-        class func serialize(_ value: Any) -> Any? {
+        public let key: String
+        
+        public let valueTransformer: ValueTransformer?
+        
+        private init(_ key: String) {
+            self.key = key
+            self.valueTransformer = nil
+        }
+        
+        private init(_ key: String, transformer: ValueTransformer) {
+            self.key = key
+            self.valueTransformer = transformer
+        }
+        
+        func serialize(_ v: Any) -> Any? {
             fatalError("Must override")
         }
         
-        class func deserialize(_ value: Any) -> Any? {
+        func deserialize(_ v: Any) -> Any? {
             fatalError("Must override")
         }
     }
 }
 
+extension UserDefaults.DefaultKeys: Equatable, Hashable {
+    
+    public static func ==(lhs: UserDefaults.DefaultKeys, rhs: UserDefaults.DefaultKeys) -> Bool {
+        guard lhs.key == rhs.key else { return false }
+        switch (lhs.valueTransformer, rhs.valueTransformer) {
+        case (nil, nil):            return true
+        case (_, nil), (nil, _):    return false
+        case let (l, r):            return type(of: l) == type(of: r)
+        }
+    }
+    
+    public var hashValue: Int {
+        return key.hashValue
+    }
+    
+}
+
 extension UserDefaults.DefaultKeys {
     
-    public class Key<T>: UserDefaults.DefaultKeys, RawRepresentable, ExpressibleByStringLiteral {
+    public final class Key<T>: UserDefaults.DefaultKeys {
         
-        public var rawValue: String {
-            return key
+        public override init(_ key: String) {
+            super.init(key)
         }
         
-        public required init(rawValue: String) {
-            super.init(rawValue)
+        public override init(_ key: String, transformer: UserDefaults.ValueTransformer) {
+            super.init(key, transformer: transformer)
         }
         
-        override class func serialize(_ value: Any) -> Any? {
-            return value
+        override func serialize(_ v: Any) -> Any? {
+            guard let t = valueTransformer else { return v }
+            return t.serialize(v)
         }
         
-        override class func deserialize(_ value: Any) -> Any? {
-            return value
-        }
-    }
-    
-    final public class ArchivedKey<T>: Key<T> /* where T: NSCoding */ {
-        
-        override class func serialize(_ value: Any) -> Any? {
-            guard let value = value as? T else {
-                fatalError("Should never be reached")
-            }
-            return NSKeyedArchiver.archivedData(withRootObject: value)
-        }
-        
-        override class func deserialize(_ value: Any) -> Any? {
-            guard let data = value as? Data else { return nil }
-            return NSKeyedUnarchiver.unarchiveObject(with: data)
+        override func deserialize(_ v: Any) -> Any? {
+            guard let t = valueTransformer else { return v }
+            guard let data = v as? Data else { return nil }
+            return t.deserialize(T.self, from: data)
         }
     }
+}
+
+extension UserDefaults.DefaultKeys.Key: ExpressibleByStringLiteral {
     
-    final public class JSONCodedKey<T>: Key<T> where T: Codable {
-        
-        override class func serialize(_ value: Any) -> Any? {
-            guard let value = value as? T else {
-                fatalError("Should never be reached")
-            }
-            return try? JSONEncoder().encode(value)
-        }
-        
-        override class func deserialize(_ value: Any) -> Any? {
-            guard let data = value as? Data else { return nil }
-            return try? JSONDecoder().decode(T.self, from: data)
-        }
+    public convenience init(stringLiteral value: String) {
+        self.init(value)
     }
 }
 
@@ -115,7 +124,11 @@ extension UserDefaults {
     public func register(defaults: [DefaultKeys: Any]) {
         var dict = Dictionary<String, Any>(minimumCapacity: defaults.count)
         for (key, value) in defaults {
-            dict[key.key] = type(of: key).serialize(value)
+            if let transformer = key.valueTransformer {
+                dict[key.key] = transformer.serialize(value)
+            } else {
+                dict[key.key] = value
+            }
         }
         register(defaults: dict)
     }
@@ -137,28 +150,28 @@ extension UserDefaults {
     
     public subscript<T>(_ key: DefaultKey<T>) -> T? {
         get {
-            return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T
+            return object(forKey: key.key).flatMap(key.deserialize) as? T
         }
         set {
-            set(newValue.flatMap(type(of: key).serialize), forKey: key.key)
+            set(newValue.flatMap(key.serialize), forKey: key.key)
         }
     }
     
     public subscript<T>(_ key: DefaultKey<T?>) -> T? {
         get {
-            return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T
+            return object(forKey: key.key).flatMap(key.deserialize) as? T
         }
         set {
-            set(newValue.flatMap(type(of: key).serialize), forKey: key.key)
+            set(newValue.flatMap(key.serialize), forKey: key.key)
         }
     }
     
     public subscript<T: DefaultConstructible>(_ key: DefaultKey<T>) -> T {
         get {
-            return object(forKey: key.rawValue).flatMap(type(of: key).deserialize) as? T ?? T()
+            return object(forKey: key.key).flatMap(key.deserialize) as? T ?? T()
         }
         set {
-            set(type(of: key).serialize(newValue), forKey: key.key)
+            set(key.serialize(newValue), forKey: key.key)
         }
     }
 }
@@ -184,20 +197,7 @@ extension UserDefaults {
         let callback: Callback
         let paths: [String]
         
-        static var swizzler: KeyValueObservation? = {
-            let bridgeClass: AnyClass = KeyValueObservation.self
-            let observeSel = #selector(NSObject.observeValue(forKeyPath:of:change:context:))
-            let swapSel = #selector(KeyValueObservation._swizzle_defaults_observeValue(forKeyPath:of:change:context:))
-            guard let rootObserveImpl = class_getInstanceMethod(bridgeClass, observeSel),
-                let swapObserveImpl = class_getInstanceMethod(bridgeClass, swapSel) else {
-                    fatalError("failed to swizzle method \(observeSel) and \(swapSel)")
-            }
-            method_exchangeImplementations(rootObserveImpl, swapObserveImpl)
-            return nil
-        }()
-        
         fileprivate init(object: UserDefaults, paths: [String], callback: @escaping Callback) {
-            let _ = KeyValueObservation.swizzler
             self.paths = paths
             self.object = object
             self.callback = callback
@@ -220,7 +220,7 @@ extension UserDefaults {
             object = nil
         }
         
-        @objc func _swizzle_defaults_observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
             guard let ourObject = self.object, object as? NSObject == ourObject, let change = change else { return }
             let rawKind = change[.kindKey] as! UInt
             let kind = NSKeyValueChange(rawValue: rawKind)!
@@ -238,8 +238,8 @@ extension UserDefaults {
     
     public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
-            let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T
-            let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T
+            let newValue = change.newValue.flatMap(key.deserialize) as? T
+            let oldValue = change.oldValue.flatMap(key.deserialize) as? T
             let notification = KeyValueObservedChange(kind: change.kind,
                                                       newValue: newValue,
                                                       oldValue: oldValue,
@@ -253,8 +253,8 @@ extension UserDefaults {
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
-            let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T ?? T()
-            let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T ?? T()
+            let newValue = change.newValue.flatMap(key.deserialize) as? T ?? T()
+            let oldValue = change.oldValue.flatMap(key.deserialize) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
                                                       newValue: newValue,
                                                       oldValue: oldValue,
@@ -268,8 +268,8 @@ extension UserDefaults {
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
-            let newValue = change.newValue.flatMap(type(of: key).deserialize) as? T ?? T()
-            let oldValue = change.oldValue.flatMap(type(of: key).deserialize) as? T ?? T()
+            let newValue = change.newValue.flatMap(key.deserialize) as? T ?? T()
+            let oldValue = change.oldValue.flatMap(key.deserialize) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
                                                       newValue: newValue,
                                                       oldValue: oldValue,
@@ -281,7 +281,7 @@ extension UserDefaults {
         return result
     }
     
-    public func observe(keys: [DefaultKeys], options: NSKeyValueObservingOptions, changeHandler: @escaping () -> Void) -> KeyValueObservation {
+    public func observe(keys: [DefaultKeys], options: NSKeyValueObservingOptions = [], changeHandler: @escaping () -> Void) -> KeyValueObservation {
         let paths = keys.map { $0.key }
         let result = KeyValueObservation(object: self, paths: paths) { (defaults, change) in
             changeHandler()
@@ -289,29 +289,4 @@ extension UserDefaults {
         result.start(options)
         return result
     }
-    
-    public func willChangeValue<T>(for key: DefaultKey<T>) {
-        self.willChangeValue(forKey: key.rawValue)
-    }
-    
-    public func willChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
-        self.willChange(changeKind, valuesAt: indexes, forKey: key.rawValue)
-    }
-    
-    public func willChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
-        self.willChangeValue(forKey: key.rawValue, withSetMutation: mutation, using: set)
-    }
-    
-    public func didChangeValue<T>(for key: DefaultKey<T>) {
-        self.didChangeValue(forKey: key.rawValue)
-    }
-    
-    public func didChange<T>(_ changeKind: NSKeyValueChange, valuesAt indexes: IndexSet, for key: DefaultKey<T>) {
-        self.didChange(changeKind, valuesAt: indexes, forKey: key.rawValue)
-    }
-    
-    public func didChangeValue<T>(for key: DefaultKey<T>, withSetMutation mutation: NSKeyValueSetMutationKind, using set: Set<T>) -> Void {
-        self.didChangeValue(forKey: key.rawValue, withSetMutation: mutation, using: set)
-    }
-    
 }
