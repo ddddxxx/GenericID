@@ -4,12 +4,12 @@ import GenericID
 let ud = UserDefaults.standard
 
 extension UserDefaults.DefaultKeys {
-    static let intKey: Key<Int> = "intKey"
-    static let stringKey: Key<String> = "stringKey"
-    static let stringArrayKey: Key<[String]> = "arrayKey"
-    static let dictKey: Key<[String: Int]> = "dictKey"
-    static let colorKey: ArchivedKey<NSColor?> = "colorKey"
-    static let pointKey: JSONCodedKey<CGPoint?> = "pointKey"
+    static let intKey       = Key<Int>("intKey")
+    static let stringKey    = Key<String>("stringKey")
+    static let stringArrayKey = Key<[String]>("arrayKey")
+    static let dictKey      = Key<[String: Int]>("dictKey")
+    static let colorKey     = Key<NSColor?>("colorKey", transformer: .keyedArchive)
+    static let pointKey     = Key<CGPoint?>("pointKey", transformer: .json)
 }
 
 ud.removeAll()
