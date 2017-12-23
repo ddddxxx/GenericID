@@ -163,21 +163,14 @@ extension UserDefaults {
         }
     }
     
-    public subscript<T>(_ key: DefaultKey<T?>) -> T? {
-        get {
-            return object(forKey: key.key).flatMap(key.deserialize) ?? nil
-        }
-        set {
-            set(newValue.flatMap(key.serialize), forKey: key.key)
-        }
-    }
-    
     public subscript<T: DefaultConstructible>(_ key: DefaultKey<T>) -> T {
         get {
             return object(forKey: key.key).flatMap(key.deserialize) ?? T()
         }
         set {
-            set(key.serialize(newValue), forKey: key.key)
+            // T might be optional and holds a `nil`, which will be bridged to `NSNull`
+            // and cannot be stored in UserDefaults. We must unwrap it manually.
+            set(unwrap(newValue).map(key.serialize), forKey: key.key)
         }
     }
 }
