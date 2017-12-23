@@ -178,6 +178,10 @@ extension UserDefaults {
 
 // MARK: - KVO
 
+public protocol DefaultsObservation {
+    func invalidate()
+}
+
 extension UserDefaults {
     
     public struct KeyValueObservedChange<T> {
@@ -189,7 +193,7 @@ extension UserDefaults {
         public let isPrior:Bool
     }
     
-    public class KeyValueObservation: NSObject {
+    class KeyValueObservation: NSObject, DefaultsObservation {
         
         typealias Callback = (UserDefaults, KeyValueObservedChange<Any>) -> Void
         
@@ -213,14 +217,14 @@ extension UserDefaults {
             }
         }
         
-        public func invalidate() {
+        func invalidate() {
             for path in paths {
                 object?.removeObserver(self, forKeyPath: path, context: nil)
             }
             object = nil
         }
         
-        override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
             guard let ourObject = self.object, object as? NSObject == ourObject, let change = change else { return }
             let rawKind = change[.kindKey] as! UInt
             let kind = NSKeyValueChange(rawValue: rawKind)!
@@ -236,7 +240,7 @@ extension UserDefaults {
 
 extension UserDefaults {
     
-    public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+    public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
             let newValue = change.newValue.flatMap(key.deserialize) as? T
             let oldValue = change.oldValue.flatMap(key.deserialize) as? T
@@ -251,7 +255,7 @@ extension UserDefaults {
         return result
     }
     
-    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
             let newValue = change.newValue.flatMap(key.deserialize) as? T ?? T()
             let oldValue = change.oldValue.flatMap(key.deserialize) as? T ?? T()
@@ -266,7 +270,7 @@ extension UserDefaults {
         return result
     }
     
-    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> KeyValueObservation {
+    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
             let newValue = change.newValue.flatMap(key.deserialize) as? T ?? T()
             let oldValue = change.oldValue.flatMap(key.deserialize) as? T ?? T()
@@ -281,7 +285,7 @@ extension UserDefaults {
         return result
     }
     
-    public func observe(keys: [DefaultKeys], options: NSKeyValueObservingOptions = [], changeHandler: @escaping () -> Void) -> KeyValueObservation {
+    public func observe(keys: [DefaultKeys], options: NSKeyValueObservingOptions = [], changeHandler: @escaping () -> Void) -> DefaultsObservation {
         let paths = keys.map { $0.key }
         let result = KeyValueObservation(object: self, paths: paths) { (defaults, change) in
             changeHandler()
