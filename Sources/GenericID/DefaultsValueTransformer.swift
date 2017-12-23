@@ -21,48 +21,55 @@ extension UserDefaults {
     
     open class ValueTransformer {
         
-        open func serialize<T>(_ value: T) -> Data? {
+        open func serialize<T>(_ value: T) -> Any? {
             fatalError("Must override")
         }
         
-        open func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
+        open func deserialize<T>(_ type: T.Type, from: Any) -> T? {
             fatalError("Must override")
         }
     }
     
     public final class JSONValueTransformer: ValueTransformer {
         
-        public override func serialize<T>(_ value: T) -> Data? {
+        public override func serialize<T>(_ value: T) -> Any? {
             guard let v = value as? Encodable else { return nil }
             return v.jsonData
         }
         
-        public override func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
-            guard let t = T.self as? Decodable.Type else { return nil }
+        public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
+            guard let t = T.self as? Decodable.Type,
+                let data = from as? Data else {
+                    return nil
+            }
             return t.init(jsonData: data) as? T
         }
     }
     
     public final class PropertyListValueTransformer: ValueTransformer {
         
-        public override func serialize<T>(_ value: T) -> Data? {
+        public override func serialize<T>(_ value: T) -> Any? {
             guard let v = value as? Encodable else { return nil }
             return v.plistData
         }
         
-        public override func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
-            guard let t = T.self as? Decodable.Type else { return nil }
+        public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
+            guard let t = T.self as? Decodable.Type,
+                let data = from as? Data else {
+                    return nil
+            }
             return t.init(plistData: data) as? T
         }
     }
     
     public final class KeyedArchiveValueTransformer: ValueTransformer {
         
-        public override func serialize<T>(_ value: T) -> Data? {
+        public override func serialize<T>(_ value: T) -> Any? {
             return NSKeyedArchiver.archivedData(withRootObject: value)
         }
         
-        public override func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
+        public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
+            guard let data = from as? Data else { return nil }
             return NSKeyedUnarchiver.unarchiveObjectWithoutException(with: data) as? T
         }
     }
@@ -71,11 +78,12 @@ extension UserDefaults {
         
         public final class ArchiveValueTransformer: ValueTransformer {
             
-            public override func serialize<T>(_ value: T) -> Data? {
+            public override func serialize<T>(_ value: T) -> Any? {
                 return NSArchiver.archivedData(withRootObject: value)
             }
             
-            public override func deserialize<T>(_ type: T.Type, from data: Data) -> T? {
+            public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
+                guard let data = from as? Data else { return nil }
                 return NSUnarchiver.unarchiveObjectWithoutException(with: data) as? T
             }
         }
