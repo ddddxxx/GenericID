@@ -193,16 +193,16 @@ extension UserDefaults {
         public let isPrior:Bool
     }
     
-    class KeyValueObservation: NSObject, DefaultsObservation {
+    class SingleKeyObservation: NSObject, DefaultsObservation {
         
         typealias Callback = (UserDefaults, KeyValueObservedChange<Any>) -> Void
         
         weak var object: UserDefaults?
         let callback: Callback
-        let paths: [String]
+        let key: String
         
-        fileprivate init(object: UserDefaults, paths: [String], callback: @escaping Callback) {
-            self.paths = paths
+        fileprivate init(object: UserDefaults, key: String, callback: @escaping Callback) {
+            self.key = key
             self.object = object
             self.callback = callback
         }
@@ -212,15 +212,11 @@ extension UserDefaults {
         }
         
         fileprivate func start(_ options: NSKeyValueObservingOptions) {
-            for path in paths {
-                object?.addObserver(self, forKeyPath: path, options: options, context: nil)
-            }
+            object?.addObserver(self, forKeyPath: key, options: options, context: nil)
         }
         
         func invalidate() {
-            for path in paths {
-                object?.removeObserver(self, forKeyPath: path, context: nil)
-            }
+            object?.removeObserver(self, forKeyPath: key, context: nil)
             object = nil
         }
         
@@ -241,7 +237,7 @@ extension UserDefaults {
 extension UserDefaults {
     
     public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
-        let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
+        let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
             let newValue = change.newValue.flatMap(key.deserialize) as? T
             let oldValue = change.oldValue.flatMap(key.deserialize) as? T
             let notification = KeyValueObservedChange(kind: change.kind,
@@ -256,7 +252,7 @@ extension UserDefaults {
     }
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
-        let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
+        let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
             let newValue = change.newValue.flatMap(key.deserialize) as? T ?? T()
             let oldValue = change.oldValue.flatMap(key.deserialize) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
@@ -271,7 +267,7 @@ extension UserDefaults {
     }
     
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
-        let result = KeyValueObservation(object: self, paths: [key.key]) { (defaults, change) in
+        let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
             let newValue = change.newValue.flatMap(key.deserialize) as? T ?? T()
             let oldValue = change.oldValue.flatMap(key.deserialize) as? T ?? T()
             let notification = KeyValueObservedChange(kind: change.kind,
@@ -284,12 +280,52 @@ extension UserDefaults {
         result.start(options)
         return result
     }
+}
+
+// MARK: Observe Multiple Keys
+
+extension UserDefaults {
+    
+    class MultiKeyObservation: NSObject, DefaultsObservation {
+        
+        typealias Callback = () -> Void
+        
+        weak var object: UserDefaults?
+        let callback: Callback
+        let keys: [String]
+        
+        fileprivate init(object: UserDefaults, keys: [String], callback: @escaping Callback) {
+            self.keys = keys
+            self.object = object
+            self.callback = callback
+        }
+        
+        deinit {
+            invalidate()
+        }
+        
+        fileprivate func start(_ options: NSKeyValueObservingOptions) {
+            for key in keys {
+                object?.addObserver(self, forKeyPath: key, options: options, context: nil)
+            }
+        }
+        
+        func invalidate() {
+            for key in keys {
+                object?.removeObserver(self, forKeyPath: key, context: nil)
+            }
+            object = nil
+        }
+        
+        override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+            guard let ourObject = self.object, object as? NSObject == ourObject else { return }
+            callback()
+        }
+    }
     
     public func observe(keys: [DefaultKeys], options: NSKeyValueObservingOptions = [], changeHandler: @escaping () -> Void) -> DefaultsObservation {
-        let paths = keys.map { $0.key }
-        let result = KeyValueObservation(object: self, paths: paths) { (defaults, change) in
-            changeHandler()
-        }
+        let keys = keys.map { $0.key }
+        let result = MultiKeyObservation(object: self, keys: keys, callback: changeHandler)
         result.start(options)
         return result
     }
