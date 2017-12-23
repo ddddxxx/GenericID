@@ -86,6 +86,12 @@ extension UserDefaults.DefaultKeys {
             guard let data = v as? Data else { return nil }
             return t.deserialize(T.self, from: data)
         }
+        
+        func deserialize(_ v: Any) -> T? {
+            guard let t = valueTransformer else { return v as? T }
+            guard let data = v as? Data else { return nil }
+            return t.deserialize(T.self, from: data)
+        }
     }
 }
 
@@ -150,7 +156,7 @@ extension UserDefaults {
     
     public subscript<T>(_ key: DefaultKey<T>) -> T? {
         get {
-            return object(forKey: key.key).flatMap(key.deserialize) as? T
+            return object(forKey: key.key).flatMap(key.deserialize)
         }
         set {
             set(newValue.flatMap(key.serialize), forKey: key.key)
@@ -159,7 +165,7 @@ extension UserDefaults {
     
     public subscript<T>(_ key: DefaultKey<T?>) -> T? {
         get {
-            return object(forKey: key.key).flatMap(key.deserialize) as? T
+            return object(forKey: key.key).flatMap(key.deserialize) ?? nil
         }
         set {
             set(newValue.flatMap(key.serialize), forKey: key.key)
@@ -168,7 +174,7 @@ extension UserDefaults {
     
     public subscript<T: DefaultConstructible>(_ key: DefaultKey<T>) -> T {
         get {
-            return object(forKey: key.key).flatMap(key.deserialize) as? T ?? T()
+            return object(forKey: key.key).flatMap(key.deserialize) ?? T()
         }
         set {
             set(key.serialize(newValue), forKey: key.key)
@@ -249,9 +255,7 @@ extension UserDefaults {
     
     public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
-            let notification = KeyValueObservedChange.init(other: change) {
-                key.deserialize($0) as? T
-            }
+            let notification = KeyValueObservedChange.init(other: change, transformer: key.deserialize)
             changeHandler(defaults, notification)
         }
         result.start(options)
@@ -261,7 +265,7 @@ extension UserDefaults {
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
             let notification = KeyValueObservedChange.init(other: change) {
-                key.deserialize($0) as? T ?? T()
+                key.deserialize($0) ?? T()
             }
             changeHandler(defaults, notification)
         }
@@ -272,7 +276,7 @@ extension UserDefaults {
     public func observe<T: DefaultConstructible>(_ key: DefaultKey<T?>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
             let notification = KeyValueObservedChange.init(other: change) {
-                key.deserialize($0) as? T ?? T()
+                key.deserialize($0) ?? T()
             }
             changeHandler(defaults, notification)
         }

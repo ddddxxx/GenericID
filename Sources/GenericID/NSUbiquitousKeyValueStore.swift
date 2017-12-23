@@ -46,7 +46,7 @@ import Foundation
         
         public subscript<T>(_ key: StoreKey<T>) -> T? {
             get {
-                return object(forKey: key.key).flatMap(key.deserialize) as? T
+                return object(forKey: key.key).flatMap(key.deserialize)
             }
             set {
                 set(newValue.flatMap(key.serialize), forKey: key.key)
@@ -55,7 +55,7 @@ import Foundation
         
         public subscript<T>(_ key: StoreKey<T?>) -> T? {
             get {
-                return object(forKey: key.key).flatMap(key.deserialize) as? T
+                return object(forKey: key.key).flatMap(key.deserialize) ?? nil
             }
             set {
                 set(newValue.flatMap(key.serialize), forKey: key.key)
@@ -64,7 +64,7 @@ import Foundation
         
         public subscript<T: DefaultConstructible>(_ key: StoreKey<T>) -> T {
             get {
-                return object(forKey: key.key).flatMap(key.deserialize) as? T ?? T()
+                return object(forKey: key.key).flatMap(key.deserialize) ?? T()
             }
             set {
                 set(key.serialize(newValue), forKey: key.key)
