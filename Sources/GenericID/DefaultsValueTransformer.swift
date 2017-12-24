@@ -106,6 +106,8 @@ extension UserDefaults.ValueTransformer {
     #endif
 }
 
+// MARK: - Codable
+
 fileprivate extension Encodable {
     
     var jsonData: Data? {
