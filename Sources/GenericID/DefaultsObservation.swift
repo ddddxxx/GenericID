@@ -26,43 +26,56 @@ extension UserDefaults {
     public struct KeyValueObservedChange<T> {
         public typealias Kind = NSKeyValueChange
         public let kind: Kind
-        public let newValue: T?
-        public let oldValue: T?
         public let indexes: IndexSet?
         public let isPrior:Bool
         
-        fileprivate init(observedChange change: [NSKeyValueChangeKey: Any], transformer: (Any) -> T? = { $0 as? T }) {
+        let _newValue: Any?
+        let _oldValue: Any?
+        let _transformer: (Any) -> T?
+        
+        public private(set) lazy var newValue: T? = _newValue.flatMap(_transformer)
+        public private(set) lazy var oldValue: T? = _oldValue.flatMap(_transformer)
+        
+        fileprivate init(observedChange change: [NSKeyValueChangeKey: Any], transformer: @escaping (Any) -> T? = { $0 as? T }) {
             let rawKind = change[.kindKey] as! UInt
             kind = NSKeyValueChange(rawValue: rawKind)!
-            oldValue = change[.newKey].flatMap(transformer)
-            newValue = change[.oldKey].flatMap(transformer)
             indexes = change[.indexesKey] as? IndexSet
             isPrior = change[.notificationIsPriorKey] as? Bool ?? false
+            _oldValue = change[.newKey]
+            _newValue = change[.oldKey]
+            _transformer = transformer
         }
         
-        fileprivate init(other: KeyValueObservedChange<Any>, transformer: (Any) -> T?) {
+        fileprivate init(other: KeyValueObservedChange<Any>, transformer: @escaping (Any) -> T?) {
             kind = other.kind
-            newValue = other.oldValue.flatMap(transformer)
-            oldValue = other.newValue.flatMap(transformer)
             indexes = other.indexes
             isPrior = other.isPrior
+            _newValue = other._oldValue
+            _oldValue = other._newValue
+            _transformer = transformer
         }
     }
     
     public struct ConstructedKeyValueObservedChange<T> {
         public typealias Kind = NSKeyValueChange
         public let kind: Kind
-        public let newValue: T
-        public let oldValue: T
         public let indexes: IndexSet?
         public let isPrior:Bool
         
-        fileprivate init(other: KeyValueObservedChange<Any>, transformer: (Any?) -> T) {
+        let _newValue: Any?
+        let _oldValue: Any?
+        let _transformer: (Any?) -> T
+        
+        public private(set) lazy var newValue: T = _transformer(_newValue)
+        public private(set) lazy var oldValue: T = _transformer(_oldValue)
+        
+        fileprivate init(other: KeyValueObservedChange<Any>, transformer: @escaping (Any?) -> T) {
             kind = other.kind
-            newValue = transformer(other.oldValue)
-            oldValue = transformer(other.newValue)
             indexes = other.indexes
             isPrior = other.isPrior
+            _newValue = other._oldValue
+            _oldValue = other._newValue
+            _transformer = transformer
         }
     }
     
@@ -103,21 +116,21 @@ extension UserDefaults {
 
 extension UserDefaults {
     
-    public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
+    public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, inout KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
-            let notification = KeyValueObservedChange(other: change, transformer: key.deserialize)
-            changeHandler(defaults, notification)
+            var notification = KeyValueObservedChange(other: change, transformer: key.deserialize)
+            changeHandler(defaults, &notification)
         }
         result.start(options)
         return result
     }
     
-    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, ConstructedKeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
+    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, inout ConstructedKeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
-            let notification = ConstructedKeyValueObservedChange(other: change) {
+            var notification = ConstructedKeyValueObservedChange(other: change) {
                 $0.flatMap(key.deserialize) ?? T()
             }
-            changeHandler(defaults, notification)
+            changeHandler(defaults, &notification)
         }
         result.start(options)
         return result
