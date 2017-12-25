@@ -21,7 +21,7 @@ import Foundation
     
     extension NSUbiquitousKeyValueStore {
         
-        public typealias StoreKeys = UserDefaults.DefaultKeys
+        public typealias StoreKeys = UserDefaults.DefaultsKeys
         public typealias StoreKey<T> = StoreKeys.Key<T>
     }
 
@@ -53,7 +53,7 @@ import Foundation
             }
         }
         
-        public subscript<T: DefaultConstructible>(_ key: StoreKey<T>) -> T {
+        public subscript<T: UDDefaultConstructible>(_ key: StoreKey<T>) -> T {
             get {
                 return object(forKey: key.key).flatMap(key.deserialize) ?? T()
             }

@@ -362,7 +362,7 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertNil(defaults[.ColorOptKey])
         
         let data = "BrokenData".data(using: .utf8)!
-        defaults.set(data, forKey: UserDefaults.DefaultKeys.ColorOptKey.key)
+        defaults.set(data, forKey: UserDefaults.DefaultsKeys.ColorOptKey.key)
         
         XCTAssertTrue(defaults.contains(.ColorOptKey))
         XCTAssertNil(defaults[.ColorOptKey])
@@ -415,7 +415,7 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertNil(defaults[.ColorOptKey])
         XCTAssertNil(defaults[.RectOptKey])
         
-        let dict: [UserDefaults.DefaultKeys : Any] = [
+        let dict: [UserDefaults.DefaultsKeys : Any] = [
             .IntKey: 42,
             .StringOptKey: "foo",
             .ColorOptKey: Color.red,

@@ -1,5 +1,5 @@
 //
-//  DefaultConstructible.swift
+//  LazyReference.swift
 //
 //  This file is part of GenericID.
 //  Copyright (c) 2017 Xander Deng
@@ -17,22 +17,32 @@
 
 import Foundation
 
-public protocol DefaultConstructible {
-    init()
-}
-
-extension Bool: DefaultConstructible {}
-extension Int: DefaultConstructible {}
-extension Float: DefaultConstructible {}
-extension Double: DefaultConstructible {}
-extension String: DefaultConstructible {}
-extension Data: DefaultConstructible {}
-extension Array: DefaultConstructible {}
-extension Dictionary: DefaultConstructible {}
-
-extension Optional: DefaultConstructible {
-    public init() {
-        self = .none
+private enum LazyValue<T> {
+    
+    case pending(() -> T)
+    case evaluated(T)
+    
+    mutating func value() -> T {
+        switch self {
+        case let .pending(block):
+            let v = block()
+            self = .evaluated(v)
+            return v
+        case let .evaluated(v):
+            return v
+        }
     }
 }
 
+class LazyReference<T> {
+    
+    private var _value: LazyValue<T>
+    
+    init(_ block: @escaping () -> T) {
+        _value = .pending(block)
+    }
+    
+    var value: T {
+        return _value.value()
+    }
+}

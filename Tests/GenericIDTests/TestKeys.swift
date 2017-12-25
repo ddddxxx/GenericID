@@ -23,7 +23,7 @@
     typealias Color = UIColor
 #endif
 
-extension UserDefaults.DefaultKeys {
+extension UserDefaults.DefaultsKeys {
     static let BoolKey      = Key<Bool>("BoolKey")
     static let IntKey       = Key<Int>("IntKey")
     static let FloatKey     = Key<Float>("FloatKey")
@@ -35,7 +35,7 @@ extension UserDefaults.DefaultKeys {
     static let DictionaryKey    = Key<[String: Any]>("DictionaryKey")
 }
 
-extension UserDefaults.DefaultKeys {
+extension UserDefaults.DefaultsKeys {
     static let BoolOptKey       = Key<Bool?>("BoolOptKey")
     static let IntOptKey        = Key<Int?>("IntOptKey")
     static let FloatOptKey      = Key<Float?>("FloatOptKey")

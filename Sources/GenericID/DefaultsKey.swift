@@ -19,9 +19,9 @@ import Foundation
 
 extension UserDefaults {
     
-    public typealias DefaultKey<T> = DefaultKeys.Key<T>
+    public typealias DefaultsKey<T> = DefaultsKeys.Key<T>
     
-    public class DefaultKeys {
+    public class DefaultsKeys {
         
         public let key: String
         
@@ -47,9 +47,9 @@ extension UserDefaults {
     }
 }
 
-extension UserDefaults.DefaultKeys {
+extension UserDefaults.DefaultsKeys {
     
-    public final class Key<T>: UserDefaults.DefaultKeys {
+    public final class Key<T>: UserDefaults.DefaultsKeys {
         
         public override init(_ key: String) {
             super.init(key)
@@ -80,9 +80,9 @@ extension UserDefaults.DefaultKeys {
 
 // MARK: - Conformances
 
-extension UserDefaults.DefaultKeys: Equatable {
+extension UserDefaults.DefaultsKeys: Equatable {
     
-    public static func ==(lhs: UserDefaults.DefaultKeys, rhs: UserDefaults.DefaultKeys) -> Bool {
+    public static func ==(lhs: UserDefaults.DefaultsKeys, rhs: UserDefaults.DefaultsKeys) -> Bool {
         guard lhs.key == rhs.key else { return false }
         switch (lhs.valueTransformer, rhs.valueTransformer) {
         case (nil, nil):            return true
@@ -92,14 +92,14 @@ extension UserDefaults.DefaultKeys: Equatable {
     }
 }
 
-extension UserDefaults.DefaultKeys: Hashable {
+extension UserDefaults.DefaultsKeys: Hashable {
     
     public var hashValue: Int {
         return key.hashValue
     }
 }
 
-extension UserDefaults.DefaultKeys.Key: ExpressibleByStringLiteral {
+extension UserDefaults.DefaultsKeys.Key: ExpressibleByStringLiteral {
     
     public convenience init(stringLiteral value: String) {
         self.init(value)

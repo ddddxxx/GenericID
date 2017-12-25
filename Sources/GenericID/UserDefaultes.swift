@@ -19,15 +19,15 @@ import Foundation
 
 extension UserDefaults {
     
-    public func contains<T>(_ key: DefaultKey<T>) -> Bool {
-        if T.self is DefaultConstructible.Type,
+    public func contains<T>(_ key: DefaultsKey<T>) -> Bool {
+        if T.self is UDDefaultConstructible.Type,
             !(T.self is OptionalProtocol.Type) {
             return true
         }
         return object(forKey: key.key) != nil
     }
     
-    public func remove<T>(_ key: DefaultKey<T>) {
+    public func remove<T>(_ key: DefaultsKey<T>) {
         removeObject(forKey: key.key)
     }
     
@@ -42,7 +42,7 @@ extension UserDefaults {
         }
     }
     
-    public func register(defaults: [DefaultKeys: Any]) {
+    public func register(defaults: [DefaultsKeys: Any]) {
         var dict = Dictionary<String, Any>(minimumCapacity: defaults.count)
         for (key, value) in defaults {
             if let transformer = key.valueTransformer {
@@ -54,7 +54,7 @@ extension UserDefaults {
         register(defaults: dict)
     }
     
-    public func unregister<T>(_ key: DefaultKey<T>) {
+    public func unregister<T>(_ key: DefaultsKey<T>) {
         var domain = volatileDomain(forName: UserDefaults.registrationDomain)
         domain.removeValue(forKey: key.key)
         setVolatileDomain(domain, forName: UserDefaults.registrationDomain)
@@ -69,7 +69,7 @@ extension UserDefaults {
 
 extension UserDefaults {
     
-    public subscript<T>(_ key: DefaultKey<T>) -> T? {
+    public subscript<T>(_ key: DefaultsKey<T>) -> T? {
         get {
             return object(forKey: key.key).flatMap(key.deserialize)
         }
@@ -78,7 +78,7 @@ extension UserDefaults {
         }
     }
     
-    public subscript<T: DefaultConstructible>(_ key: DefaultKey<T>) -> T {
+    public subscript<T: UDDefaultConstructible>(_ key: DefaultsKey<T>) -> T {
         get {
             return object(forKey: key.key).flatMap(key.deserialize) ?? T()
         }
