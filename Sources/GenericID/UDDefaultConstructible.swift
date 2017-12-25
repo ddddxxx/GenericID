@@ -1,5 +1,5 @@
 //
-//  DefaultConstructible.swift
+//  UDDefaultConstructible.swift
 //
 //  This file is part of GenericID.
 //  Copyright (c) 2017 Xander Deng
@@ -17,20 +17,20 @@
 
 import Foundation
 
-public protocol DefaultConstructible {
+public protocol UDDefaultConstructible {
     init()
 }
 
-extension Bool: DefaultConstructible {}
-extension Int: DefaultConstructible {}
-extension Float: DefaultConstructible {}
-extension Double: DefaultConstructible {}
-extension String: DefaultConstructible {}
-extension Data: DefaultConstructible {}
-extension Array: DefaultConstructible {}
-extension Dictionary: DefaultConstructible {}
+extension Bool: UDDefaultConstructible {}
+extension Int: UDDefaultConstructible {}
+extension Float: UDDefaultConstructible {}
+extension Double: UDDefaultConstructible {}
+extension String: UDDefaultConstructible {}
+extension Data: UDDefaultConstructible {}
+extension Array: UDDefaultConstructible {}
+extension Dictionary: UDDefaultConstructible {}
 
-extension Optional: DefaultConstructible {
+extension Optional: UDDefaultConstructible {
     public init() {
         self = .none
     }
