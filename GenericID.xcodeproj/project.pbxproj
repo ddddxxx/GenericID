@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB1022841FF0C752000488CB /* LazyReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1022831FF0C752000488CB /* LazyReference.swift */; };
 		BB3952321F4EC79800CF0EA2 /* TestKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3952311F4EC79800CF0EA2 /* TestKeys.swift */; };
 		BB4AFBC71F52643400373ABA /* DefaultConstructible.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */; };
 		BB6D30E71FEB5440008D901A /* Unarchiver+UnarchiveWithoutException.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6D30E61FEB5440008D901A /* Unarchiver+UnarchiveWithoutException.m */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BB1022831FF0C752000488CB /* LazyReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyReference.swift; sourceTree = "<group>"; };
 		BB3952311F4EC79800CF0EA2 /* TestKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestKeys.swift; sourceTree = "<group>"; };
 		BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConstructible.swift; sourceTree = "<group>"; };
 		BB6D30E51FEB5440008D901A /* Unarchiver+UnarchiveWithoutException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Unarchiver+UnarchiveWithoutException.h"; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 			children = (
 				BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */,
 				BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */,
+				BB1022831FF0C752000488CB /* LazyReference.swift */,
 				BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */,
 				OBJ_15 /* StaticKey.swift */,
 				OBJ_9 /* AssociatedObject.swift */,
@@ -246,6 +249,7 @@
 			files = (
 				BBFAEF661FEF90A500D9E1D9 /* DefaultsObservation.swift in Sources */,
 				OBJ_29 /* AssociatedObject.swift in Sources */,
+				BB1022841FF0C752000488CB /* LazyReference.swift in Sources */,
 				BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */,
 				OBJ_31 /* UICollectionView.swift in Sources */,
 				OBJ_32 /* UIStoryboard.swift in Sources */,

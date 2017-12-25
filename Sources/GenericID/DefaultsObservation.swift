@@ -44,36 +44,38 @@ extension UserDefaults {
     public struct KeyValueObservedChange<T> {
         
         let _change: _KeyValueObservedChange
-        let _transformer: (Any) -> T?
+        let _oldValue: LazyReference<T?>
+        let _newValue: LazyReference<T?>
         
         public var kind: NSKeyValueChange { return _change.kind }
         public var indexes: IndexSet? { return _change.indexes }
-        public var isPrior:Bool { return _change.isPrior }
-        
-        public private(set) lazy var newValue: T? = _change.newValue.flatMap(_transformer)
-        public private(set) lazy var oldValue: T? = _change.oldValue.flatMap(_transformer)
+        public var isPrior: Bool { return _change.isPrior }
+        public var newValue: T? { return _newValue.value }
+        public var oldValue: T? { return _oldValue.value }
         
         fileprivate init(_ change: _KeyValueObservedChange, transformer: @escaping (Any) -> T?) {
             _change = change
-            _transformer = transformer
+            _oldValue = LazyReference { change.oldValue.flatMap(transformer) }
+            _newValue = LazyReference { change.newValue.flatMap(transformer) }
         }
     }
     
     public struct ConstructedKeyValueObservedChange<T> {
         
         let _change: _KeyValueObservedChange
-        let _transformer: (Any?) -> T
+        let _oldValue: LazyReference<T>
+        let _newValue: LazyReference<T>
         
         public var kind: NSKeyValueChange { return _change.kind }
         public var indexes: IndexSet? { return _change.indexes }
-        public var isPrior:Bool { return _change.isPrior }
-        
-        public private(set) lazy var newValue: T = _transformer(_change.newValue)
-        public private(set) lazy var oldValue: T = _transformer(_change.oldValue)
+        public var isPrior: Bool { return _change.isPrior }
+        public var newValue: T { return _newValue.value }
+        public var oldValue: T { return _oldValue.value }
         
         fileprivate init(_ change: _KeyValueObservedChange, transformer: @escaping (Any?) -> T) {
             _change = change
-            _transformer = transformer
+            _oldValue = LazyReference { transformer(change.oldValue) }
+            _newValue = LazyReference { transformer(change.newValue) }
         }
     }
     
@@ -114,21 +116,21 @@ extension UserDefaults {
 
 extension UserDefaults {
     
-    public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, inout KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
+    public func observe<T>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, KeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
-            var notification = KeyValueObservedChange(change, transformer: key.deserialize)
-            changeHandler(defaults, &notification)
+            let notification = KeyValueObservedChange(change, transformer: key.deserialize)
+            changeHandler(defaults, notification)
         }
         result.start(options)
         return result
     }
     
-    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, inout ConstructedKeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
+    public func observe<T: DefaultConstructible>(_ key: DefaultKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, ConstructedKeyValueObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
-            var notification = ConstructedKeyValueObservedChange(change) {
+            let notification = ConstructedKeyValueObservedChange(change) {
                 $0.flatMap(key.deserialize) ?? T()
             }
-            changeHandler(defaults, &notification)
+            changeHandler(defaults, notification)
         }
         result.start(options)
         return result
