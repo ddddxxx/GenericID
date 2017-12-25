@@ -457,7 +457,7 @@ class UserDefaultesTests: XCTestCase {
             ex.expectedFulfillmentCount = 2
         #endif
         defaults[.StringOptKey] = "foo"
-        let token = defaults.observe(.StringOptKey, options: [.old, .new]) { (defaults: UserDefaults, change: UserDefaults.KeyValueObservedChange<String>) in
+        let token = defaults.observe(.StringOptKey, options: [.old, .new]) { defaults, change in
             #if os(macOS)
                 XCTAssertEqual(change.oldValue, "foo")
                 XCTAssertEqual(change.newValue, "bar")
