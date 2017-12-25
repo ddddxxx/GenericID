@@ -1,5 +1,5 @@
 //
-//  Unarchiver+UnarchiveWithoutException.h
+//  NSException+Suppress.h
 //
 //  This file is part of GenericID.
 //  Copyright (c) 2017 Xander Deng
@@ -17,18 +17,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSKeyedUnarchiver (UnarchiveWithoutException)
-
-+ (id _Nullable)unarchiveObjectWithoutExceptionWithData:(NSData * _Nonnull)data;
-
-@end
-
-#if TARGET_OS_OSX
-
-@interface NSUnarchiver (UnarchiveWithoutException)
-
-+ (id _Nullable)unarchiveObjectWithoutExceptionWithData:(NSData * _Nonnull)data;
-
-@end
-
-#endif
+NS_INLINE void suppressException(void(NS_NOESCAPE ^ _Nonnull block)()) {
+    @try {
+        block();
+        return;
+    }
+    @catch (NSException *exception) {
+        return;
+    }
+}
