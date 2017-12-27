@@ -70,11 +70,15 @@ extension UserDefaults {
         
         public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
             guard let data = from as? Data else { return nil }
-            var result: T?
-            suppressException {
-                result = NSKeyedUnarchiver.unarchiveObject(with: data) as? T
+            if #available(OSXApplicationExtension 10.11, iOSApplicationExtension 9.0, *) {
+                return (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? T
+            } else {
+                var result: T?
+                suppressException {
+                    result = NSKeyedUnarchiver.unarchiveObject(with: data) as? T
+                }
+                return result
             }
-            return result
         }
     }
     
