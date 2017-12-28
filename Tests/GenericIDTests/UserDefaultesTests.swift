@@ -87,7 +87,7 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(defaults[.DataKey], data)
         
         defaults[.DataKey].removeFirst()
-        XCTAssertEqual(defaults[.DataKey], Data(data.dropFirst()))
+        XCTAssertEqual(defaults[.DataKey], data.dropFirst())
         
         defaults.remove(.DataKey)
         XCTAssert(defaults[.DataKey].isEmpty)
@@ -257,7 +257,7 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(defaults[.DataOptKey], data)
         
         defaults[.DataOptKey]?.removeFirst()
-        XCTAssertEqual(defaults[.DataOptKey], Data(data.dropFirst()))
+        XCTAssertEqual(defaults[.DataOptKey], data.dropFirst())
         
         defaults[.DataOptKey] = nil
         XCTAssertNil(defaults[.DataOptKey])

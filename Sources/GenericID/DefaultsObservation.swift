@@ -25,11 +25,11 @@ extension UserDefaults {
     
     class _DefaultsObservedChange {
         
-        let kind: NSKeyValueChange
-        let indexes: IndexSet?
-        let isPrior:Bool
-        let newValue: Any?
-        let oldValue: Any?
+        fileprivate let kind: NSKeyValueChange
+        fileprivate let indexes: IndexSet?
+        fileprivate let isPrior:Bool
+        fileprivate let newValue: Any?
+        fileprivate let oldValue: Any?
         
         init(observedChange change: [NSKeyValueChangeKey: Any]) {
             let rawKind = change[.kindKey] as! UInt
@@ -43,9 +43,9 @@ extension UserDefaults {
     
     public struct DefaultsObservedChange<T> {
         
-        let _change: _DefaultsObservedChange
-        let _oldValue: LazyReference<T?>
-        let _newValue: LazyReference<T?>
+        private let _change: _DefaultsObservedChange
+        private let _oldValue: LazyReference<T?>
+        private let _newValue: LazyReference<T?>
         
         public var kind: NSKeyValueChange { return _change.kind }
         public var indexes: IndexSet? { return _change.indexes }
@@ -83,9 +83,9 @@ extension UserDefaults {
         
         typealias Callback = (UserDefaults, _DefaultsObservedChange) -> Void
         
-        weak var object: UserDefaults?
-        let callback: Callback
-        let key: String
+        private weak var object: UserDefaults?
+        private let callback: Callback
+        private let key: String
         
         fileprivate init(object: UserDefaults, key: String, callback: @escaping Callback) {
             self.key = key
@@ -145,9 +145,9 @@ extension UserDefaults {
         
         typealias Callback = () -> Void
         
-        weak var object: UserDefaults?
-        let callback: Callback
-        let keys: [String]
+        private weak var object: UserDefaults?
+        private let callback: Callback
+        private let keys: [String]
         
         fileprivate init(object: UserDefaults, keys: [String], callback: @escaping Callback) {
             self.keys = keys
