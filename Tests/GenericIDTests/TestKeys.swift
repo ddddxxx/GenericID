@@ -47,9 +47,9 @@ extension UserDefaults.DefaultsKeys {
     static let ArrayOptKey      = Key<[Any]?>("ArrayOptKey")
     static let StringArrayOptKey = Key<[String]?>("StringArrayOptKey")
     static let DictionaryOptKey = Key<[String: Any]?>("DictionaryOptKey")
-    static let ColorOptKey      = Key<Color>("ColorOptKey", transformer: .keyedArchive)
-    static let RectOptKey       = Key<CGRect>("RectOptKey", transformer: .json)
-    static let AnyOptKey        = Key<Any>("AnyOptKey")
+    static let ColorOptKey      = Key<Color?>("ColorOptKey", transformer: .keyedArchive)
+    static let RectOptKey       = Key<CGRect?>("RectOptKey", transformer: .json)
+    static let AnyOptKey        = Key<Any?>("AnyOptKey")
 }
 
 extension NSObject.AssociateKeys {

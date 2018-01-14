@@ -26,9 +26,9 @@ All these fantastic API are compatible with traditional string-based API.
 
 ```swift
 extension UserDefaults.DefaultKeys {
-    static let intKey:   Key<Int?> = "intKey"
-    static let colorKey: ArchivedKey<UIColor?> = "colorKey"
-    static let pointKey: JSONCodedKey<CGPoint?> = "pointKey"
+    static let intKey   = Key<Int>("intKey")
+    static let colorKey = Key<Color>("colorKey", transformer: .keyedArchive)
+    static let pointKey = Key<CGPoint>("pointKey", transformer: .json)
 }
 ```
 
