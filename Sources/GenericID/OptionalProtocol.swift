@@ -5,13 +5,22 @@
 //  Created by 邓翔 on 2017/9/1.
 //
 
-protocol OptionalProtocol {}
+protocol OptionalProtocol {
+    
+    var value: Any? { get }
+}
 
-extension Optional: OptionalProtocol {}
+extension Optional: OptionalProtocol {
+    
+    var value: Any? {
+        switch self {
+        case .none: return nil
+        case let .some(v): return v
+        }
+    }
+}
 
 func unwrap(_ v: Any) -> Any? {
-    let mirror = Mirror(reflecting: v)
-    guard mirror.displayStyle == .optional else { return v }
-    guard let value = mirror.children.first?.value else { return nil }
-    return unwrap(value)
+    guard let opt = v as? OptionalProtocol else { return v }
+    return opt.value.flatMap(unwrap)
 }
