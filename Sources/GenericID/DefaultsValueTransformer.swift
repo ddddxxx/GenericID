@@ -70,15 +70,7 @@ extension UserDefaults {
         
         public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
             guard let data = from as? Data else { return nil }
-            if #available(OSXApplicationExtension 10.11, iOSApplicationExtension 9.0, *) {
-                return (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? T
-            } else {
-                var result: T?
-                suppressException {
-                    result = NSKeyedUnarchiver.unarchiveObject(with: data) as? T
-                }
-                return result
-            }
+            return (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? T
         }
     }
     
@@ -141,5 +133,41 @@ fileprivate extension Decodable {
     init?(plistData: Data) {
         guard let v = try? PropertyListDecoder().decode(Self.self, from: plistData) else { return nil }
         self = v
+    }
+}
+
+// MARK: -
+
+extension NSKeyedUnarchiver {
+    
+    private class DummyKeyedUnarchiverDelegate: NSObject, NSKeyedUnarchiverDelegate {
+        
+        @objc(UnknownClass_AyWMH3gRIKYqLBV4)
+        private final class Unknown: NSObject, NSCoding {
+            func encode(with aCoder: NSCoder) {}
+            init?(coder aDecoder: NSCoder) { return nil }
+        }
+        
+        var unknownClassName: String?
+        
+        func unarchiver(_ unarchiver: NSKeyedUnarchiver, cannotDecodeObjectOfClassName name: String, originalClasses classNames: [String]) -> Swift.AnyClass? {
+            unknownClassName = name
+            print(classNames)
+            return Unknown.self
+        }
+    }
+    
+    @available(macOS, obsoleted: 10.11)
+    @available(iOS, obsoleted: 9.0)
+    @nonobjc class func unarchiveTopLevelObjectWithData(_ data: Data) throws -> Any? {
+        let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
+        let delegate = DummyKeyedUnarchiverDelegate()
+        unarchiver.delegate = delegate
+        let obj = unarchiver.decodeObject(forKey: "root")
+        if let name = delegate.unknownClassName {
+            let desc = "*** -[NSKeyedUnarchiver decodeObjectForKey:]: cannot decode object of class (\(name)); the class may be defined in source code or a library that is not linked"
+            throw NSError(domain: NSCocoaErrorDomain, code: 4864, userInfo: [NSDebugDescriptionErrorKey: desc])
+        }
+        return obj
     }
 }

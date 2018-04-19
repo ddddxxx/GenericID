@@ -41,8 +41,6 @@
 		BB1022831FF0C752000488CB /* LazyReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyReference.swift; sourceTree = "<group>"; };
 		BB3952311F4EC79800CF0EA2 /* TestKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestKeys.swift; sourceTree = "<group>"; };
 		BB4AFBC61F52643400373ABA /* UDDefaultConstructible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDDefaultConstructible.swift; sourceTree = "<group>"; };
-		BB6D30E51FEB5440008D901A /* NSException+Suppress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSException+Suppress.h"; sourceTree = "<group>"; };
-		BB6D30E81FEB560A008D901A /* GenericIDBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenericIDBridge.h; sourceTree = "<group>"; };
 		BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalProtocol.swift; sourceTree = "<group>"; };
 		BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUbiquitousKeyValueStore.swift; sourceTree = "<group>"; };
 		BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINibGettable.swift; sourceTree = "<group>"; };
@@ -144,8 +142,6 @@
 				OBJ_13 /* UITableView.swift */,
 				OBJ_11 /* UICollectionView.swift */,
 				OBJ_12 /* UIStoryboard.swift */,
-				BB6D30E81FEB560A008D901A /* GenericIDBridge.h */,
-				BB6D30E51FEB5440008D901A /* NSException+Suppress.h */,
 			);
 			name = GenericID;
 			path = Sources/GenericID;
@@ -296,7 +292,6 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = Sources/GenericID/GenericIDBridge.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericID;
@@ -319,7 +314,6 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = Sources/GenericID/GenericIDBridge.h;
 				SWIFT_VERSION = 4.0;
 				TARGET_NAME = GenericID;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
