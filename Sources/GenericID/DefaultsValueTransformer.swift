@@ -73,26 +73,6 @@ extension UserDefaults {
             return (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? T
         }
     }
-    
-    #if os(macOS)
-        
-        public final class ArchiveValueTransformer: ValueTransformer {
-            
-            public override func serialize<T>(_ value: T) -> Any? {
-                return NSArchiver.archivedData(withRootObject: value)
-            }
-            
-            public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
-                guard let data = from as? Data else { return nil }
-                var result: T?
-                suppressException {
-                    result = NSUnarchiver.unarchiveObject(with: data) as? T
-                }
-                return result
-            }
-        }
-    
-    #endif
 }
 
 extension UserDefaults.ValueTransformer {
@@ -102,12 +82,6 @@ extension UserDefaults.ValueTransformer {
     public static let plist = UserDefaults.PropertyListValueTransformer()
     
     public static let keyedArchive = UserDefaults.KeyedArchiveValueTransformer()
-    
-    #if os(macOS)
-    
-        public static let archive = UserDefaults.ArchiveValueTransformer()
-    
-    #endif
 }
 
 // MARK: - Codable
