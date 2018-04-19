@@ -66,14 +66,12 @@ extension UserDefaults.DefaultsKeys {
         
         override func deserialize(_ v: Any) -> Any? {
             guard let t = valueTransformer else { return v }
-            guard let data = v as? Data else { return nil }
-            return t.deserialize(T.self, from: data)
+            return t.deserialize(T.self, from: v)
         }
         
         func deserialize(_ v: Any) -> T? {
             guard let t = valueTransformer else { return v as? T }
-            guard let data = v as? Data else { return nil }
-            return t.deserialize(T.self, from: data)
+            return t.deserialize(T.self, from: v)
         }
     }
 }
