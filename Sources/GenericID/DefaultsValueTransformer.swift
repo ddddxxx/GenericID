@@ -38,7 +38,7 @@ extension UserDefaults {
         }
         
         public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
-            guard let t = T.self as? Decodable.Type,
+            guard let t = type as? Decodable.Type,
                 let data = from as? Data else {
                     return nil
             }
@@ -54,7 +54,7 @@ extension UserDefaults {
         }
         
         public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
-            guard let t = T.self as? Decodable.Type,
+            guard let t = type as? Decodable.Type,
                 let data = from as? Data else {
                     return nil
             }
