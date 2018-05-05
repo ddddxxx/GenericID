@@ -85,7 +85,7 @@ extension UserDefaults {
         set {
             // T might be optional and holds a `nil`, which will be bridged to `NSNull`
             // and cannot be stored in UserDefaults. We must unwrap it manually.
-            set(unwrap(newValue).map(key.serialize), forKey: key.key)
+            set(unwrap(newValue).flatMap(key.serialize), forKey: key.key)
         }
     }
 }

@@ -17,52 +17,43 @@
 
 import Foundation
 
-#if !os(watchOS)
+@available(watchOS, unavailable)
+extension NSUbiquitousKeyValueStore {
     
-    extension NSUbiquitousKeyValueStore {
-        
-        public typealias StoreKeys = UserDefaults.DefaultsKeys
-        public typealias StoreKey<T> = StoreKeys.Key<T>
+    public typealias StoreKeys = UserDefaults.DefaultsKeys
+    public typealias StoreKey<T> = StoreKeys.Key<T>
+    
+    public func contains<T>(_ key: StoreKey<T>) -> Bool {
+        return object(forKey: key.key) != nil
     }
-
-    extension NSUbiquitousKeyValueStore {
-        
-        public func contains<T>(_ key: StoreKey<T>) -> Bool {
-            return object(forKey: key.key) != nil
-        }
-        
-        public func remove<T>(_ key: StoreKey<T>) {
-            removeObject(forKey: key.key)
-        }
-        
-        public func removeAll() {
-            for (key, _) in dictionaryRepresentation {
-                removeObject(forKey: key)
-            }
+    
+    public func remove<T>(_ key: StoreKey<T>) {
+        removeObject(forKey: key.key)
+    }
+    
+    public func removeAll() {
+        for (key, _) in dictionaryRepresentation {
+            removeObject(forKey: key)
         }
     }
     
-    extension NSUbiquitousKeyValueStore {
-        
-        public subscript<T>(_ key: StoreKey<T>) -> T? {
-            get {
-                return object(forKey: key.key).flatMap(key.deserialize)
-            }
-            set {
-                set(newValue.flatMap(key.serialize), forKey: key.key)
-            }
+    public subscript<T>(_ key: StoreKey<T>) -> T? {
+        get {
+            return object(forKey: key.key).flatMap(key.deserialize)
         }
-        
-        public subscript<T: UDDefaultConstructible>(_ key: StoreKey<T>) -> T {
-            get {
-                return object(forKey: key.key).flatMap(key.deserialize) ?? T()
-            }
-            set {
-                // T might be optional and holds a `nil`, which will be bridged to `NSNull`
-                // and cannot be stored in NSUbiquitousKeyValueStore. We must unwrap it manually.
-                set(unwrap(newValue).map(key.serialize), forKey: key.key)
-            }
+        set {
+            set(newValue.flatMap(key.serialize), forKey: key.key)
         }
     }
     
-#endif
+    public subscript<T: UDDefaultConstructible>(_ key: StoreKey<T>) -> T {
+        get {
+            return object(forKey: key.key).flatMap(key.deserialize) ?? T()
+        }
+        set {
+            // T might be optional and holds a `nil`, which will be bridged to `NSNull`
+            // and cannot be stored in NSUbiquitousKeyValueStore. We must unwrap it manually.
+            set(unwrap(newValue).flatMap(key.serialize), forKey: key.key)
+        }
+    }
+}

@@ -1,17 +1,36 @@
 //
 //  OptionalProtocol.swift
-//  GenericID
 //
-//  Created by 邓翔 on 2017/9/1.
+//  This file is part of GenericID.
+//  Copyright (c) 2017 Xander Deng
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
 //
 
-protocol OptionalProtocol {}
+protocol OptionalProtocol {
+    
+    var value: Any? { get }
+}
 
-extension Optional: OptionalProtocol {}
+extension Optional: OptionalProtocol {
+    
+    var value: Any? {
+        switch self {
+        case .none: return nil
+        case let .some(v): return v
+        }
+    }
+}
 
 func unwrap(_ v: Any) -> Any? {
-    let mirror = Mirror(reflecting: v)
-    guard mirror.displayStyle == .optional else { return v }
-    guard let value = mirror.children.first?.value else { return nil }
-    return unwrap(value)
+    guard let opt = v as? OptionalProtocol else { return v }
+    return opt.value.flatMap(unwrap)
 }
