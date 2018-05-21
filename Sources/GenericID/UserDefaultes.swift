@@ -89,3 +89,57 @@ extension UserDefaults {
         }
     }
 }
+
+// MARK: - Binding
+
+class DefaultsDeserializeValueTransformer: ValueTransformer {
+    
+    var defaultsKey: UserDefaults.DefaultsKeys
+    
+    init(key: UserDefaults.DefaultsKeys) {
+        defaultsKey = key
+        super.init()
+    }
+    
+    override class func transformedValueClass() -> Swift.AnyClass {
+        return AnyObject.self
+    }
+    
+    override class func allowsReverseTransformation() -> Bool {
+        return true
+    }
+    
+    override func transformedValue(_ value: Any?) -> Any? {
+        guard let value = value else { return nil }
+        return defaultsKey.deserialize(value).flatMap(unwrap)
+    }
+    
+    override func reverseTransformedValue(_ value: Any?) -> Any? {
+        guard let value = value else { return nil }
+        return defaultsKey.serialize(value)
+    }
+}
+
+#if canImport(AppKit)
+
+    import AppKit
+
+    extension NSObject {
+        
+        public func bind<T>(_ binding: NSBindingName,
+                            to userDefaults: UserDefaults = UserDefaults.standard,
+                            defaultsKey: UserDefaults.DefaultsKey<T>,
+                            options: [NSBindingOption: Any] = [:]) {
+            var options = options
+            if let transformer = defaultsKey.valueTransformer {
+                if transformer is UserDefaults.KeyedArchiveValueTransformer {
+                    options[.valueTransformerName] = NSValueTransformerName.keyedUnarchiveFromDataTransformerName
+                } else {
+                    options[.valueTransformer] = DefaultsDeserializeValueTransformer(key: defaultsKey)
+                }
+            }
+            bind(binding, to: userDefaults, withKeyPath: defaultsKey.key, options: options)
+        }
+    }
+
+#endif
