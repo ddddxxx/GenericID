@@ -50,7 +50,7 @@ extension UserDefaults {
                 let data = from as? Data else {
                     return nil
             }
-            return (try? t.decode(data, decoder: decoder)) as? T
+            return (try? t.init(data: data, decoder: decoder)) as? T
         }
     }
     

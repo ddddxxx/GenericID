@@ -32,8 +32,8 @@ extension Encodable {
 }
 
 extension Decodable {
-    static func decode(_ data: Data, decoder: DataDecoder) throws -> Self {
-        return try decoder.decode(Self.self, from: data)
+    init(data: Data, decoder: DataDecoder) throws {
+        self = try decoder.decode(Self.self, from: data)
     }
 }
 
