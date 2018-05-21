@@ -21,7 +21,7 @@ extension UserDefaults {
     
     public func contains<T>(_ key: DefaultsKey<T>) -> Bool {
         if T.self is UDDefaultConstructible.Type,
-            !(T.self is OptionalProtocol.Type) {
+            !(T.self is AnyOptionalType.Type) {
             return true
         }
         return object(forKey: key.key) != nil

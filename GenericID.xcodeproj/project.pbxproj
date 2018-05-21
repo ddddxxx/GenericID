@@ -10,7 +10,7 @@
 		BB1022841FF0C752000488CB /* LazyReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1022831FF0C752000488CB /* LazyReference.swift */; };
 		BB3952321F4EC79800CF0EA2 /* TestKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3952311F4EC79800CF0EA2 /* TestKeys.swift */; };
 		BB4AFBC71F52643400373ABA /* UDDefaultConstructible.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4AFBC61F52643400373ABA /* UDDefaultConstructible.swift */; };
-		BBC222AB1F592BE5008F1183 /* OptionalProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */; };
+		BBC222AB1F592BE5008F1183 /* OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC222AA1F592BE5008F1183 /* OptionalType.swift */; };
 		BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */; };
 		BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */; };
 		BBF2AB8A20B1CB9B006D66F9 /* DataCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF2AB8920B1CB9B006D66F9 /* DataCoder.swift */; };
@@ -42,7 +42,7 @@
 		BB1022831FF0C752000488CB /* LazyReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyReference.swift; sourceTree = "<group>"; };
 		BB3952311F4EC79800CF0EA2 /* TestKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestKeys.swift; sourceTree = "<group>"; };
 		BB4AFBC61F52643400373ABA /* UDDefaultConstructible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDDefaultConstructible.swift; sourceTree = "<group>"; };
-		BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalProtocol.swift; sourceTree = "<group>"; };
+		BBC222AA1F592BE5008F1183 /* OptionalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalType.swift; sourceTree = "<group>"; };
 		BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUbiquitousKeyValueStore.swift; sourceTree = "<group>"; };
 		BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINibGettable.swift; sourceTree = "<group>"; };
 		BBF2AB8920B1CB9B006D66F9 /* DataCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCoder.swift; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				BB4AFBC61F52643400373ABA /* UDDefaultConstructible.swift */,
-				BBC222AA1F592BE5008F1183 /* OptionalProtocol.swift */,
+				BBC222AA1F592BE5008F1183 /* OptionalType.swift */,
 				BBF2AB8920B1CB9B006D66F9 /* DataCoder.swift */,
 				BB1022831FF0C752000488CB /* LazyReference.swift */,
 				BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */,
@@ -254,7 +254,7 @@
 				OBJ_33 /* UITableView.swift in Sources */,
 				BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */,
 				BBFAEF641FEF904A00D9E1D9 /* DefaultsKey.swift in Sources */,
-				BBC222AB1F592BE5008F1183 /* OptionalProtocol.swift in Sources */,
+				BBC222AB1F592BE5008F1183 /* OptionalType.swift in Sources */,
 				OBJ_34 /* UserDefaultes.swift in Sources */,
 				BBF348B51FEB485E001E76C4 /* DefaultsValueTransformer.swift in Sources */,
 				OBJ_35 /* StaticKey.swift in Sources */,
