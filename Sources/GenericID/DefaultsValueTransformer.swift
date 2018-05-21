@@ -30,11 +30,19 @@ extension UserDefaults {
         }
     }
     
-    public final class JSONValueTransformer: ValueTransformer {
+    public final class DataCoderValueTransformer: ValueTransformer {
+        
+        let encoder: DataEncoder
+        let decoder: DataDecoder
+        
+        init(encoder: DataEncoder, decoder: DataDecoder) {
+            self.encoder = encoder
+            self.decoder = decoder
+        }
         
         public override func serialize<T>(_ value: T) -> Any? {
             guard let v = value as? Encodable else { return nil }
-            return v.jsonData
+            return try? v.encodedData(encoder: encoder)
         }
         
         public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
@@ -42,23 +50,7 @@ extension UserDefaults {
                 let data = from as? Data else {
                     return nil
             }
-            return t.init(jsonData: data) as? T
-        }
-    }
-    
-    public final class PropertyListValueTransformer: ValueTransformer {
-        
-        public override func serialize<T>(_ value: T) -> Any? {
-            guard let v = value as? Encodable else { return nil }
-            return v.plistData
-        }
-        
-        public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
-            guard let t = type as? Decodable.Type,
-                let data = from as? Data else {
-                    return nil
-            }
-            return t.init(plistData: data) as? T
+            return (try? t.decode(data, decoder: decoder)) as? T
         }
     }
     
@@ -77,37 +69,13 @@ extension UserDefaults {
 
 extension UserDefaults.ValueTransformer {
     
-    public static let json = UserDefaults.JSONValueTransformer()
+    public static let json = UserDefaults.DataCoderValueTransformer(encoder: JSONEncoder(),
+                                                                    decoder: JSONDecoder())
     
-    public static let plist = UserDefaults.PropertyListValueTransformer()
+    public static let plist = UserDefaults.DataCoderValueTransformer(encoder: PropertyListEncoder(),
+                                                                     decoder: PropertyListDecoder())
     
     public static let keyedArchive = UserDefaults.KeyedArchiveValueTransformer()
-}
-
-// MARK: - Codable
-
-fileprivate extension Encodable {
-    
-    var jsonData: Data? {
-        return try? JSONEncoder().encode(self)
-    }
-    
-    var plistData: Data? {
-        return try? PropertyListEncoder().encode(self)
-    }
-}
-
-fileprivate extension Decodable {
-    
-    init?(jsonData: Data) {
-        guard let v = try? JSONDecoder().decode(Self.self, from: jsonData) else { return nil }
-        self = v
-    }
-    
-    init?(plistData: Data) {
-        guard let v = try? PropertyListDecoder().decode(Self.self, from: plistData) else { return nil }
-        self = v
-    }
 }
 
 // MARK: -
