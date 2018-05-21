@@ -64,7 +64,7 @@ extension UserDefaults {
         
         public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
             guard let data = from as? Data else { return nil }
-            return (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? T
+            return (try? NSKeyedUnarchiver.my_unarchiveTopLevelObjectWithData(data)) as? T
         }
     }
 }
@@ -82,7 +82,7 @@ extension UserDefaults.ValueTransformer {
 
 // MARK: -
 
-extension NSKeyedUnarchiver {
+private extension NSKeyedUnarchiver {
     
     private class DummyKeyedUnarchiverDelegate: NSObject, NSKeyedUnarchiverDelegate {
         
@@ -101,17 +101,19 @@ extension NSKeyedUnarchiver {
         }
     }
     
-    @available(macOS, obsoleted: 10.11)
-    @available(iOS, obsoleted: 9.0)
-    @nonobjc class func unarchiveTopLevelObjectWithData(_ data: Data) throws -> Any? {
-        let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
-        let delegate = DummyKeyedUnarchiverDelegate()
-        unarchiver.delegate = delegate
-        let obj = unarchiver.decodeObject(forKey: "root")
-        if let name = delegate.unknownClassName {
-            let desc = "*** -[NSKeyedUnarchiver decodeObjectForKey:]: cannot decode object of class (\(name)); the class may be defined in source code or a library that is not linked"
-            throw NSError(domain: NSCocoaErrorDomain, code: 4864, userInfo: [NSDebugDescriptionErrorKey: desc])
+    @nonobjc class func my_unarchiveTopLevelObjectWithData(_ data: Data) throws -> Any? {
+        if #available(macOS 10.11, iOS 9.0, *) {
+            return try unarchiveTopLevelObjectWithData(data)
+        } else {
+            let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
+            let delegate = DummyKeyedUnarchiverDelegate()
+            unarchiver.delegate = delegate
+            let obj = unarchiver.decodeObject(forKey: "root")
+            if let name = delegate.unknownClassName {
+                let desc = "*** -[NSKeyedUnarchiver decodeObjectForKey:]: cannot decode object of class (\(name)); the class may be defined in source code or a library that is not linked"
+                throw NSError(domain: NSCocoaErrorDomain, code: 4864, userInfo: [NSDebugDescriptionErrorKey: desc])
+            }
+            return obj
         }
-        return obj
     }
 }
