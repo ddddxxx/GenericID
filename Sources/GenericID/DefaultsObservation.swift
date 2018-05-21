@@ -125,7 +125,7 @@ extension UserDefaults {
         return result
     }
     
-    public func observe<T: UDDefaultConstructible>(_ key: DefaultsKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, ConstructedDefaultsObservedChange<T>) -> Void) -> DefaultsObservation {
+    public func observe<T: DefaultConstructible>(_ key: DefaultsKey<T>, options: NSKeyValueObservingOptions = [], changeHandler: @escaping (UserDefaults, ConstructedDefaultsObservedChange<T>) -> Void) -> DefaultsObservation {
         let result = SingleKeyObservation(object: self, key: key.key) { (defaults, change) in
             let notification = ConstructedDefaultsObservedChange(change) {
                 $0.flatMap(key.deserialize) ?? T()

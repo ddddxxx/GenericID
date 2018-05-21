@@ -20,7 +20,7 @@ import Foundation
 extension UserDefaults {
     
     public func contains<T>(_ key: DefaultsKey<T>) -> Bool {
-        if T.self is UDDefaultConstructible.Type,
+        if T.self is DefaultConstructible.Type,
             !(T.self is AnyOptionalType.Type) {
             return true
         }
@@ -78,7 +78,7 @@ extension UserDefaults {
         }
     }
     
-    public subscript<T: UDDefaultConstructible>(_ key: DefaultsKey<T>) -> T {
+    public subscript<T: DefaultConstructible>(_ key: DefaultsKey<T>) -> T {
         get {
             return object(forKey: key.key).flatMap(key.deserialize) ?? T()
         }
