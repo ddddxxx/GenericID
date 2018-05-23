@@ -25,16 +25,11 @@ extension UserDefaults {
     
     class _DefaultsObservedChange {
         
-        fileprivate let kind: NSKeyValueChange
-        fileprivate let indexes: IndexSet?
         fileprivate let isPrior:Bool
         fileprivate let newValue: Any?
         fileprivate let oldValue: Any?
         
         init(observedChange change: [NSKeyValueChangeKey: Any]) {
-            let rawKind = change[.kindKey] as! UInt
-            kind = NSKeyValueChange(rawValue: rawKind)!
-            indexes = change[.indexesKey] as? IndexSet
             isPrior = change[.notificationIsPriorKey] as? Bool ?? false
             oldValue = change[.oldKey]
             newValue = change[.newKey]
@@ -47,8 +42,6 @@ extension UserDefaults {
         private let _oldValue: LazyReference<T?>
         private let _newValue: LazyReference<T?>
         
-        public var kind: NSKeyValueChange { return _change.kind }
-        public var indexes: IndexSet? { return _change.indexes }
         public var isPrior: Bool { return _change.isPrior }
         public var newValue: T? { return _newValue.value }
         public var oldValue: T? { return _oldValue.value }
@@ -66,8 +59,6 @@ extension UserDefaults {
         let _oldValue: LazyReference<T>
         let _newValue: LazyReference<T>
         
-        public var kind: NSKeyValueChange { return _change.kind }
-        public var indexes: IndexSet? { return _change.indexes }
         public var isPrior: Bool { return _change.isPrior }
         public var newValue: T { return _newValue.value }
         public var oldValue: T { return _oldValue.value }
