@@ -30,7 +30,7 @@ extension UserDefaults {
         }
     }
     
-    public final class DataCoderValueTransformer: ValueTransformer {
+    final class DataCoderValueTransformer: ValueTransformer {
         
         let encoder: DataEncoder
         let decoder: DataDecoder
@@ -40,12 +40,12 @@ extension UserDefaults {
             self.decoder = decoder
         }
         
-        public override func serialize<T>(_ value: T) -> Any? {
+        override func serialize<T>(_ value: T) -> Any? {
             guard let v = value as? Encodable else { return nil }
             return try? v.encodedData(encoder: encoder)
         }
         
-        public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
+        override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
             // Unwrap optional type. this can be removed with dynamically querying conditional conformance in Swift 4.2.
             let unwrappedType = unwrap(type)
             guard let t = unwrappedType as? Decodable.Type,
@@ -56,13 +56,13 @@ extension UserDefaults {
         }
     }
     
-    public final class KeyedArchiveValueTransformer: ValueTransformer {
+    final class KeyedArchiveValueTransformer: ValueTransformer {
         
-        public override func serialize<T>(_ value: T) -> Any? {
+        override func serialize<T>(_ value: T) -> Any? {
             return NSKeyedArchiver.archivedData(withRootObject: value)
         }
         
-        public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
+        override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
             guard let data = from as? Data else { return nil }
             return (try? NSKeyedUnarchiver.my_unarchiveTopLevelObjectWithData(data)) as? T
         }
@@ -71,13 +71,16 @@ extension UserDefaults {
 
 extension UserDefaults.ValueTransformer {
     
-    public static let json = UserDefaults.DataCoderValueTransformer(encoder: JSONEncoder(),
-                                                                    decoder: JSONDecoder())
+    public static let json: UserDefaults.ValueTransformer =
+        UserDefaults.DataCoderValueTransformer(encoder: JSONEncoder(),
+                                               decoder: JSONDecoder())
     
-    public static let plist = UserDefaults.DataCoderValueTransformer(encoder: PropertyListEncoder(),
-                                                                     decoder: PropertyListDecoder())
+    public static let plist: UserDefaults.ValueTransformer =
+        UserDefaults.DataCoderValueTransformer(encoder: PropertyListEncoder(),
+                                               decoder: PropertyListDecoder())
     
-    public static let keyedArchive = UserDefaults.KeyedArchiveValueTransformer()
+    public static let keyedArchive: UserDefaults.ValueTransformer =
+        UserDefaults.KeyedArchiveValueTransformer()
 }
 
 // MARK: -
