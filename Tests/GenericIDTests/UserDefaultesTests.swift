@@ -528,4 +528,16 @@ class UserDefaultesTests: XCTestCase {
         waitForExpectations(timeout: 0)
     }
     
+    func testBinding() {
+        class A: NSObject { @objc dynamic var rect: CGRect = .zero }
+        let bindingName = NSBindingName("rect")
+        
+        let a = A()
+        let rect = CGRect(x: 1, y: 1, width: 1, height: 1)
+        
+        a.bind(bindingName, defaultsKey: .RectOptKey)
+        defaults[.RectOptKey] = rect
+        XCTAssertEqual(a.rect, rect)
+        a.unbind(bindingName)
+    }
 }

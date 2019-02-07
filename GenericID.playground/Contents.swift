@@ -3,7 +3,7 @@ import GenericID
 
 let ud = UserDefaults.standard
 
-extension UserDefaults.DefaultKeys {
+extension UserDefaults.DefaultsKeys {
     static let intKey       = Key<Int>("intKey")
     static let stringKey    = Key<String>("stringKey")
     static let stringArrayKey = Key<[String]>("arrayKey")

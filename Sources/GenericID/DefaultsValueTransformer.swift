@@ -30,89 +30,62 @@ extension UserDefaults {
         }
     }
     
-    public final class JSONValueTransformer: ValueTransformer {
+    final class DataCoderValueTransformer: ValueTransformer {
         
-        public override func serialize<T>(_ value: T) -> Any? {
-            guard let v = value as? Encodable else { return nil }
-            return v.jsonData
+        let encoder: DataEncoder
+        let decoder: DataDecoder
+        
+        init(encoder: DataEncoder, decoder: DataDecoder) {
+            self.encoder = encoder
+            self.decoder = decoder
         }
         
-        public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
-            guard let t = type as? Decodable.Type,
+        override func serialize<T>(_ value: T) -> Any? {
+            guard let v = value as? Encodable else { return nil }
+            return try? v.encodedData(encoder: encoder)
+        }
+        
+        override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
+            // Unwrap optional type. this can be removed with dynamically querying conditional conformance in Swift 4.2.
+            let unwrappedType = unwrap(type)
+            guard let t = unwrappedType as? Decodable.Type,
                 let data = from as? Data else {
                     return nil
             }
-            return t.init(jsonData: data) as? T
+            return (try? t.init(data: data, decoder: decoder)) as? T
         }
     }
     
-    public final class PropertyListValueTransformer: ValueTransformer {
+    final class KeyedArchiveValueTransformer: ValueTransformer {
         
-        public override func serialize<T>(_ value: T) -> Any? {
-            guard let v = value as? Encodable else { return nil }
-            return v.plistData
-        }
-        
-        public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
-            guard let t = type as? Decodable.Type,
-                let data = from as? Data else {
-                    return nil
-            }
-            return t.init(plistData: data) as? T
-        }
-    }
-    
-    public final class KeyedArchiveValueTransformer: ValueTransformer {
-        
-        public override func serialize<T>(_ value: T) -> Any? {
+        override func serialize<T>(_ value: T) -> Any? {
             return NSKeyedArchiver.archivedData(withRootObject: value)
         }
         
-        public override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
+        override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
             guard let data = from as? Data else { return nil }
-            return (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? T
+            return (try? NSKeyedUnarchiver.my_unarchiveTopLevelObjectWithData(data)) as? T
         }
     }
 }
 
 extension UserDefaults.ValueTransformer {
     
-    public static let json = UserDefaults.JSONValueTransformer()
+    public static let json: UserDefaults.ValueTransformer =
+        UserDefaults.DataCoderValueTransformer(encoder: JSONEncoder(),
+                                               decoder: JSONDecoder())
     
-    public static let plist = UserDefaults.PropertyListValueTransformer()
+    public static let plist: UserDefaults.ValueTransformer =
+        UserDefaults.DataCoderValueTransformer(encoder: PropertyListEncoder(),
+                                               decoder: PropertyListDecoder())
     
-    public static let keyedArchive = UserDefaults.KeyedArchiveValueTransformer()
-}
-
-// MARK: - Codable
-
-fileprivate extension Encodable {
-    
-    var jsonData: Data? {
-        return try? JSONEncoder().encode(self)
-    }
-    
-    var plistData: Data? {
-        return try? PropertyListEncoder().encode(self)
-    }
-}
-
-fileprivate extension Decodable {
-    
-    init?(jsonData: Data) {
-        guard let v = try? JSONDecoder().decode(Self.self, from: jsonData) else { return nil }
-        self = v
-    }
-    
-    init?(plistData: Data) {
-        guard let v = try? PropertyListDecoder().decode(Self.self, from: plistData) else { return nil }
-        self = v
-    }
+    public static let keyedArchive: UserDefaults.ValueTransformer =
+        UserDefaults.KeyedArchiveValueTransformer()
 }
 
 // MARK: -
 
-extension NSKeyedUnarchiver {
+private extension NSKeyedUnarchiver {
     
     private class DummyKeyedUnarchiverDelegate: NSObject, NSKeyedUnarchiverDelegate {
         
@@ -131,17 +104,19 @@ extension NSKeyedUnarchiver {
         }
     }
     
-    @available(macOS, obsoleted: 10.11)
-    @available(iOS, obsoleted: 9.0)
-    @nonobjc class func unarchiveTopLevelObjectWithData(_ data: Data) throws -> Any? {
-        let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
-        let delegate = DummyKeyedUnarchiverDelegate()
-        unarchiver.delegate = delegate
-        let obj = unarchiver.decodeObject(forKey: "root")
-        if let name = delegate.unknownClassName {
-            let desc = "*** -[NSKeyedUnarchiver decodeObjectForKey:]: cannot decode object of class (\(name)); the class may be defined in source code or a library that is not linked"
-            throw NSError(domain: NSCocoaErrorDomain, code: 4864, userInfo: [NSDebugDescriptionErrorKey: desc])
+    @nonobjc class func my_unarchiveTopLevelObjectWithData(_ data: Data) throws -> Any? {
+        if #available(macOS 10.11, iOS 9.0, *) {
+            return try unarchiveTopLevelObjectWithData(data)
+        } else {
+            let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
+            let delegate = DummyKeyedUnarchiverDelegate()
+            unarchiver.delegate = delegate
+            let obj = unarchiver.decodeObject(forKey: "root")
+            if let name = delegate.unknownClassName {
+                let desc = "*** -[NSKeyedUnarchiver decodeObjectForKey:]: cannot decode object of class (\(name)); the class may be defined in source code or a library that is not linked"
+                throw NSError(domain: NSCocoaErrorDomain, code: 4864, userInfo: [NSDebugDescriptionErrorKey: desc])
+            }
+            return obj
         }
-        return obj
     }
 }

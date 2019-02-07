@@ -20,8 +20,8 @@ import Foundation
 extension UserDefaults {
     
     public func contains<T>(_ key: DefaultsKey<T>) -> Bool {
-        if T.self is UDDefaultConstructible.Type,
-            !(T.self is OptionalProtocol.Type) {
+        if T.self is DefaultConstructible.Type,
+            !(T.self is AnyOptionalType.Type) {
             return true
         }
         return object(forKey: key.key) != nil
@@ -78,7 +78,7 @@ extension UserDefaults {
         }
     }
     
-    public subscript<T: UDDefaultConstructible>(_ key: DefaultsKey<T>) -> T {
+    public subscript<T: DefaultConstructible>(_ key: DefaultsKey<T>) -> T {
         get {
             return object(forKey: key.key).flatMap(key.deserialize) ?? T()
         }
@@ -89,3 +89,57 @@ extension UserDefaults {
         }
     }
 }
+
+// MARK: - Binding
+
+class DefaultsDeserializeValueTransformer: ValueTransformer {
+    
+    var defaultsKey: UserDefaults.DefaultsKeys
+    
+    init(key: UserDefaults.DefaultsKeys) {
+        defaultsKey = key
+        super.init()
+    }
+    
+    override class func transformedValueClass() -> Swift.AnyClass {
+        return AnyObject.self
+    }
+    
+    override class func allowsReverseTransformation() -> Bool {
+        return true
+    }
+    
+    override func transformedValue(_ value: Any?) -> Any? {
+        guard let value = value else { return nil }
+        return defaultsKey.deserialize(value).flatMap(unwrap)
+    }
+    
+    override func reverseTransformedValue(_ value: Any?) -> Any? {
+        guard let value = value else { return nil }
+        return defaultsKey.serialize(value)
+    }
+}
+
+#if canImport(AppKit)
+
+    import AppKit
+
+    extension NSObject {
+        
+        public func bind<T>(_ binding: NSBindingName,
+                            to userDefaults: UserDefaults = UserDefaults.standard,
+                            defaultsKey: UserDefaults.DefaultsKey<T>,
+                            options: [NSBindingOption: Any] = [:]) {
+            var options = options
+            if let transformer = defaultsKey.valueTransformer {
+                if transformer is UserDefaults.KeyedArchiveValueTransformer {
+                    options[.valueTransformerName] = NSValueTransformerName.keyedUnarchiveFromDataTransformerName
+                } else {
+                    options[.valueTransformer] = DefaultsDeserializeValueTransformer(key: defaultsKey)
+                }
+            }
+            bind(binding, to: userDefaults, withKeyPath: defaultsKey.key, options: options)
+        }
+    }
+
+#endif

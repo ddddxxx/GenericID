@@ -46,7 +46,7 @@ extension NSUbiquitousKeyValueStore {
         }
     }
     
-    public subscript<T: UDDefaultConstructible>(_ key: StoreKey<T>) -> T {
+    public subscript<T: DefaultConstructible>(_ key: StoreKey<T>) -> T {
         get {
             return object(forKey: key.key).flatMap(key.deserialize) ?? T()
         }

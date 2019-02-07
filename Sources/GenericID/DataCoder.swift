@@ -1,5 +1,5 @@
 //
-//  OptionalProtocol.swift
+//  DataCoder.swift
 //
 //  This file is part of GenericID.
 //  Copyright (c) 2017 Xander Deng
@@ -15,22 +15,30 @@
 //  all copies or substantial portions of the Software.
 //
 
-protocol OptionalProtocol {
-    
-    var value: Any? { get }
+import Foundation
+
+protocol DataEncoder {
+    func encode<T>(_ value: T) throws -> Data where T : Encodable
 }
 
-extension Optional: OptionalProtocol {
-    
-    var value: Any? {
-        switch self {
-        case .none: return nil
-        case let .some(v): return v
-        }
+protocol DataDecoder {
+    func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable
+}
+
+extension Encodable {
+    func encodedData(encoder: DataEncoder) throws -> Data {
+        return try encoder.encode(self)
     }
 }
 
-func unwrap(_ v: Any) -> Any? {
-    guard let opt = v as? OptionalProtocol else { return v }
-    return opt.value.flatMap(unwrap)
+extension Decodable {
+    init(data: Data, decoder: DataDecoder) throws {
+        self = try decoder.decode(Self.self, from: data)
+    }
 }
+
+extension JSONEncoder: DataEncoder {}
+extension JSONDecoder: DataDecoder {}
+
+extension PropertyListEncoder: DataEncoder {}
+extension PropertyListDecoder: DataDecoder {}

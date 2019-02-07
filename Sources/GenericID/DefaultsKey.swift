@@ -81,12 +81,8 @@ extension UserDefaults.DefaultsKeys {
 extension UserDefaults.DefaultsKeys: Equatable {
     
     public static func ==(lhs: UserDefaults.DefaultsKeys, rhs: UserDefaults.DefaultsKeys) -> Bool {
-        guard lhs.key == rhs.key else { return false }
-        switch (lhs.valueTransformer, rhs.valueTransformer) {
-        case (nil, nil):            return true
-        case (_, nil), (nil, _):    return false
-        case let (l, r):            return type(of: l) == type(of: r)
-        }
+        return lhs.key == rhs.key &&
+            lhs.valueTransformer === rhs.valueTransformer
     }
 }
 
