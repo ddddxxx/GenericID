@@ -56,6 +56,7 @@ extension UserDefaults {
         }
     }
     
+    @available(OSXApplicationExtension 10.11, *)
     final class KeyedArchiveValueTransformer: ValueTransformer {
         
         override func serialize<T>(_ value: T) -> Any? {
@@ -79,6 +80,7 @@ extension UserDefaults.ValueTransformer {
         UserDefaults.DataCoderValueTransformer(encoder: PropertyListEncoder(),
                                                decoder: PropertyListDecoder())
     
+    @available(OSXApplicationExtension 10.11, *)
     public static let keyedArchive: UserDefaults.ValueTransformer =
         UserDefaults.KeyedArchiveValueTransformer()
 }

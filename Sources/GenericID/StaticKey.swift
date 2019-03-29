@@ -28,8 +28,8 @@ public class StaticKeyBase {
 
 extension StaticKeyBase: Hashable {
 
-    public var hashValue: Int {
-        return key.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(key)
     }
     
     public static func ==(lhs: StaticKeyBase, rhs: StaticKeyBase) -> Bool {

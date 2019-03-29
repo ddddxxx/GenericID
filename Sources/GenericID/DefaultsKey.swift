@@ -88,8 +88,8 @@ extension UserDefaults.DefaultsKeys: Equatable {
 
 extension UserDefaults.DefaultsKeys: Hashable {
     
-    public var hashValue: Int {
-        return key.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(key)
     }
 }
 
