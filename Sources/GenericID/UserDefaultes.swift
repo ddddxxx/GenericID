@@ -132,7 +132,8 @@ class DefaultsDeserializeValueTransformer: ValueTransformer {
                             options: [NSBindingOption: Any] = [:]) {
             var options = options
             if let transformer = defaultsKey.valueTransformer {
-                if transformer is UserDefaults.KeyedArchiveValueTransformer {
+                if #available(OSXApplicationExtension 10.11, *),
+                    transformer is UserDefaults.KeyedArchiveValueTransformer {
                     options[.valueTransformerName] = NSValueTransformerName.keyedUnarchiveFromDataTransformerName
                 } else {
                     options[.valueTransformer] = DefaultsDeserializeValueTransformer(key: defaultsKey)
