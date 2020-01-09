@@ -47,7 +47,7 @@ extension UserDefaults {
         
         override func deserialize<T>(_ type: T.Type, from: Any) -> T? {
             // Unwrap optional type. this can be removed with dynamically querying conditional conformance in Swift 4.2.
-            let unwrappedType = unwrap(type)
+            let unwrappedType = unwrapRecursively(type)
             guard let t = unwrappedType as? Decodable.Type,
                 let data = from as? Data else {
                     return nil
