@@ -24,108 +24,190 @@ import Combine
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension UserDefaults {
     
-    public func publisher<Value>(for key: DefaultsKey<Value>) -> DefaultsValuePublisher<Value> {
-        return DefaultsValuePublisher(object: self, key: key)
+    public func publisher<Value>(for key: DefaultsKey<Value>) -> Publisher<Value> {
+        return Publisher(object: self, key: key)
     }
     
-    public func publisher<Value: DefaultConstructible>(for key: DefaultsKey<Value>) -> Publishers.Map<UserDefaults.DefaultsValuePublisher<Value>, Value> {
-        return DefaultsValuePublisher(object: self, key: key).map { $0 ?? Value() }
+    public func publisher<Value: DefaultConstructible>(for key: DefaultsKey<Value>) -> Publishers.Map<UserDefaults.Publisher<Value>, Value> {
+        return Publisher(object: self, key: key).map { $0 ?? Value() }
     }
     
     public func publisher(for keys: [DefaultsKeys]) -> MultiValuePublisher {
-        let stringKeys = keys.map { $0.key }
-        return MultiValuePublisher(object: self, keys: stringKeys)
+        return MultiValuePublisher(object: self, keys: keys)
     }
 }
 
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension UserDefaults {
     
-    public class DefaultsValuePublisher<Value>: NSObject, Publisher {
+    public struct Publisher<Value>: Combine.Publisher {
         
         public typealias Output = Value?
         public typealias Failure = Never
         
-        private weak var object: UserDefaults?
-        private var key: DefaultsKey<Value>
-        
-        private var subject = CurrentValueSubject<Value?, Never>(nil)
-        private var isStarted = false
+        public let object: UserDefaults
+        public let key: DefaultsKey<Value>
         
         init(object: UserDefaults, key: DefaultsKey<Value>) {
             self.object = object
             self.key = key
-            super.init()
-        }
-        
-        private func startObservationIfNeeded() {
-            if !isStarted {
-                subject.send(object?[key])
-                object?.addObserver(self, forKeyPath: key.key, options: [.new], context: nil)
-                isStarted = true
-            }
-        }
-        
-        deinit {
-            if isStarted {
-                object?.removeObserver(self, forKeyPath: key.key, context: nil)
-            }
         }
         
         public func receive<S: Subscriber>(subscriber: S) where S.Failure == Failure, S.Input == Output {
-            startObservationIfNeeded()
-            subject.receive(subscriber: subscriber)
-        }
-        
-        override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-            guard let ourObject = self.object, object as? NSObject == ourObject else { return }
-            let v = change?[.newKey].flatMap(key.deserialize)
-            subject.send(v)
+            let subscription = UserDefaults.Subscription(object: object, key: key, downstream: subscriber)
+            subscriber.receive(subscription: subscription)
         }
     }
     
-    public class MultiValuePublisher: NSObject, Publisher {
+    public struct MultiValuePublisher: Combine.Publisher {
         
         public typealias Output = Void
         public typealias Failure = Never
         
-        private weak var object: UserDefaults?
-        private var keys: [String]
+        public var object: UserDefaults
+        public var keys: [DefaultsKeys]
         
-        private var subject = PassthroughSubject<Void, Never>()
-        private var isStarted = false
-        
-        init(object: UserDefaults, keys: [String]) {
+        init(object: UserDefaults, keys: [DefaultsKeys]) {
             self.object = object
             self.keys = keys
-            super.init()
         }
         
-        private func startObservationIfNeeded() {
-            if !isStarted {
-                for key in keys {
-                    object?.addObserver(self, forKeyPath: key, options: [.new], context: nil)
-                }
-                isStarted = true
+        public func receive<S: Subscriber>(subscriber: S) where S.Failure == Failure, S.Input == Output {
+            let subscription = UserDefaults.MultiValueSubscription(object: object, keys: keys, downstream: subscriber)
+            subscriber.receive(subscription: subscription)
+        }
+    }
+}
+
+@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+private extension UserDefaults {
+    
+    final class Subscription<Output, Downstream: Subscriber>: NSObject, Combine.Subscription where Downstream.Input == Output?, Downstream.Failure == Never {
+        
+        private let lock = NSLock()
+        
+        private let downstreamLock = NSRecursiveLock()
+        
+        private var downstream: Downstream?
+        
+        private var demand = Subscribers.Demand.none
+        
+        private var object: UserDefaults?
+        
+        private let key: DefaultsKey<Output>
+        
+        init(object: UserDefaults, key: DefaultsKey<Output>, downstream: Downstream) {
+            self.object = object
+            self.key = key
+            self.downstream = downstream
+            super.init()
+            object.addObserver(self, forKeyPath: key.key, options: [.new], context: nil)
+        }
+        
+        deinit {
+            cancel()
+        }
+        
+        func request(_ demand: Subscribers.Demand) {
+            lock.lock()
+            self.demand += demand
+            lock.unlock()
+        }
+        
+        func cancel() {
+            lock.lock()
+            guard let object = self.object else {
+                lock.unlock()
+                return
+            }
+            self.object = nil
+            lock.unlock()
+            object.removeObserver(self, forKeyPath: key.key, context: nil)
+        }
+        
+        override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+            lock.lock()
+            guard demand > 0, let downstream = downstream else {
+                lock.unlock()
+                return
+            }
+            demand -= 1
+            lock.unlock()
+            
+            downstreamLock.lock()
+            let value = change?[.newKey].flatMap(key.deserialize)
+            let newDemand = downstream.receive(value)
+            downstreamLock.unlock()
+            
+            lock.lock()
+            demand += newDemand
+            lock.unlock()
+        }
+    }
+    
+    final class MultiValueSubscription<Downstream: Subscriber>: NSObject, Combine.Subscription where Downstream.Input == Void, Downstream.Failure == Never {
+        
+        private let lock = NSLock()
+        
+        private let downstreamLock = NSRecursiveLock()
+        
+        private var downstream: Downstream?
+        
+        private var demand = Subscribers.Demand.none
+        
+        private var object: UserDefaults?
+        
+        private var keys: [DefaultsKeys]
+        
+        init(object: UserDefaults, keys: [DefaultsKeys], downstream: Downstream) {
+            self.object = object
+            self.keys = keys
+            self.downstream = downstream
+            super.init()
+            for key in keys {
+                object.addObserver(self, forKeyPath: key.key, options: [.new], context: nil)
             }
         }
         
         deinit {
-            if isStarted {
-                for key in keys {
-                    object?.removeObserver(self, forKeyPath: key, context: nil)
-                }
+            cancel()
+        }
+        
+        func request(_ demand: Subscribers.Demand) {
+            lock.lock()
+            self.demand += demand
+            lock.unlock()
+        }
+        
+        func cancel() {
+            lock.lock()
+            guard let object = self.object else {
+                lock.unlock()
+                return
+            }
+            self.object = nil
+            lock.unlock()
+            for key in keys {
+                object.removeObserver(self, forKeyPath: key.key, context: nil)
             }
         }
         
-        public func receive<S: Subscriber>(subscriber: S) where S.Failure == Failure, S.Input == Output {
-            startObservationIfNeeded()
-            subject.receive(subscriber: subscriber)
-        }
-        
-        override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-            guard let ourObject = self.object, object as? NSObject == ourObject else { return }
-            subject.send()
+        override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+            lock.lock()
+            guard demand > 0, let downstream = downstream else {
+                lock.unlock()
+                return
+            }
+            demand -= 1
+            lock.unlock()
+            
+            downstreamLock.lock()
+            let newDemand = downstream.receive()
+            downstreamLock.unlock()
+            
+            lock.lock()
+            demand += newDemand
+            lock.unlock()
         }
     }
 }
