@@ -16,12 +16,8 @@
 //
 
 import Foundation
+import CXShim
 
-#if canImport(Combine)
-
-import Combine
-
-@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension UserDefaults {
     
     public func publisher<Value>(for key: DefaultsKey<Value>) -> Publisher<Value> {
@@ -37,10 +33,9 @@ extension UserDefaults {
     }
 }
 
-@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension UserDefaults {
     
-    public struct Publisher<Value>: Combine.Publisher {
+    public struct Publisher<Value>: CXShim.Publisher {
         
         public typealias Output = Value?
         public typealias Failure = Never
@@ -59,7 +54,7 @@ extension UserDefaults {
         }
     }
     
-    public struct MultiValuePublisher: Combine.Publisher {
+    public struct MultiValuePublisher: CXShim.Publisher {
         
         public typealias Output = Void
         public typealias Failure = Never
@@ -79,10 +74,9 @@ extension UserDefaults {
     }
 }
 
-@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 private extension UserDefaults {
     
-    final class Subscription<Output, Downstream: Subscriber>: NSObject, Combine.Subscription where Downstream.Input == Output?, Downstream.Failure == Never {
+    final class Subscription<Output, Downstream: Subscriber>: NSObject, CXShim.Subscription where Downstream.Input == Output?, Downstream.Failure == Never {
         
         private let lock = NSLock()
         
@@ -145,7 +139,7 @@ private extension UserDefaults {
         }
     }
     
-    final class MultiValueSubscription<Downstream: Subscriber>: NSObject, Combine.Subscription where Downstream.Input == Void, Downstream.Failure == Never {
+    final class MultiValueSubscription<Downstream: Subscriber>: NSObject, CXShim.Subscription where Downstream.Input == Void, Downstream.Failure == Never {
         
         private let lock = NSLock()
         
@@ -211,5 +205,3 @@ private extension UserDefaults {
         }
     }
 }
-
-#endif
