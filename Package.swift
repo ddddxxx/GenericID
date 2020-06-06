@@ -14,7 +14,7 @@ let package = Package(
             targets: ["GenericID"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/cx-org/CombineX", .upToNextMinor(from: "0.1.0"))
+        .package(url: "https://github.com/cx-org/CombineX", .upToNextMinor(from: "0.2.0"))
     ],
     targets: [
         .target(
