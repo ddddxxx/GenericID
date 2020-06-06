@@ -15,6 +15,8 @@
 //  all copies or substantial portions of the Software.
 //
 
+#if canImport(CXShim)
+
 import Foundation
 import CXShim
 
@@ -129,7 +131,7 @@ private extension UserDefaults {
             lock.unlock()
             
             downstreamLock.lock()
-            let value = change?[.newKey].flatMap(key.deserialize)
+            let value = self.object?[self.key]
             let newDemand = downstream.receive(value)
             downstreamLock.unlock()
             
@@ -205,3 +207,5 @@ private extension UserDefaults {
         }
     }
 }
+
+#endif // canImport(CXShim)
