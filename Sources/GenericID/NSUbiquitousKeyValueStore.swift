@@ -53,7 +53,7 @@ extension NSUbiquitousKeyValueStore {
         set {
             // T might be optional and holds a `nil`, which will be bridged to `NSNull`
             // and cannot be stored in NSUbiquitousKeyValueStore. We must unwrap it manually.
-            set(unwrap(newValue).flatMap(key.serialize), forKey: key.key)
+            set(unwrapRecursively(newValue).flatMap(key.serialize), forKey: key.key)
         }
     }
 }

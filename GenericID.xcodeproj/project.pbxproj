@@ -1,442 +1,744 @@
 // !$*UTF8*$!
 {
-	archiveVersion = 1;
-	classes = {
-	};
-	objectVersion = 46;
-	objects = {
-
-/* Begin PBXBuildFile section */
-		BB1022841FF0C752000488CB /* LazyReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1022831FF0C752000488CB /* LazyReference.swift */; };
-		BB3952321F4EC79800CF0EA2 /* TestKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3952311F4EC79800CF0EA2 /* TestKeys.swift */; };
-		BB4AFBC71F52643400373ABA /* DefaultConstructible.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */; };
-		BBC222AB1F592BE5008F1183 /* OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC222AA1F592BE5008F1183 /* OptionalType.swift */; };
-		BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */; };
-		BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */; };
-		BBF2AB8A20B1CB9B006D66F9 /* DataCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF2AB8920B1CB9B006D66F9 /* DataCoder.swift */; };
-		BBF348B51FEB485E001E76C4 /* DefaultsValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF348B41FEB485E001E76C4 /* DefaultsValueTransformer.swift */; };
-		BBFAEF641FEF904A00D9E1D9 /* DefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFAEF631FEF904A00D9E1D9 /* DefaultsKey.swift */; };
-		BBFAEF661FEF90A500D9E1D9 /* DefaultsObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFAEF651FEF90A500D9E1D9 /* DefaultsObservation.swift */; };
-		OBJ_29 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AssociatedObject.swift */; };
-		OBJ_31 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* UICollectionView.swift */; };
-		OBJ_32 /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* UIStoryboard.swift */; };
-		OBJ_33 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* UITableView.swift */; };
-		OBJ_34 /* UserDefaultes.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* UserDefaultes.swift */; };
-		OBJ_35 /* StaticKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* StaticKey.swift */; };
-		OBJ_42 /* AssociatedObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* AssociatedObjectTests.swift */; };
-		OBJ_43 /* UserDefaultesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* UserDefaultesTests.swift */; };
-		OBJ_45 /* GenericID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* GenericID.framework */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		BBE557951EC0287000F1EC31 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = OBJ_24;
-			remoteInfo = GenericID;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXFileReference section */
-		BB1022831FF0C752000488CB /* LazyReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyReference.swift; sourceTree = "<group>"; };
-		BB3952311F4EC79800CF0EA2 /* TestKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestKeys.swift; sourceTree = "<group>"; };
-		BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConstructible.swift; sourceTree = "<group>"; };
-		BBC222AA1F592BE5008F1183 /* OptionalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalType.swift; sourceTree = "<group>"; };
-		BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUbiquitousKeyValueStore.swift; sourceTree = "<group>"; };
-		BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINibGettable.swift; sourceTree = "<group>"; };
-		BBF2AB8920B1CB9B006D66F9 /* DataCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCoder.swift; sourceTree = "<group>"; };
-		BBF348B41FEB485E001E76C4 /* DefaultsValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsValueTransformer.swift; sourceTree = "<group>"; };
-		BBFAEF631FEF904A00D9E1D9 /* DefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsKey.swift; sourceTree = "<group>"; };
-		BBFAEF651FEF90A500D9E1D9 /* DefaultsObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsObservation.swift; sourceTree = "<group>"; };
-		OBJ_11 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
-		OBJ_12 /* UIStoryboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
-		OBJ_13 /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
-		OBJ_14 /* UserDefaultes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultes.swift; sourceTree = "<group>"; };
-		OBJ_15 /* StaticKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticKey.swift; sourceTree = "<group>"; };
-		OBJ_18 /* AssociatedObjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObjectTests.swift; sourceTree = "<group>"; };
-		OBJ_19 /* UserDefaultesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultesTests.swift; sourceTree = "<group>"; };
-		OBJ_22 /* GenericID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GenericID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		OBJ_23 /* GenericIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = GenericIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		OBJ_9 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
-/* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		OBJ_36 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		OBJ_44 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 0;
-			files = (
-				OBJ_45 /* GenericID.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		OBJ_16 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				OBJ_17 /* GenericIDTests */,
-			);
-			path = Tests;
-			sourceTree = SOURCE_ROOT;
-		};
-		OBJ_17 /* GenericIDTests */ = {
-			isa = PBXGroup;
-			children = (
-				BB3952311F4EC79800CF0EA2 /* TestKeys.swift */,
-				OBJ_18 /* AssociatedObjectTests.swift */,
-				OBJ_19 /* UserDefaultesTests.swift */,
-			);
-			name = GenericIDTests;
-			path = Tests/GenericIDTests;
-			sourceTree = SOURCE_ROOT;
-		};
-		OBJ_21 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				OBJ_22 /* GenericID.framework */,
-				OBJ_23 /* GenericIDTests.xctest */,
-			);
-			name = Products;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		OBJ_5 = {
-			isa = PBXGroup;
-			children = (
-				OBJ_6 /* Package.swift */,
-				OBJ_7 /* Sources */,
-				OBJ_16 /* Tests */,
-				OBJ_21 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		OBJ_7 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				OBJ_8 /* GenericID */,
-			);
-			path = Sources;
-			sourceTree = SOURCE_ROOT;
-		};
-		OBJ_8 /* GenericID */ = {
-			isa = PBXGroup;
-			children = (
-				BB4AFBC61F52643400373ABA /* DefaultConstructible.swift */,
-				BBC222AA1F592BE5008F1183 /* OptionalType.swift */,
-				BBF2AB8920B1CB9B006D66F9 /* DataCoder.swift */,
-				BB1022831FF0C752000488CB /* LazyReference.swift */,
-				BBE9A9F61ECE927C0058FB8D /* UINibGettable.swift */,
-				OBJ_15 /* StaticKey.swift */,
-				OBJ_9 /* AssociatedObject.swift */,
-				BBFAEF631FEF904A00D9E1D9 /* DefaultsKey.swift */,
-				BBF348B41FEB485E001E76C4 /* DefaultsValueTransformer.swift */,
-				OBJ_14 /* UserDefaultes.swift */,
-				BBFAEF651FEF90A500D9E1D9 /* DefaultsObservation.swift */,
-				BBCCD9B01ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift */,
-				OBJ_13 /* UITableView.swift */,
-				OBJ_11 /* UICollectionView.swift */,
-				OBJ_12 /* UIStoryboard.swift */,
-			);
-			name = GenericID;
-			path = Sources/GenericID;
-			sourceTree = SOURCE_ROOT;
-		};
-/* End PBXGroup section */
-
-/* Begin PBXNativeTarget section */
-		OBJ_24 /* GenericID */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_25 /* Build configuration list for PBXNativeTarget "GenericID" */;
-			buildPhases = (
-				OBJ_28 /* Sources */,
-				OBJ_36 /* Frameworks */,
-				BBF48A521F04FA5500D35321 /* Bump Build */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = GenericID;
-			productName = GenericID;
-			productReference = OBJ_22 /* GenericID.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		OBJ_37 /* GenericIDTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_38 /* Build configuration list for PBXNativeTarget "GenericIDTests" */;
-			buildPhases = (
-				OBJ_41 /* Sources */,
-				OBJ_44 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				OBJ_46 /* PBXTargetDependency */,
-			);
-			name = GenericIDTests;
-			productName = GenericIDTests;
-			productReference = OBJ_23 /* GenericIDTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-/* End PBXNativeTarget section */
-
-/* Begin PBXProject section */
-		OBJ_1 /* Project object */ = {
-			isa = PBXProject;
-			attributes = {
-				LastUpgradeCheck = 9999;
-				TargetAttributes = {
-					OBJ_24 = {
-						LastSwiftMigration = 0920;
-					};
-					OBJ_37 = {
-						LastSwiftMigration = 1020;
-					};
-				};
-			};
-			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "GenericID" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				English,
-				en,
-			);
-			mainGroup = OBJ_5;
-			productRefGroup = OBJ_21 /* Products */;
-			projectDirPath = "";
-			projectRoot = "";
-			targets = (
-				OBJ_24 /* GenericID */,
-				OBJ_37 /* GenericIDTests */,
-			);
-		};
-/* End PBXProject section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		BBF48A521F04FA5500D35321 /* Bump Build */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bump Build";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
-		};
-/* End PBXShellScriptBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
-		OBJ_28 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 0;
-			files = (
-				BBFAEF661FEF90A500D9E1D9 /* DefaultsObservation.swift in Sources */,
-				OBJ_29 /* AssociatedObject.swift in Sources */,
-				BB1022841FF0C752000488CB /* LazyReference.swift in Sources */,
-				BBCCD9B11ED2911300CEFDB1 /* NSUbiquitousKeyValueStore.swift in Sources */,
-				OBJ_31 /* UICollectionView.swift in Sources */,
-				OBJ_32 /* UIStoryboard.swift in Sources */,
-				BB4AFBC71F52643400373ABA /* DefaultConstructible.swift in Sources */,
-				BBF2AB8A20B1CB9B006D66F9 /* DataCoder.swift in Sources */,
-				OBJ_33 /* UITableView.swift in Sources */,
-				BBE9A9F71ECE927C0058FB8D /* UINibGettable.swift in Sources */,
-				BBFAEF641FEF904A00D9E1D9 /* DefaultsKey.swift in Sources */,
-				BBC222AB1F592BE5008F1183 /* OptionalType.swift in Sources */,
-				OBJ_34 /* UserDefaultes.swift in Sources */,
-				BBF348B51FEB485E001E76C4 /* DefaultsValueTransformer.swift in Sources */,
-				OBJ_35 /* StaticKey.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		OBJ_41 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 0;
-			files = (
-				OBJ_42 /* AssociatedObjectTests.swift in Sources */,
-				BB3952321F4EC79800CF0EA2 /* TestKeys.swift in Sources */,
-				OBJ_43 /* UserDefaultesTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		OBJ_46 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = OBJ_24 /* GenericID */;
-			targetProxy = BBE557951EC0287000F1EC31 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin XCBuildConfiguration section */
-		OBJ_26 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ENABLE_MODULES = YES;
-				DEFINES_MODULE = YES;
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = GenericID.xcodeproj/GenericID_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = ddddxxx.GenericID;
-				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGET_NAME = GenericID;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Debug;
-		};
-		OBJ_27 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ENABLE_MODULES = YES;
-				DEFINES_MODULE = YES;
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = GenericID.xcodeproj/GenericID_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = ddddxxx.GenericID;
-				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGET_NAME = GenericID;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Release;
-		};
-		OBJ_3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_NS_ASSERTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_SWIFT_FLAGS = "-DXcode";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-				USE_HEADERMAP = NO;
-			};
-			name = Debug;
-		};
-		OBJ_39 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-				);
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = GenericID.xcodeproj/GenericIDTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				SWIFT_VERSION = 5.0;
-				TARGET_NAME = GenericIDTests;
-			};
-			name = Debug;
-		};
-		OBJ_4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_OPTIMIZATION_LEVEL = s;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				OTHER_SWIFT_FLAGS = "-DXcode";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
-				USE_HEADERMAP = NO;
-			};
-			name = Release;
-		};
-		OBJ_40 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-				);
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = GenericID.xcodeproj/GenericIDTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				SWIFT_VERSION = 5.0;
-				TARGET_NAME = GenericIDTests;
-			};
-			name = Release;
-		};
-/* End XCBuildConfiguration section */
-
-/* Begin XCConfigurationList section */
-		OBJ_2 /* Build configuration list for PBXProject "GenericID" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_3 /* Debug */,
-				OBJ_4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		OBJ_25 /* Build configuration list for PBXNativeTarget "GenericID" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_26 /* Debug */,
-				OBJ_27 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		OBJ_38 /* Build configuration list for PBXNativeTarget "GenericIDTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_39 /* Debug */,
-				OBJ_40 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-/* End XCConfigurationList section */
-	};
-	rootObject = OBJ_1 /* Project object */;
+   archiveVersion = "1";
+   objectVersion = "46";
+   objects = {
+      "GenericID::GenericID" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_35";
+         buildPhases = (
+            "OBJ_38",
+            "OBJ_54"
+         );
+         dependencies = (
+         );
+         name = "GenericID";
+         productName = "GenericID";
+         productReference = "GenericID::GenericID::Product";
+         productType = "com.apple.product-type.framework";
+      };
+      "GenericID::GenericID::Product" = {
+         isa = "PBXFileReference";
+         path = "GenericID.framework";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+      "GenericID::GenericIDPackageTests::ProductTarget" = {
+         isa = "PBXAggregateTarget";
+         buildConfigurationList = "OBJ_62";
+         buildPhases = (
+         );
+         dependencies = (
+            "OBJ_65"
+         );
+         name = "GenericIDPackageTests";
+         productName = "GenericIDPackageTests";
+      };
+      "GenericID::GenericIDTests" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_67";
+         buildPhases = (
+            "OBJ_70",
+            "OBJ_74"
+         );
+         dependencies = (
+            "OBJ_76"
+         );
+         name = "GenericIDTests";
+         productName = "GenericIDTests";
+         productReference = "GenericID::GenericIDTests::Product";
+         productType = "com.apple.product-type.bundle.unit-test";
+      };
+      "GenericID::GenericIDTests::Product" = {
+         isa = "PBXFileReference";
+         path = "GenericIDTests.xctest";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+      "GenericID::SwiftPMPackageDescription" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_56";
+         buildPhases = (
+            "OBJ_59"
+         );
+         dependencies = (
+         );
+         name = "GenericIDPackageDescription";
+         productName = "GenericIDPackageDescription";
+         productType = "com.apple.product-type.framework";
+      };
+      "OBJ_1" = {
+         isa = "PBXProject";
+         attributes = {
+            LastSwiftMigration = "9999";
+            LastUpgradeCheck = "9999";
+         };
+         buildConfigurationList = "OBJ_2";
+         compatibilityVersion = "Xcode 3.2";
+         developmentRegion = "en";
+         hasScannedForEncodings = "0";
+         knownRegions = (
+            "en"
+         );
+         mainGroup = "OBJ_5";
+         productRefGroup = "OBJ_29";
+         projectDirPath = ".";
+         targets = (
+            "GenericID::GenericID",
+            "GenericID::SwiftPMPackageDescription",
+            "GenericID::GenericIDPackageTests::ProductTarget",
+            "GenericID::GenericIDTests"
+         );
+      };
+      "OBJ_10" = {
+         isa = "PBXFileReference";
+         path = "DataCoder.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_11" = {
+         isa = "PBXFileReference";
+         path = "DefaultConstructible.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_12" = {
+         isa = "PBXFileReference";
+         path = "DefaultsKey.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_13" = {
+         isa = "PBXFileReference";
+         path = "DefaultsObservation.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_14" = {
+         isa = "PBXFileReference";
+         path = "DefaultsValueTransformer.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_15" = {
+         isa = "PBXFileReference";
+         path = "LazyReference.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_16" = {
+         isa = "PBXFileReference";
+         path = "NSUbiquitousKeyValueStore.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_17" = {
+         isa = "PBXFileReference";
+         path = "OptionalType.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_18" = {
+         isa = "PBXFileReference";
+         path = "StaticKey.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_19" = {
+         isa = "PBXFileReference";
+         path = "UICollectionView.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_2" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_3",
+            "OBJ_4"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_20" = {
+         isa = "PBXFileReference";
+         path = "UINibGettable.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_21" = {
+         isa = "PBXFileReference";
+         path = "UIStoryboard.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_22" = {
+         isa = "PBXFileReference";
+         path = "UITableView.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_23" = {
+         isa = "PBXFileReference";
+         path = "UserDefaultes.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_24" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_25"
+         );
+         name = "Tests";
+         path = "";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_25" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_26",
+            "OBJ_27",
+            "OBJ_28"
+         );
+         name = "GenericIDTests";
+         path = "Tests/GenericIDTests";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_26" = {
+         isa = "PBXFileReference";
+         path = "AssociatedObjectTests.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_27" = {
+         isa = "PBXFileReference";
+         path = "TestKeys.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_28" = {
+         isa = "PBXFileReference";
+         path = "UserDefaultesTests.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_29" = {
+         isa = "PBXGroup";
+         children = (
+            "GenericID::GenericIDTests::Product",
+            "GenericID::GenericID::Product"
+         );
+         name = "Products";
+         path = "";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+      "OBJ_3" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_OBJC_ARC = "YES";
+            COMBINE_HIDPI_IMAGES = "YES";
+            COPY_PHASE_STRIP = "NO";
+            DEBUG_INFORMATION_FORMAT = "dwarf";
+            DYLIB_INSTALL_NAME_BASE = "@rpath";
+            ENABLE_NS_ASSERTIONS = "YES";
+            GCC_OPTIMIZATION_LEVEL = "0";
+            GCC_PREPROCESSOR_DEFINITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE=1",
+               "DEBUG=1"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            ONLY_ACTIVE_ARCH = "YES";
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)",
+               "-DXcode"
+            );
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            SDKROOT = "macosx";
+            SUPPORTED_PLATFORMS = (
+               "macosx",
+               "iphoneos",
+               "iphonesimulator",
+               "appletvos",
+               "appletvsimulator",
+               "watchos",
+               "watchsimulator"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE",
+               "DEBUG"
+            );
+            SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+            USE_HEADERMAP = "NO";
+         };
+         name = "Debug";
+      };
+      "OBJ_32" = {
+         isa = "PBXFileReference";
+         path = "LICENSE";
+         sourceTree = "<group>";
+      };
+      "OBJ_33" = {
+         isa = "PBXFileReference";
+         path = "README.md";
+         sourceTree = "<group>";
+      };
+      "OBJ_35" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_36",
+            "OBJ_37"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_36" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "GenericID.xcodeproj/GenericID_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "GenericID";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "GenericID";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_37" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "GenericID.xcodeproj/GenericID_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "GenericID";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "GenericID";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Release";
+      };
+      "OBJ_38" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_39",
+            "OBJ_40",
+            "OBJ_41",
+            "OBJ_42",
+            "OBJ_43",
+            "OBJ_44",
+            "OBJ_45",
+            "OBJ_46",
+            "OBJ_47",
+            "OBJ_48",
+            "OBJ_49",
+            "OBJ_50",
+            "OBJ_51",
+            "OBJ_52",
+            "OBJ_53"
+         );
+      };
+      "OBJ_39" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_9";
+      };
+      "OBJ_4" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_OBJC_ARC = "YES";
+            COMBINE_HIDPI_IMAGES = "YES";
+            COPY_PHASE_STRIP = "YES";
+            DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+            DYLIB_INSTALL_NAME_BASE = "@rpath";
+            GCC_OPTIMIZATION_LEVEL = "s";
+            GCC_PREPROCESSOR_DEFINITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE=1"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)",
+               "-DXcode"
+            );
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            SDKROOT = "macosx";
+            SUPPORTED_PLATFORMS = (
+               "macosx",
+               "iphoneos",
+               "iphonesimulator",
+               "appletvos",
+               "appletvsimulator",
+               "watchos",
+               "watchsimulator"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE"
+            );
+            SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+            USE_HEADERMAP = "NO";
+         };
+         name = "Release";
+      };
+      "OBJ_40" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_10";
+      };
+      "OBJ_41" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_11";
+      };
+      "OBJ_42" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_12";
+      };
+      "OBJ_43" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_13";
+      };
+      "OBJ_44" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_14";
+      };
+      "OBJ_45" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_15";
+      };
+      "OBJ_46" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_16";
+      };
+      "OBJ_47" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_17";
+      };
+      "OBJ_48" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_18";
+      };
+      "OBJ_49" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_19";
+      };
+      "OBJ_5" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_6",
+            "OBJ_7",
+            "OBJ_24",
+            "OBJ_29",
+            "OBJ_32",
+            "OBJ_33"
+         );
+         path = "";
+         sourceTree = "<group>";
+      };
+      "OBJ_50" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_20";
+      };
+      "OBJ_51" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_21";
+      };
+      "OBJ_52" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_22";
+      };
+      "OBJ_53" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_23";
+      };
+      "OBJ_54" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+         );
+      };
+      "OBJ_56" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_57",
+            "OBJ_58"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_57" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            LD = "/usr/bin/true";
+            OTHER_SWIFT_FLAGS = (
+               "-swift-version",
+               "5",
+               "-I",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
+               "-target",
+               "x86_64-apple-macosx10.10",
+               "-sdk",
+               "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "-package-description-version",
+               "5"
+            );
+            SWIFT_VERSION = "5.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_58" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            LD = "/usr/bin/true";
+            OTHER_SWIFT_FLAGS = (
+               "-swift-version",
+               "5",
+               "-I",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
+               "-target",
+               "x86_64-apple-macosx10.10",
+               "-sdk",
+               "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "-package-description-version",
+               "5"
+            );
+            SWIFT_VERSION = "5.0";
+         };
+         name = "Release";
+      };
+      "OBJ_59" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_60"
+         );
+      };
+      "OBJ_6" = {
+         isa = "PBXFileReference";
+         explicitFileType = "sourcecode.swift";
+         path = "Package.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_60" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_6";
+      };
+      "OBJ_62" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_63",
+            "OBJ_64"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_63" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+         };
+         name = "Debug";
+      };
+      "OBJ_64" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+         };
+         name = "Release";
+      };
+      "OBJ_65" = {
+         isa = "PBXTargetDependency";
+         target = "GenericID::GenericIDTests";
+      };
+      "OBJ_67" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_68",
+            "OBJ_69"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_68" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_MODULES = "YES";
+            EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "GenericID.xcodeproj/GenericIDTests_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "@loader_path/../Frameworks",
+               "@loader_path/Frameworks"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "GenericIDTests";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_69" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_MODULES = "YES";
+            EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "GenericID.xcodeproj/GenericIDTests_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "@loader_path/../Frameworks",
+               "@loader_path/Frameworks"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "GenericIDTests";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Release";
+      };
+      "OBJ_7" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_8"
+         );
+         name = "Sources";
+         path = "";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_70" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_71",
+            "OBJ_72",
+            "OBJ_73"
+         );
+      };
+      "OBJ_71" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_26";
+      };
+      "OBJ_72" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_27";
+      };
+      "OBJ_73" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_28";
+      };
+      "OBJ_74" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+            "OBJ_75"
+         );
+      };
+      "OBJ_75" = {
+         isa = "PBXBuildFile";
+         fileRef = "GenericID::GenericID::Product";
+      };
+      "OBJ_76" = {
+         isa = "PBXTargetDependency";
+         target = "GenericID::GenericID";
+      };
+      "OBJ_8" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_9",
+            "OBJ_10",
+            "OBJ_11",
+            "OBJ_12",
+            "OBJ_13",
+            "OBJ_14",
+            "OBJ_15",
+            "OBJ_16",
+            "OBJ_17",
+            "OBJ_18",
+            "OBJ_19",
+            "OBJ_20",
+            "OBJ_21",
+            "OBJ_22",
+            "OBJ_23"
+         );
+         name = "GenericID";
+         path = "Sources/GenericID";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_9" = {
+         isa = "PBXFileReference";
+         path = "AssociatedObject.swift";
+         sourceTree = "<group>";
+      };
+   };
+   rootObject = "OBJ_1";
 }

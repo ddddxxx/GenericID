@@ -31,15 +31,18 @@ protocol OptionalType: AnyOptionalType {
     init(_ wrapped: WrappedType?)
 }
 
-extension Optional: OptionalType {
+extension OptionalType {
     
     var anyWrapped: Any? {
-        return self
+        return wrapped
     }
     
     static var anyWrappedType: Any.Type {
-        return Wrapped.self
+        return WrappedType.self
     }
+}
+
+extension Optional: OptionalType {
     
     var wrapped: Wrapped? {
         return self
@@ -51,11 +54,29 @@ extension Optional: OptionalType {
 }
 
 func unwrap(_ v: Any) -> Any? {
-    guard let opt = v as? AnyOptionalType else { return v }
-    return opt.anyWrapped.flatMap(unwrap)
+    if let opt = v as? AnyOptionalType {
+        return opt.anyWrapped
+    } else {
+        return v
+    }
 }
 
 func unwrap(_ t: Any.Type) -> Any.Type {
-    guard let opt = t as? AnyOptionalType.Type else { return t }
-    return unwrap(opt.anyWrappedType)
+    if let opt = t as? AnyOptionalType.Type {
+        return opt.anyWrappedType
+    } else {
+        return t
+    }
+}
+
+func unwrapRecursively(_ v: Any) -> Any? {
+    return unwrap(v).anyWrapped.flatMap(unwrapRecursively)
+}
+
+func unwrapRecursively(_ t: Any.Type) -> Any.Type {
+    if let opt = t as? AnyOptionalType.Type {
+        return unwrapRecursively(opt.anyWrappedType)
+    } else {
+        return t
+    }
 }

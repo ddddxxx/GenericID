@@ -30,14 +30,18 @@
     
     extension UITableView.CellReuseIdentifiers {
         
-        public class ID<T: UITableViewCell>: UITableView.CellReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
+        public final class ID<T: UITableViewCell>: UITableView.CellReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
             
             public var rawValue: String {
                 return key
             }
             
-            public required init(rawValue: String) {
+            public init(rawValue: String) {
                 super.init(rawValue)
+            }
+            
+            public init(stringLiteral value: String) {
+                super.init(value)
             }
         }
     }
@@ -89,14 +93,18 @@
     
     extension UITableView.HeaderFooterViewReuseIdentifiers {
         
-        public class ID<T: UITableViewHeaderFooterView>: UITableView.HeaderFooterViewReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
+        public final class ID<T: UITableViewHeaderFooterView>: UITableView.HeaderFooterViewReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
             
             public var rawValue: String {
                 return key
             }
             
-            public required init(rawValue: String) {
+            public init(rawValue: String) {
                 super.init(rawValue)
+            }
+            
+            public init(stringLiteral value: String) {
+                super.init(value)
             }
         }
     }

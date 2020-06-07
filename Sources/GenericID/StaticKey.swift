@@ -36,18 +36,3 @@ extension StaticKeyBase: Hashable {
         return lhs.key == rhs.key
     }
 }
-
-extension RawRepresentable where RawValue == String {
-    
-    public init(stringLiteral value: String) {
-        self.init(rawValue: value)!
-    }
-    
-    public init(unicodeScalarLiteral value: String) {
-        self.init(stringLiteral: value)
-    }
-    
-    public init(extendedGraphemeClusterLiteral value: String) {
-        self.init(stringLiteral: value)
-    }
-}

@@ -28,14 +28,18 @@
     
     extension UIStoryboard.Identifiers {
         
-        public class ID<T: UIViewController>: UIStoryboard.Identifiers, RawRepresentable, ExpressibleByStringLiteral {
+        public final class ID<T: UIViewController>: UIStoryboard.Identifiers, RawRepresentable, ExpressibleByStringLiteral {
             
             public var rawValue: String {
                 return key
             }
             
-            public required init(rawValue: String) {
+            public init(rawValue: String) {
                 super.init(rawValue)
+            }
+            
+            public init(stringLiteral value: String) {
+                super.init(value)
             }
         }
     }

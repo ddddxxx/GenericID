@@ -528,6 +528,7 @@ class UserDefaultesTests: XCTestCase {
         waitForExpectations(timeout: 0)
     }
     
+    #if os(macOS)
     func testBinding() {
         class A: NSObject { @objc dynamic var rect: CGRect = .zero }
         let bindingName = NSBindingName("rect")
@@ -540,4 +541,5 @@ class UserDefaultesTests: XCTestCase {
         XCTAssertEqual(a.rect, rect)
         a.unbind(bindingName)
     }
+    #endif
 }

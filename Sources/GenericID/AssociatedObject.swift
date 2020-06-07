@@ -26,14 +26,18 @@ extension NSObject {
 
 extension NSObject.AssociateKeys {
     
-    public class Key<T>: NSObject.AssociateKeys, RawRepresentable, ExpressibleByStringLiteral {
+    public final class Key<T>: NSObject.AssociateKeys, RawRepresentable, ExpressibleByStringLiteral {
         
         public var rawValue: String {
             return key
         }
         
-        public required init(rawValue: String) {
+        public init(rawValue: String) {
             super.init(rawValue)
+        }
+        
+        public init(stringLiteral value: String) {
+            super.init(value)
         }
     }
 }

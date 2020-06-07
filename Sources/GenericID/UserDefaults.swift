@@ -85,7 +85,7 @@ extension UserDefaults {
         set {
             // T might be optional and holds a `nil`, which will be bridged to `NSNull`
             // and cannot be stored in UserDefaults. We must unwrap it manually.
-            set(unwrap(newValue).flatMap(key.serialize), forKey: key.key)
+            set(unwrapRecursively(newValue).flatMap(key.serialize), forKey: key.key)
         }
     }
 }
@@ -111,7 +111,7 @@ class DefaultsDeserializeValueTransformer: ValueTransformer {
     
     override func transformedValue(_ value: Any?) -> Any? {
         guard let value = value else { return nil }
-        return defaultsKey.deserialize(value).flatMap(unwrap)
+        return defaultsKey.deserialize(value).flatMap(unwrapRecursively)
     }
     
     override func reverseTransformedValue(_ value: Any?) -> Any? {

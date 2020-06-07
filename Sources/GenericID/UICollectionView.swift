@@ -30,14 +30,18 @@
     
     extension UICollectionView.CellReuseIdentifiers {
         
-        public class ID<T: UICollectionViewCell>: UICollectionView.CellReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
+        public final class ID<T: UICollectionViewCell>: UICollectionView.CellReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
             
             public var rawValue: String {
                 return key
             }
             
-            public required init(rawValue: String) {
+            public init(rawValue: String) {
                 super.init(rawValue)
+            }
+            
+            public init(stringLiteral value: String) {
+                super.init(value)
             }
         }
     }
@@ -79,14 +83,18 @@
     
     extension UICollectionView.SupplementaryViewReuseIdentifiers {
         
-        public class ID<T: UICollectionReusableView>: UICollectionView.SupplementaryViewReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
+        public final class ID<T: UICollectionReusableView>: UICollectionView.SupplementaryViewReuseIdentifiers, RawRepresentable, ExpressibleByStringLiteral {
             
             public var rawValue: String {
                 return key
             }
             
-            public required init(rawValue: String) {
+            public init(rawValue: String) {
                 super.init(rawValue)
+            }
+            
+            public init(stringLiteral value: String) {
+                super.init(value)
             }
         }
     }
