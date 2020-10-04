@@ -2,9 +2,8 @@
 
 # GenericID
 
-[![Build Status](https://travis-ci.org/ddddxxx/GenericID.svg?branch=master)](https://travis-ci.org/ddddxxx/GenericID)
 ![platforms](https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg)
-![supports](https://img.shields.io/badge/supports-Carthage%20%7C%20Swift_PM-brightgreen.svg)
+![supports](https://img.shields.io/badge/Swift_Package_Manager-compatible-brightgreen.svg)
 ![swift](https://img.shields.io/badge/swift-4.0-orange.svg)
 [![codebeat badge](https://codebeat.co/badges/2bf7d7e0-2bfe-4280-bbb3-ed64566ddd10)](https://codebeat.co/projects/github-com-ddddxxx-genericid-master)
 
@@ -176,28 +175,6 @@ extension YourClass.AssociateKeys {
 
 // Use it!
 yourObject[.someKey] = 42
-```
-
-## Installation
-
-### [Carthage](https://github.com/Carthage/Carthage)
-
-Add the project to your `Cartfile`:
-
-```
-github "ddddxxx/GenericID"
-```
-
-### [Swift Package Manager](https://github.com/apple/swift-package-manager)
-
-Add the project to your `Package.swift` file:
-
-```swift
-let package = Package(
-    dependencies: [
-        .Package(url: "https://github.com/ddddxxx/GenericID")
-    ]
-)
 ```
 
 ## License
