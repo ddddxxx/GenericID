@@ -53,29 +53,17 @@ extension Optional: OptionalType {
     }
 }
 
-func unwrap(_ v: Any) -> Any? {
-    if let opt = v as? AnyOptionalType {
-        return opt.anyWrapped
+func unwrapRecursively(_ v: Any) -> Any? {
+    if let wrapped = (v as? AnyOptionalType)?.anyWrapped {
+        return unwrapRecursively(wrapped)
     } else {
         return v
     }
 }
 
-func unwrap(_ t: Any.Type) -> Any.Type {
-    if let opt = t as? AnyOptionalType.Type {
-        return opt.anyWrappedType
-    } else {
-        return t
-    }
-}
-
-func unwrapRecursively(_ v: Any) -> Any? {
-    return unwrap(v).anyWrapped.flatMap(unwrapRecursively)
-}
-
 func unwrapRecursively(_ t: Any.Type) -> Any.Type {
-    if let opt = t as? AnyOptionalType.Type {
-        return unwrapRecursively(opt.anyWrappedType)
+    if let wrapped = (t as? AnyOptionalType.Type)?.anyWrappedType {
+        return unwrapRecursively(wrapped)
     } else {
         return t
     }
