@@ -13,9 +13,7 @@ All these fantastic API are compatible with traditional string-based API.
 
 ## Requirements
 
-- macOS 10.10+ / iOS 8.0+ / tvOS 9.0+ / watchOS 2.0+
-- Xcode 9+
-- Swift 4.0+
+- Swift 5.2 (Xcode 11.4)
 
 ## Type-safe `UserDefaults`
 
